@@ -1,0 +1,97 @@
+<html><head>
+    <meta name="viewport" content="width=device-width">
+    <title>Form</title>
+    <link rel="stylesheet" href="__JS__/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="__CSS__/font-awesome.min.css">
+    <link rel="stylesheet" href="__CSS__/index.css">
+    <link rel="stylesheet" href="__CSS__/style.min.css">
+    <link rel="stylesheet" href="__CSS__/framework-ui.css">
+  
+<script src="__JS__/jquery/jQuery-2.2.0.min.js"></script>
+<script src="__JS__/bootstrap/js/bootstrap.min.js"></script>
+<script src="__JS__/validate/jquery.validate.min.js"></script>
+<script src="__JS__/layer/layer.js"></script>
+<script src="__JS__/framework-ui.js"></script>
+<script>
+function submitForm() {
+  if (!$('#commentForm').formValid()) {
+       return false;
+  }
+  $.submitForm({
+            url: "{:U('User/editUser')}",
+            param: $("#commentForm").formSerialize(),
+            success: function () {
+                $.currentWindow().Refresh();
+            }
+  })
+
+}
+</script>
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        
+        <div class="row">
+            <div class="col-sm-12">       
+   <form class="form-horizontal" id="commentForm" action="{:U('User/editUser')}" method="post">
+   		<input type="hidden" name="id" id="id" value="{$result.id}">
+      <div style="padding-top: 20px; margin-right: 20px;">
+        <table class="form">
+            <tbody>
+           
+            <tr>
+                <th class="formTitle">用户名：</th>
+                <td class="formValue">
+                    <input id="admin_login" name="admin_login" type="text" class="form-control required" disabled placeholder="请输入用户名" value="{$result.admin_login}">
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">姓名：</th>
+                <td class="formValue">
+                    <input id="admin_name" name="admin_name" type="text" class="form-control required" placeholder="请输入姓名" value="{$result.admin_name}">
+                </td>
+            </tr>
+             <tr>
+                <th class="formTitle">用户组：</th>
+                <td class="formValue">
+                    <select id="role_id" name="role_id" class="form-control required">
+                   	<volist name="rolelist" id="vo">
+                   	 <option value="{$vo.id}"  <php>if($result['role_id']==$vo['id']){</php>selected<php>}</php> >{$vo.name}</option>
+                     </volist>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">是否药房：</th>
+                <td class="formValue">
+                    <select id="is_pharmacy" name="is_pharmacy" class="form-control required">
+                   
+                      <option value="0"  <php>if($result['is_pharmacy']==0){</php>selected<php>}</php> > 否</option>
+                      <option value="1"  <php>if($result['is_pharmacy']==1){</php>selected<php>}</php> >是</option>
+                    
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">排序：</th>
+                <td class="formValue">
+                    <input id="sort" name="sort" type="text" class="form-control required" placeholder="请输入排序" value="{$result.sort}">
+                </td>
+            </tr>
+        </tbody></table>
+    </div>
+ 
+					</form>
+
+   
+            </div>
+
+            
+        </div>
+
+    </div>
+   
+
+
+</body>
+</html>

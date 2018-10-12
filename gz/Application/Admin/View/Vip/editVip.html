@@ -1,0 +1,96 @@
+<html><head>
+    <meta name="viewport" content="width=device-width">
+    <title>Form</title>
+    <link rel="stylesheet" href="__JS__/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="__CSS__/font-awesome.min.css">
+    <link rel="stylesheet" href="__CSS__/index.css">
+    <link rel="stylesheet" href="__CSS__/style.min.css">
+    <link rel="stylesheet" href="__CSS__/framework-ui.css">
+  
+<script src="__JS__/jquery/jQuery-2.2.0.min.js"></script>
+<script src="__JS__/bootstrap/js/bootstrap.min.js"></script>
+<script src="__JS__/validate/jquery.validate.min.js"></script>
+<script src="__JS__/layer/layer.js"></script>
+<script src="__JS__/framework-ui.js"></script>
+<script type="text/javascript" src="__STATIC__/uploadify/jquery.uploadify.min.js"></script>
+<script>
+function submitForm() {
+  if (!$('#commentForm').formValid()) {
+       return false;
+  }
+  $.submitForm({
+            url: "{:U('Vip/editVip')}",
+            param: $("#commentForm").formSerialize(),
+            success: function () {
+                $.currentWindow().Refresh();
+            }
+  })
+
+}
+</script>
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        
+        <div class="row">
+            <div class="col-sm-12">       
+   <form class="form-horizontal" id="commentForm" action="{:U('Vip/editVip')}" method="post">
+   		<input type="hidden" name="id" id="id" value="{$vip.id}">
+      <div style="padding-top: 20px; margin-right: 20px;">
+        <table class="form">
+            <tbody>
+            <tr>
+                <th class="formTitle">会员等级：</th>
+                <td class="formValue">
+                    <select id="setting_id" name="setting_id" class="form-control">
+                        <volist name="category" id="vo">
+                            <option value="{$vo.id}" <if condition="$vo['id'] eq $vip['setting_id']">selected</if>>{$vo.title}</option>
+                        </volist>
+                    </select> 
+                </td>
+            </tr>
+            <!-- <tr>
+                <th class="formTitle">所属类型：</th>
+                <td class="formValue">
+                    <select id="type_id" name="type_id" class="form-control">
+                        <option value="1"  <if condition="$vip['type_id'] eq 1">selected</if>>1</option>
+                        <option value="2"  <if condition="$vip['type_id'] eq 2">selected</if>>2</option>
+                        <option value="3"  <if condition="$vip['type_id'] eq 3">selected</if>>3</option>
+                        <option value="4"  <if condition="$vip['type_id'] eq 4">selected</if>>4</option>
+                       
+              
+                    </select> 
+                </td>
+            </tr> -->
+            <tr>
+                <th class="formTitle">金额：</th>
+                <td class="formValue">
+                    <input id="money" name="money" type="text" class="form-control required"  placeholder="请输入金额" value="{$vip.money}">
+                </td>
+            </tr>
+            
+
+            <tr>
+                <th class="formTitle">标题：</th>
+                <td class="formValue">
+                     <input id="title" name="title" type="text" class="form-control required"  placeholder="请输入金额" value="{$vip.title}">
+                </td>
+            </tr>
+           
+        </tbody></table>
+    </div>
+ 
+	</form>
+
+   
+            </div>
+
+            
+        </div>
+
+    </div>
+   
+
+
+</body>
+</html>

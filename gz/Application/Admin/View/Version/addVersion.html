@@ -1,0 +1,91 @@
+<html><head>
+    <meta name="viewport" content="width=device-width">
+    <title>Form</title>
+    <link rel="stylesheet" href="__JS__/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="__CSS__/font-awesome.min.css">
+    <link rel="stylesheet" href="__CSS__/index.css">
+    <link rel="stylesheet" href="__CSS__/style.min.css">
+    <link rel="stylesheet" href="__CSS__/framework-ui.css">
+  
+<script src="__JS__/jquery/jQuery-2.2.0.min.js"></script>
+<script src="__JS__/bootstrap/js/bootstrap.min.js"></script>
+<script src="__JS__/validate/jquery.validate.min.js"></script>
+<script src="__JS__/layer/layer.js"></script>
+<script src="__JS__/framework-ui.js"></script>
+<script type="text/javascript" src="__STATIC__/uploadify/jquery.uploadify.min.js"></script>
+<script>
+function submitForm() {
+  if (!$('#commentForm').formValid()) {
+       return false;
+  }
+  $.submitForm({
+            url: "{:U('Version/addVersion')}",
+            param: $("#commentForm").formSerialize(),
+            success: function () {
+                $.currentWindow().Refresh();
+            }
+  })
+
+}
+</script>
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        
+        <div class="row">
+            <div class="col-sm-12">       
+   <form class="form-horizontal" id="commentForm" action="{:U('Version/addVersion')}" method="post">
+        <input type="hidden" name="id" id="id" value="{$version.id}">
+      <div style="padding-top: 20px; margin-right: 20px;">
+        <table class="form">
+            <tbody>
+            <tr>
+                <th class="formTitle">版本号：</th>
+                <td class="formValue">
+                    <input id="version" name="version" type="text" class="form-control required"  placeholder="请输入版本号" value="">
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">描述：</th>
+                <td class="formValue">
+                    <input id="ver_desc" name="ver_desc" type="text" class="form-control required"  placeholder="请输入描述信息" value="">
+                    <!-- <textarea name="description" id="description" class="form-control" rows="3">{$version.description}</textarea> -->
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">网址：</th>
+                <td class="formValue">
+                    <input id="ver_url" name="ver_url" type="text" class="form-control required"  placeholder="请输入网址" value="">
+                </td>
+            </tr>
+            
+
+            <tr>
+                <th class="formTitle">强制更新：</th>
+                <td class="formValue">
+                     <select id="is_mandatory" name="is_mandatory" class="form-control">
+                  
+                         <option value="1">是</option>
+                         <option value="0">否</option>
+              
+                    </select>
+                </td>
+            </tr>
+           
+        </tbody></table>
+    </div>
+ 
+    </form>
+
+   
+            </div>
+
+            
+        </div>
+
+    </div>
+   
+
+
+</body>
+</html>

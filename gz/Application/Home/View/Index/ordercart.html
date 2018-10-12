@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" /><meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+<meta content="yes" name="apple-mobile-web-app-capable" />
+<meta content="black" name="apple-mobile-web-app-status-bar-style" />
+<meta name="format-detection" content="telephone=no"/>
+<title>{$metaTitle}</title>
+<script src="__JS__/jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="__JS__/jquery.lazyload.js" type="text/javascript"></script>
+<script src="__JS__/notification.js" type="text/javascript"></script>
+<script src="__JS__/swiper.min.js" type="text/javascript"></script>
+<script src="__JS__/main.js" type="text/javascript"></script>
+<link rel="stylesheet" type="text/css" href="__CSS__/css.css" />
+<link type="text/css" rel="stylesheet" href="__CSS__/style_touch.css">
+</head>
+<body>
+<form method="post" action="{:U('Home/Index/ordersave')}" id="FromID">
+<div class="m-detail-mainout">
+	<div class="m-ck-module">
+	<h1>收货信息</h1>
+	<ul>
+		<li class="addr-info">
+			<ul class="addr-addnew-form addr-edit-form" id="addr-edit-form" style="display: none1;">
+				<li>
+					<label>收货人姓名：</label><span><input name="name" id="name" value="" type="text" placeholder="输入收货人姓名"></span>
+					<label>手机：</label><span><input name="phone" id="phone" value="" type="text" placeholder="输入您的收货电话"></span>
+					<label>详细地址：</label><span><input name="address" id="address" value="" type="text" placeholder="输入您的收货地址"></span>
+				</li>
+			</ul>
+			
+		</li>
+	</ul>
+	</div>
+	
+	<div class="m-ck-module">
+		<h1>付款方式</h1>
+		<ul id="payment_mode" class="rd">
+			<li>
+				
+				<label><input name="paymode" value="1" type="radio" checked>在线支付</label>
+			
+		
+				<label><input name="paymode" value="2" type="radio">货到付款</label>
+			
+			
+			</li>    
+		</ul>
+	</div>
+<div class="m-ck-module">
+<h1>商品清单</h1>
+<ul>
+<ul class="m-cart-list">
+<volist name="products" id="p">
+		<li>
+			<span class="pic"><img src="{$p.img_thumb}" width="75" height="75"></span>
+			<span class="con">
+			<i class="t">{$p.title}</i>
+			<p><label>数量：</label>{$p.count}　<label>销售价：</label><span class="price">￥{$p.price}</span></p>
+            <p><label>总价：</label>{$p['count']*$p['price']}</p>
+			</span>
+		</li>
+</volist>
+</ul>
+</ul>
+</div>
+<div class="m-cart-toal m-checkout-toal">
+<input type="hidden" name="order_num" id="order_num" value="{$totalcount}" />
+<input type="hidden" name="order_amount" id="order_amount" value="{$total}"  />
+<input type="hidden" name="order_price" id="order_price" value="{$totalprice}" />
+<p id="price_total" class="check">商品总数：<b>{$totalcount}</b>　件<br>
+商品总价：<b>{$total}</b>　元<br>
+您共需支付：<b id="totalmoney">{$totalprice}</b>　元</p>
+<p class="act"><a id="sub_order" href="javascript:;" class="checkout">确认，提交订单</a></p>
+</div>
+</div>
+</form>
+
+<script>
+$(document).ready(function(){
+	$("#sub_order").click(function(){
+	
+		var userName=$('#name').val();
+		if($.trim(userName) == ""){
+			alert('请填写姓名');
+			return false;
+		}
+		var userPhone = $("#phone").val()
+		if ($.trim(userPhone) == "") {
+			alert('请填写您的手机号码');
+			return false;
+		}
+		var patrn = /^(1(([35][0-9])|(47)|(85)|[8][01256789]))\d{8}$/;
+		if (!patrn.exec($.trim(userPhone))) {
+			alert('手机号格式错误');
+			return false;
+		}
+		var address = $("#address").val()
+		if ($.trim(address) == "") {
+			alert('请填写您的详细地址');
+			return false;
+		}
+		$("#FromID").submit();
+		return true;
+	});
+});
+</script>
+</body>
+</html>

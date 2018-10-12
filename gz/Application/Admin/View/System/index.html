@@ -1,0 +1,287 @@
+<html><head>
+    <meta name="viewport" content="width=device-width">
+    <title>Form</title>
+    <link rel="stylesheet" href="__JS__/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="__CSS__/font-awesome.min.css">
+    <link rel="stylesheet" href="__CSS__/index.css">
+    <link rel="stylesheet" href="__CSS__/style.min.css">
+    <style type="text/css">
+        .max_width{
+            width: 80%;
+        }
+    </style>
+</head>
+
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        
+        <div class="row">
+            <div class="col-sm-12">
+            
+            	
+                    
+            
+                <div class="tabs-container" style="margin-top:10px; margin-left:10px; margin-right:10px;">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a data-toggle="tab" href="#tab-1" aria-expanded="true">基本设置</a></li>
+                        <li><a data-toggle="tab" href="#tab-2" aria-expanded="false">邮件服务器</a></li>
+                        <li><a data-toggle="tab" href="#tab-3" aria-expanded="false">短信接口</a></li>
+                        <li><a data-toggle="tab" href="#tab-4" aria-expanded="false">咨询分佣</a></li>
+                  
+                    </ul>
+                     <form class="form-horizontal" id="commentForm" action="{:U('System/dopost')}" method="post">
+                    <div class="tab-content">
+                   
+                        <div id="tab-1" class="tab-pane active">
+                            <div class="panel-body">
+                            	<volist name="web_config" id="vo">
+                                    <div class="form-group">
+                                    <label class="col-sm-2 control-label">{$vo.remark}：</label>
+                                    <div class="col-sm-10">
+                                    	<php>
+                                        if($vo['type']==1)
+                                        {
+                                        </php>
+                                        <textarea rows="5" class="form-control max_width" name="config[{$vo.name}]" id="{$vo.name}" >{$vo.value}</textarea>
+                                        <php>
+                                        }else{
+                                        </php>
+                                        <input type="text" class="form-control max_width" name="config[{$vo.name}]" id="{$vo.name}" value="{$vo.value}">
+                                         <php>
+                                        }
+                                        </php>
+                                    </div>
+                                     </div>
+                                 </volist>
+                                 
+                                
+                                <div class="form-group">
+                                <div class="col-sm-12 col-sm-offset-3">
+                                    <button class="btn btn-primary" type="submit">提交</button>
+                                </div>
+                            	</div>
+                                 
+                         
+
+                            </div>
+                        </div>
+                        <div id="tab-2" class="tab-pane">
+                            <div class="panel-body">
+                                
+                              
+                               <volist name="email_config" id="vo">
+                                    <div class="form-group">
+                                    <label class="col-sm-2 control-label">{$vo.remark}：</label>
+                                    <div class="col-sm-10">
+                                    	<php>
+                                        if($vo['type']==1)
+                                        {
+                                        </php>
+                                        <textarea rows="5" class="form-control max_width" name="config[{$vo.name}]" id="{$vo.name}" >{$vo.value}</textarea>
+                                        <php>
+                                        }else{
+                                        </php>
+                                        <input type="text" class="form-control max_width" name="config[{$vo.name}]" id="{$vo.name}" value="{$vo.value}">
+                                         <php>
+                                        }
+                                        </php>
+                                    </div>
+                                     </div>
+                                 </volist>
+    
+                                
+                                <div class="form-group">
+                                <div class="col-sm-12 col-sm-offset-3">
+                                    <button class="btn btn-primary" type="submit">提交</button>
+                                </div>
+                            	</div>
+                           
+                                
+                            </div>
+                        </div>
+                        <div id="tab-3" class="tab-pane">
+                            <div class="panel-body">
+                          
+                                
+                                <volist name="sms_config" id="vo">
+                                    <div class="form-group">
+                                    <label class="col-sm-2 control-label">{$vo.remark}：</label>
+                                    <div class="col-sm-10">
+                                    	<php>
+                                        if($vo['type']==1)
+                                        {
+                                        </php>
+                                        <textarea rows="5" class="form-control max_width" name="config[{$vo.name}]" id="{$vo.name}" >{$vo.value}</textarea>
+                                        <php>
+                                        }else{
+                                        </php>
+                                        <input type="text" class="form-control max_width" name="config[{$vo.name}]" id="{$vo.name}" value="{$vo.value}">
+                                         <php>
+                                        }
+                                        </php>
+                                    </div>
+                                     </div>
+                                 </volist>
+                                
+                                
+                                <div class="form-group">
+                                <div class="col-sm-12 col-sm-offset-3">
+                                    <button class="btn btn-primary" type="submit">提交</button>
+                                </div>
+                            	</div>
+                        
+                             
+                            </div>
+                            
+                        </div>
+
+                        
+                        <div id="tab-4" class="tab-pane">
+                            <div class="panel-body">
+                              <div class="form-group">
+                                    <label class="col-sm-2 control-label">分佣设置：</label>
+                                    <div class="col-sm-10 control-label" style="text-align:left;">
+                                    	设置咨询<strong style="color: #f00;">%</strong>百分比，将对应信息填写到以下表单：
+                                    </div>
+                                     </div>
+                               <volist name="wx_config" id="vo">
+                                    <div class="form-group">
+                                    <label class="col-sm-2 control-label">{$vo.remark}：</label>
+                                    <div class="col-sm-10">
+                                    	<php>
+                                        if($vo['type']==1)
+                                        {
+                                        </php>
+                                        <textarea rows="5" class="form-control max_width" name="config[{$vo.name}]" id="{$vo.name}">{$vo.value}</textarea>
+                                        <php>
+                                        }else{
+                                        </php>
+                                        <input type="text" class="form-control max_width" name="config[{$vo.name}]" id="{$vo.name}" value="{$vo.value}">
+                                         <php>
+                                        }
+                                        </php>
+                                    </div>
+                                     </div>
+                                 </volist>
+                                
+                                <div class="form-group">
+                                <div class="col-sm-12 col-sm-offset-3">
+                                    <button class="btn btn-primary" type="submit">提交</button>
+                                </div>
+                            	</div>
+                           
+                                
+                            </div>
+                        </div>
+                        
+                        
+                        <div id="tab-5" class="tab-pane">
+                            <div class="panel-body">
+                          		
+                                
+                                
+                                <volist name="token_config" id="vo">
+                                	 <div class="form-group">
+                                    <label class="col-sm-2 control-label">URL：</label>
+                                    <div class="col-sm-10 control-label" style="text-align:left;">
+                                    	http://<php>echo $_SERVER['HTTP_HOST'];</php>/index.php?m=Weixin&token={$vo.value}
+                                    </div>
+                                     </div>
+                                    <div class="form-group">
+                                    <label class="col-sm-2 control-label">{$vo.remark}：</label>
+                                    <div class="col-sm-10">
+                                    	<php>
+                                        if($vo['type']==1)
+                                        {
+                                        </php>
+                                        <textarea rows="5" class="form-control" name="config[{$vo.name}]" id="{$vo.name}">{$vo.value}</textarea>
+                                        <php>
+                                        }else{
+                                        </php>
+                                        <input type="text" class="form-control" name="config[{$vo.name}]" id="{$vo.name}" value="{$vo.value}">
+                                         <php>
+                                        }
+                                        </php>
+                                    </div>
+                                     </div>
+                                 </volist>
+                                
+                                    <div class="form-group">
+                                    <label class="col-sm-2 control-label"></label>
+                                    <div class="col-sm-10">
+                                    	Token填写完成以后，请先点击<span style="color:#0000FF;">“保存设置”</span>按钮保存配置，然后按以下步骤配置微信公众平台：
+                                    </div>
+                                     </div>
+                                     
+                                     
+                                     <div class="form-group">
+                                    <label class="col-sm-2 control-label">第1步：</label>
+                                    <div class="col-sm-10 control-label" style="text-align:left;">
+                                    	点击<a style="color:#0000FF;" href="https://mp.weixin.qq.com" target="_blank">https://mp.weixin.qq.com</a> 登录微信公众平台，然后点击页面左下方<span style="color:#0000FF;">“开发者中心”</span>，进入开发者中心页面；
+                                    </div>
+                                     </div>
+                                     
+                                     
+                                       <div class="form-group">
+                                    <label class="col-sm-2 control-label">第2步：</label>
+                                    <div class="col-sm-10 control-label" style="text-align:left;">
+                                    	第一次成为开发者，要勾选<span style="color:#0000FF;">“我同意”</span>复选框，然后点击<span style="color:#0000FF;">“成为开发者”</span>按钮；
+                                    </div>
+                                     </div>
+                                     
+                                       <div class="form-group">
+                                    <label class="col-sm-2 control-label">第3步：</label>
+                                    <div class="col-sm-10 control-label" style="text-align:left;">
+                                    	在<span style="color:#0000FF;">“接口配置信息”</span>页面中，将上面设置的信息分别填入Url和Token表单中；
+                                    </div>
+                                     </div>
+                                     
+                                     <div class="form-group">
+                                    <label class="col-sm-2 control-label">第4步：</label>
+                                    <div class="col-sm-10 control-label" style="text-align:left;">
+                                    	点击<span style="color:#0000FF;">“提交”</span>按钮，如果提示成功，表示消息接口配置成功；
+                                    </div>
+                                     </div>
+                                     
+                                     <div class="form-group">
+                                    <label class="col-sm-2 control-label">第5步：</label>
+                                    <div class="col-sm-10 control-label" style="text-align:left;">
+                                    	最后一步，别忘记了一定要点击<span style="color:#0000FF;">“开启”</span>按钮，否则你的开发者模式是不会生效的。
+                                    </div>
+                                     </div>
+                                
+                                <div class="form-group">
+                                <div class="col-sm-12 col-sm-offset-3">
+                                    <button class="btn btn-primary" type="submit">提交</button>
+                                </div>
+                            	</div>
+                        
+                             
+                            </div>
+                            
+                        </div>
+                       
+                    </div>
+</form>
+
+                </div>
+            </div>
+
+            
+        </div>
+
+    </div>
+   <script src="__JS__/jquery/jQuery-2.2.0.min.js"></script>
+   <script src="__JS__/bootstrap/js/bootstrap.min.js"></script>
+   <script src="__JS__/validate/jquery.validate.min.js"></script>
+   <script src="__JS__/validate/messages_zh.min.js"></script>
+<script>
+$().ready(function() {
+	$("#commentForm").validate();
+});
+</script>
+
+
+
+</body>
+</html>

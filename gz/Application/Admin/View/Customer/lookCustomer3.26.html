@@ -1,0 +1,173 @@
+<html><head>
+    <meta name="viewport" content="width=device-width">
+    <title>Form</title>
+    <link rel="stylesheet" href="__JS__/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="__CSS__/font-awesome.min.css">
+    <link rel="stylesheet" href="__CSS__/index.css">
+    <link rel="stylesheet" href="__CSS__/style.min.css">
+    <link rel="stylesheet" href="__CSS__/framework-ui.css">
+    <link rel="stylesheet" type="text/css" href="__CSS__/zoomify.min.css">
+<script src="__JS__/jquery/jQuery-2.2.0.min.js"></script>
+<script src="__JS__/bootstrap/js/bootstrap.min.js"></script>
+<script src="__JS__/validate/jquery.validate.min.js"></script>
+<script src="__JS__/layer/layer.js"></script>
+<script src="__JS__/framework-ui.js"></script>
+<script type="text/javascript" src="__STATIC__/uploadify/jquery.uploadify.min.js"></script>
+<script src="__JS__/zoomify.min.js"></script>
+<script>
+function submitForm() {
+  if (!$('#commentForm').formValid()) {
+       return false;
+  }
+  $.submitForm({
+            url: "{:U('Customer/lookCustomer')}",
+            param: $("#commentForm").formSerialize(),
+            success: function () {
+                $.currentWindow().Refresh();
+            }
+  })
+
+}
+function dianji(){
+    $('.icon').zoomify();
+}
+
+
+</script>
+<style type="text/css">
+    input{
+        border: 0;
+    }
+</style>
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        
+        <div class="row">
+            <div class="col-sm-12">       
+  <form class="form-horizontal" id="commentForm" action="{:U('Customer/lookCustomer')}" method="post">
+      <div style="padding-top: 20px; margin-right: 20px;">
+        <table class="form">
+            <tbody>
+            <tr>
+                <th class="formTitle">姓名：</th>
+                <td class="formValue">
+                    <input type="hidden" name="id" id="id" value="{$customer.id}">
+                    <input type="hidden" name="user_id" id="user_id" value="{$customer.user_id}">
+                    <input id="username" name="username" type="text" class="form-control required" disabled value="{$customer.name}">
+                </td>
+                <th class="formTitle">年龄：</th>
+                <td class="formValue">
+                    <input id="age" name="age" type="text" class="form-control required" disabled value="{$customer.age}">
+                </td>
+            </tr>
+            
+           
+            <tr>
+                <th class="formTitle">性别：</th>
+                <td class="formValue">
+                    <switch name="customer.sex"> 
+                        <case value="0"><input type="text" class="form-control" disabled value="未知"></case>
+                        <case value="1"><input type="text" class="form-control" disabled value="女"></case>
+                        <case value="2"><input type="text" class="form-control" disabled value="男"></case>
+                        <default/>
+                    </switch>
+                </td>
+                <th class="formTitle">头像：</th>
+                <td class="formValue">
+                    <img src="{$http_img_url}{$customer.img_thumb}" style="width: 50px;height: 50px;" class="icon" onClick="dianji();">
+                   
+                </td>
+                
+            </tr>
+            <tr>
+                <th class="formTitle">电话：</th>
+                <td class="formValue">
+                    <input id="phone" name="phone" type="text" class="form-control" disabled value="{$customer.username}">
+                </td>
+                <th class="formTitle">身份证号码：</th>
+                <td class="formValue">
+                    <input id="card" name="card" type="text" class="form-control" disabled value="{$customer.card}">
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">身份证：</th>
+                <td class="formValue">
+                    <img src="{$http_img_url}{$customer.card_correct}" style="width: 120px;height: 70px;" class="icon" onClick="dianji();">
+                    <img src="{$http_img_url}{$customer.card_opposite}" style="width: 120px;height: 70px;" class="icon" onClick="dianji();">
+                   
+                </td>
+                 <th class="formTitle">执业证书：</th>
+                <td class="formValue">
+                    <img src="{$http_img_url}{$customer.certificate}" style="width: 120px;height: 70px;" class="icon" onClick="dianji();">
+                   
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">资格证书：</th>
+                <td class="formValue">
+                    <img src="{$http_img_url}{$customer.qualification}" style="width: 120px;height: 70px;" class="icon" onClick="dianji();">
+                   
+                </td>
+                <th class="formTitle">最高职称证书：</th>
+                <td class="formValue">
+                    <img src="{$http_img_url}{$customer.highest_professional}" style="width: 120px;height: 70px;" class="icon" onClick="dianji();">
+                   
+                </td>
+                
+            </tr>
+            <tr>
+                <th class="formTitle">科室类别：</th>
+                <td class="formValue">
+                    <input id="departmentname" name="departmentname" type="text" class="form-control required" disabled value="{$customer.departmentname}" >
+                </td>
+                <th class="formTitle">医院：</th>
+                <td class="formValue">
+                    <input id="hospitalname" name="hospitalname" type="text" class="form-control required" disabled value="{$customer.hospitalname}">
+                </td>
+            </tr>
+           
+            
+            <tr>
+                <th class="formTitle">会员：</th>
+                <td class="formValue">
+                    <switch name="customer.member_level">
+                        <case value="0"><input type="text" class="form-control" disabled value="非会员"></case>
+                        <case value="1"><input type="text" class="form-control" disabled value="VIP"></case>
+                        <case value="2"><input type="text" class="form-control" disabled value="SVIP"></case>
+                        <default />
+                    </switch>
+                   
+                </td>
+                <th class="formTitle">状态：</th>
+                <td class="formValue">
+                    <switch name="customer.status"> 
+                        <case value="0"><input type="text" class="form-control" disabled value="未审核"></case>
+                        <case value="1"><input type="text" class="form-control" disabled value="审核通过"></case>
+                        <case value="2"><input type="text" class="form-control" disabled value="审核中"></case>
+                        <case value="3"><input type="text" class="form-control" disabled value="审核未通过"></case>
+                        <default/>
+                    </switch>
+                </td>
+            </tr>
+            
+            
+            
+           
+        </tbody></table>
+    </div>
+ 
+					</form>
+
+   
+            </div>
+
+            
+        </div>
+
+    </div>
+   
+
+
+</body>
+</html>

@@ -1,0 +1,125 @@
+<html><head>
+    <meta name="viewport" content="width=device-width">
+    <title>Form</title>
+    <link rel="stylesheet" href="__JS__/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="__CSS__/font-awesome.min.css">
+    <link rel="stylesheet" href="__CSS__/dataTables.bootstrap.css">
+    <link rel="stylesheet" href="__CSS__/index.css">
+    <link rel="stylesheet" href="__CSS__/style.min.css">
+    <link rel="stylesheet" href="__CSS__/framework-ui.css">
+  
+<script src="__JS__/jquery/jQuery-2.2.0.min.js"></script>
+<script src="__JS__/bootstrap/js/bootstrap.min.js"></script>
+<script src="__JS__/validate/jquery.validate.min.js"></script>
+<script src="__JS__/layer/layer.js"></script>
+<script src="__JS__/framework-ui.js"></script>
+<script>
+function submitForm() {
+  if (!$('#commentForm').formValid()) {
+       return false;
+  }
+  $.submitForm({
+            url: "{:U('Customer/saveAccess')}",
+            param: $("#commentForm").serialize(),
+            success: function () {
+                $.currentWindow().Refresh();
+            }
+  })
+
+}
+</script>
+<script type="text/javascript"> 
+function checknode(obj) {
+	    var chk = $("input[type='checkbox']");
+	    var count = chk.length;
+	    var num = chk.index(obj);
+	    var level_top = level_bottom = chk.eq(num).attr('level');
+	    for (var i = num; i >= 0; i--) {
+	        var le = chk.eq(i).attr('level');
+	        if (le <level_top) {
+	            chk.eq(i).prop("checked", true);
+	            var level_top = level_top - 1;
+	        }
+	    }
+	    for (var j = num + 1; j < count; j++) {
+	        var le = chk.eq(j).attr('level');
+	        if (chk.eq(num).prop("checked")) {
+	            if (le > level_bottom){
+	            	chk.eq(j).prop("checked", true);
+	            }
+	            else if (le == level_bottom){
+	            	break;
+	            }
+	        } else {
+	            if (le >level_bottom){
+	            	chk.eq(j).prop("checked", false);
+	            }else if(le == level_bottom){
+	            	break;
+	            }
+	        }
+	    }
+	}
+</script>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    
+                    <div class="ibox-content">
+						<div id="DataTables_Table_0_wrapper" class="dataTables_wrapper form-inline" role="grid">
+                         <form class="form-horizontal" id="commentForm" action="{:U('Customer/saveAccess')}" method="post">
+   							<input type="hidden" name="doctor_id" id="doctor_id" value="{$doctor_id}">
+                        <table class="table table-striped table-bordered table-hover dataTable">
+                            <thead>
+                                <tr>
+                                    <th align="left">选择</th>
+                                    <th align="left">ID</th>
+                                    <th align="left">名称</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                              <volist name="result" id="vo">
+                                <tr>
+                                  <td>
+                                    分类
+                                  </td>
+                                  <td>
+                                    {$vo.id}
+                                  </td>
+                                  <td>
+                                    {$vo.title}
+                                  </td>
+                                </tr>
+                                 <volist name="vo['child']" id="co">
+                                <tr>
+                                  <td>
+                                    <input type="checkbox" name="menid[]" value="{$co.id}" <if condition="in_array($co['id'],$selected)"> checked="checked"</if>>
+                                  </td>
+                                  <td>
+                                    {$co.id}
+                                  </td>
+                                  <td>
+                                    {$co.title}
+                                  </td>
+                                </tr>
+                              </volist>
+                              </volist>
+                            </tbody>
+                           
+                        </table>
+                 		</form>
+ 					</div>
+                    </div>
+                    
+                </div>
+                
+            </div>
+            
+        </div>
+        
+    </div>
+  
+  
+</body>
+</html>

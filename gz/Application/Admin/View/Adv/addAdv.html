@@ -1,0 +1,160 @@
+<html><head>
+    <meta name="viewport" content="width=device-width">
+    <title>Form</title>
+    <link rel="stylesheet" href="__JS__/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="__CSS__/font-awesome.min.css">
+    <link rel="stylesheet" href="__CSS__/index.css">
+    <link rel="stylesheet" href="__CSS__/style.min.css">
+    <link rel="stylesheet" href="__CSS__/framework-ui.css">
+  
+<script src="__JS__/jquery/jQuery-2.2.0.min.js"></script>
+<script src="__JS__/bootstrap/js/bootstrap.min.js"></script>
+<script src="__JS__/validate/jquery.validate.min.js"></script>
+<script src="__JS__/layer/layer.js"></script>
+<script src="__JS__/framework-ui.js"></script>
+<script type="text/javascript" src="__STATIC__/uploadify/jquery.uploadify.min.js"></script>
+<script>
+function submitForm() {
+  if (!$('#commentForm').formValid()) {
+       return false;
+  }
+  $.submitForm({
+            url: "{:U('Adv/addAdv')}",
+            param: $("#commentForm").serialize(),
+            success: function () {
+                $.currentWindow().Refresh();
+            }
+  })
+
+}
+</script>
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        
+        <div class="row">
+            <div class="col-sm-12">       
+   <form class="form-horizontal" id="commentForm" action="{:U('Adv/addAdv')}" method="post">
+         
+      <div style="padding-top: 20px; margin-right: 20px;">
+        <table class="form">
+            <tbody>
+           
+            <tr>
+                <th class="formTitle">名称：</th>
+                <td class="formValue">
+                    <input id="title" name="title" type="text" class="form-control required" placeholder="请输入名称">
+                </td>
+            </tr>
+             <tr>
+                <th class="formTitle">文章分类：</th>
+                <td class="formValue">
+                    <select id="adv_id" name="adv_id" class="form-control required">
+                    <volist name="catelist" id="vo">
+                   	 <option value="{$vo.id}">{$vo.title}</option>
+                     </volist>
+                    </select>
+                </td>
+            </tr>
+            
+            <tr>
+                <th class="formTitle">图标：</th>
+                <td class="formValue">
+                    <input type="file" id="upload_picture_imgitem">
+                    <input type="hidden" name="img_thumb" id="img_thumb"/>
+                        
+                    <script type="text/javascript">
+
+
+                    //上传图片
+
+
+                    /* 初始化上传插件 */
+
+
+                    $("#upload_picture_imgitem").uploadify({
+
+                        "height"          : 30,
+
+                        "swf"             : "__STATIC__/uploadify/uploadify.swf",
+
+                        "fileObjName"     : "download",
+
+                        "buttonText"      : "上传图片",
+
+                        "uploader"        : "{:U('File/uploadPicture',array('session_id'=>session_id()))}",
+
+                        "width"           : 120,
+
+                        'removeTimeout'   : 1,
+
+                        'fileTypeExts'    : '*.jpg; *.png; *.gif;',
+
+                        "onUploadSuccess" : uploadPictureimg,
+                        'onFallback' : function() {
+
+                            alert('未检测到兼容版本的Flash.');
+
+                        }
+
+                    });
+
+                    function uploadPictureimg(file, data){
+                        var data = $.parseJSON(data);
+                        var src = '';
+                        if(data.status){
+                            $("#img_thumb").val(data.data.path);
+                            src = data.data.path;
+                            $("#img_thumb").parent().parent().parent().find('.upload-img-box').html(
+                                '<div class="upload-pre-item"><img src="'+ http_img_url + src + '"/></div>'
+                            );
+                        } else {
+                            alert(data.info);
+                        }
+                    }
+
+                    </script>
+                </td>
+            </tr>
+            
+            <tr>
+                <th class="formTitle"></th>
+                <td class="formValue">
+                   <div class="upload-img-box">
+						
+					</div>
+                </td>
+            </tr>
+            
+             <tr>
+                <th class="formTitle">链接地址：</th>
+                <td class="formValue">
+                    <input id="link_url" name="link_url" type="text" class="form-control" placeholder="请输入链接地址">
+                </td>
+            </tr>
+            
+            <tr>
+                <th class="formTitle">排序：</th>
+                <td class="formValue">
+                    <input id="sort" name="sort" type="text" class="form-control required number" placeholder="请输入排序">
+                </td>
+            </tr>
+   
+            
+        </tbody></table>
+    </div>
+
+					</form>
+
+   
+            </div>
+
+            
+        </div>
+
+    </div>
+   
+
+
+</body>
+</html>

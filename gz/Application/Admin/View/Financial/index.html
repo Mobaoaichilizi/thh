@@ -1,0 +1,152 @@
+<html><head>
+    <meta name="viewport" content="width=device-width">
+    <title>Index</title>
+    <link rel="stylesheet" href="__JS__/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="__CSS__/dataTables.bootstrap.css">
+    <link rel="stylesheet" href="__CSS__/font-awesome.min.css">
+    <link rel="stylesheet" href="__CSS__/index.css">
+    <link rel="stylesheet" href="__CSS__/style.min.css">
+    <link rel="stylesheet" href="__CSS__/framework-ui.css">
+     <script src="__JS__/jquery/jQuery-2.2.0.min.js"></script>
+   <script src="__JS__/bootstrap/js/bootstrap.min.js"></script>
+   <script src="__JS__/layer/layer.js"></script>
+   <script src="__JS__/framework-ui.js"></script>
+</head>
+<script language="javascript">
+
+
+function Refresh()
+{
+	self.location.reload();
+}
+</script>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>收支明细管理</h5>
+                        <div class="ibox-tools">
+                           
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+						<div id="DataTables_Table_0_wrapper" class="dataTables_wrapper form-inline" role="grid">
+                        <div class="topPanel">
+    <div class="toolbar">
+        <div class="btn-group">
+            
+        </div>
+    </div>
+    <div class="search">
+        <table>
+            <tbody><tr>
+                <td>
+                <form class="form-serch" method="post" action="{:U('Financial/index')}">
+                    <div class="input-group">
+                       <!--  <input id="personname" name="personname" type="text" class="form-control" placeholder="开户名" style="width: 200px;">
+                        <span class="input-group-btn">
+                            <button id="btn_search" type="submit" class="btn  btn-primary"><i class="fa fa-search"></i></button> -->
+                        </span>
+                    </div>
+                    </form>
+                </td>
+            </tr>
+        </tbody></table>
+    </div>
+</div>
+                    
+                        <table class="table table-striped table-bordered table-hover dataTable">
+                            <thead>
+                                <tr>
+                                    <th align="left">ID</th>
+                                    <th align="left">用户</th>
+                                    <th align="left">收入支出</th>
+                                    <th align="left">金额/积分</th>
+                                    <th align="left">余额/总积分</th>
+                                    <th align="left">单位</th>
+                                    <th align="left">备注</th>
+                                    <th align="left">收支类型</th>
+                                    <th align="left">操作时间</th>
+                                   
+                                </tr>
+                            </thead>
+                            <tbody>
+                               <volist name="financiallist" id="vo">
+                                <tr class="gradeC">
+                                    <td>{$vo.id}</td>
+                                    <td>{$vo.username}</td>
+                                    <td>
+	                                    <switch name="vo.operation">
+	                                    	<case value="1">充值</case>
+                                            <case value="2">消费</case>
+	                                    	<case value="3">收益</case>
+	                                    	<default/>
+	                                    </switch>
+	                                </td>
+                                    
+                                    <td>
+                                    	<switch name="vo.operation">
+	                                    	<case value="1">+{$vo.money}</case>
+                                            <case value="2">-{$vo.money}</case>
+	                                    	<case value="3">+{$vo.money}</case>
+	                                    	<default/>
+	                                    </switch>
+	                                </td>
+                                    
+                                    <td>{$vo.balance}</td>
+                                    <td>
+                                        <switch name="vo.recognizable">
+                                            <case value="1">元</case>
+                                            <case value="2">分</case>
+                                            <default/>
+                                        </switch>
+                                    </td>
+                                    <td>{$vo.content}</td>
+                                    <td>
+                                    	<switch name="vo.type">
+	                                    	<case value="1">图文咨询</case>
+	                                    	<case value="2">电话咨询</case>
+	                                    	<case value="3">预约咨询</case>
+	                                    	<case value="4">视频咨询</case>
+                                            <case value="5">开通会员</case>
+                                            <case value="6">用户充值</case>
+                                            <case value="7">账户提现</case>
+                                            <case value="8">系统奖励</case>
+                                            <case value="9">处方支付</case>
+                                            <case value="10">我的药房处方支付</case>
+                                            <case value="11">商品支付</case>
+	                                    	<case value="12">咨询退款</case>
+	                                    	<default/>
+	                                    </switch>
+	                                </td>
+                                    <td>{$vo.createtime|date="Y-m-d H:i:s",###}</td>
+                                    
+                                </tr>
+                               </volist>
+                                
+                              
+                            </tbody>
+                           
+                        </table>
+                        <div class="row">
+                       {$page}
+                       </div>
+
+
+                  
+ 					</div>
+                    </div>
+                    
+                </div>
+                
+            </div>
+            
+        </div>
+        
+    </div>
+  
+  
+</body>
+</html>

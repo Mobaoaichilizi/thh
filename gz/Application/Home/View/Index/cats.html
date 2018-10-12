@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" /><meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+<meta content="yes" name="apple-mobile-web-app-capable" />
+<meta content="black" name="apple-mobile-web-app-status-bar-style" />
+<meta name="format-detection" content="telephone=no"/>
+<title>{lgq#$metaTitle}</title>
+<script src="{lgq#:$Theme['root']}/js/jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="{lgq#:$Theme['root']}/js/jquery.lazyload.js" type="text/javascript"></script>
+<script src="{lgq#:$Theme['root']}/js/notification.js" type="text/javascript"></script>
+<script src="{lgq#:$Theme['root']}/js/swiper.min.js" type="text/javascript"></script>
+<script src="{lgq#:$Theme['root']}/js/main.js" type="text/javascript"></script>
+<link type="text/css" rel="stylesheet" href="{lgq#:$Theme['root']}/css/touch_index.css">
+<link rel="stylesheet" type="text/css" href="{lgq#:$Theme['root']}/css.css" />
+</head>
+<body>
+<div class="waptit1">{lgq#$metaTitle}</div>
+<!--主体-->
+<volist name="cats" id="hostlist" key="i"> 
+	<php>if ($i > 6) {$k = $i % 6 + 1;} else {$k = $i;}</php>
+	<div class="m-floor">
+	<ul>
+    
+	<li class="tit bgf{lgq#$k}">
+	<i>{lgq#$i}F</i>{lgq#$hostlist.class_name}
+	</li>
+	<li class="img"><a href="{lgq#:U('Store/products',array('token' => $_GET['token'], 'catid' => $hostlist['id'], 'wecha_id' => $wecha_id))}"><img src="{lgq#$host}{lgq#:C(Uploads_Path)}{lgq#$hostlist.img_thumb}"/></a></li>
+	</ul>
+	</div>
+</volist> 
+<div class="store_footer"></div>
+<include file="Store:footer"/>
+</body>
+</html>

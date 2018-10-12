@@ -1,0 +1,154 @@
+@charset "utf-8";
+/* CSS Document */
+
+* { padding:0; margin:0;}
+html,body { font-size:13px; font-family:"微软雅黑";}
+a { text-decoration:none; color:#333;}
+em,i { font-style:normal;}
+a:hover{ color:#ed6b20;}
+ul,li { list-style:none;}
+.fl { float:left;}
+.fr { float:right;}
+.clearfix{ clear:both;}
+.ttir { text-align:right;}
+.wz24 { font-size:24px !important;}
+.wz26 { font-size:26px !important;}
+.wz30 { font-size:30px !important;}
+.wz40 { font-size:40px !important;}
+.wzse1 { color:#03cbdd;}
+.wzse2 { color:#ff9900;}
+.wzse3 { color:#ff0000;}
+input[text] { -webkit-appearance:none;}
+/*
+:root { font-size:14px;}
+article { font-size: $min-font-size;}
+@media (min-width: $min-screen) and (max-width: $max-screen) { article { font-size: calc($min-font-size + (2 - 1.4) * ((100vw - $min-screen) / (1200 - 800)));}}
+@media (min-width: $max-screen) { article { font-size:$max-font-size;}}
+*/
+/* 外挂图形文字 */
+@font-face { font-family: "iconfont"; src: url('../fonts/iconfont.eot'); src: url('../fonts/iconfont.eot?#iefix') format('embedded-opentype'), url('../fonts/iconfont.woff') format('woff'), url('../fonts/iconfont.ttf') format('truetype'), url('../fonts/iconfont.svg#iconfont') format('svg');}
+.iconfont { font-family:"iconfont" !important; font-size:16px; font-style:normal; -webkit-font-smoothing:antialiased; -webkit-text-stroke-width:0.2px; -moz-osx-font-smoothing:grayscale;}
+@keyframes more_list 		 { from { left:0; bottom:-900px;} to { left:0; bottom:0;}	}
+@-webkit-keyframes more_list { from { left:0; bottom:-900px;} to { left:0; bottom:0;}	}
+
+
+/* 主体 */
+.pet_mian { max-width:400px; margin:0 auto; background:#f3f3f3; position:relative;}
+.pet_content_main { max-width: 100%; background:#fff; padding:10px 20px; -webkit-box-shadow:0 0 3px rgba(100,100,100,.1); box-shadow:0 0 3px rgba(100,100,100,.1);}
+
+.lanren .more { width:100%; float:left; padding:5px; box-sizing:border-box; text-align:center; line-height:2rem; /*font-style:italic;*/}
+.lanren .more a { width:100%; float:left; color:#30b6b9;/* border:1px solid #CCC; border-radius:5px;*/}
+
+/*头部*/
+.toptitle { width:100%; float:left; background:#03cadd; color:#FFF; padding:10px; box-sizing:border-box;}
+.toptitle a { color:#FFF; display:block;}
+.toptitle .Tbtn1 { width:10%;}
+.toptitle .Ttit1 { width:80%; text-align:center; font-size:20px; padding-top:.6%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+
+/*报告列表*/
+.tulist1 { width:100%; float:left; background:#FFF; padding:10px; box-sizing:border-box; margin-bottom:10px; box-shadow:2px 2px 3px #EEE;}
+.tulist1 .pic { width:25%;}
+.tulist1 .pic img { width:100%; border:1px solid #e6e6e6; max-width:180px; max-height:170px; display:inherit;}
+.tulist1 .con { width:71%; margin-left:2%; line-height:1.8em;}
+.tulist1 .con .bt { font-size:16px; line-height:2.2em; height:2.2em; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.tulist1 .con .nr { color:#999;}
+.tulist1 .con .nr p { height:1.8em; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+
+/*用药记录*/
+.jilulist1 { width:100%; float:left; background:#FFF; padding:10px; box-sizing:border-box; margin-bottom:10px; box-shadow:2px 2px 3px #EEE;}
+.jilulist1 div { width:100%; float:left;}
+.jilulist1 .tit .bt { width:90%; font-size:17px; line-height:2em; height:2em; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.jilulist1 .tit .btn { width:10%; text-align:right; color:#03cbdd;}
+.jilulist1 .con { font-size:15px; margin:5px 0;}
+.jilulist1 .con i { float:left; margin-right:6px; color:#999;}
+.jilulist1 .edit { border-top:1px solid #EEE; margin-top:10px; padding:10px 0;}
+.jilulist1 .edit dd { float:right; margin-left:15px; font-size:15px;}
+.jilulist1 .edit dd i { margin:0 5px; color:#999;}
+
+/* 是否选中提醒 */
+.aui-switch { width:3.3rem; height:1.8rem; border-radius:0.9rem; position:relative; top:3px; right:5px; vertical-align:top; border: 1px solid #dddddd; background-color:#dddddd; background-clip:content-box; display:inline-block; outline:none; -webkit-appearance:none; appearance:none; -webkit-user-select:none; user-select:none; -webkit-box-sizing:border-box; box-sizing:border-box; -webkit-background-clip:padding-box; background-clip:padding-box; -webkit-transition:all 0.2s linear; transition:all 0.2s linear;}
+.aui-switch:before { width:1.6rem; height:1.6rem; border-radius:0.9rem; position:absolute; top:0; left:0; background:#fff; content:''; -webkit-transition:left 0.2s; transition:left 0.2s;}
+.aui-switch:checked { border-color:#03cadd; background-color:#03cadd;}
+.aui-switch:checked:before { left:1.55rem;}
+
+/* 轮播 */
+.am-control-nav,.am-direction-nav,.am-slides{margin:0;padding:0;list-style:none}
+.am-slider{margin:0;padding:0;position:relative; max-height:500px; overflow:hidden}
+.am-slider .am-slides img{width:100%;display:block}
+.am-slider-a1 .am-control-nav{text-align:center;position:absolute;line-height:0;width:100%;bottom:5px}
+.am-slider-a1 .am-control-nav li{margin:0 6px; display:inline-block;}
+.am-slider-a1 .am-control-nav li a{width:8px;height:8px;display:block;background-color:rgba(0,0,0,.5);cursor:pointer;text-indent:-9999px;border-radius:50%;-webkit-box-shadow:inset 0 0 3px rgba(0,0,0,.3);box-shadow:inset 0 0 3px rgba(0,0,0,.3)}
+.am-slider-a1 img { height:/*220px*/;}
+.am-slider-a1 .am-control-nav li { position:relative;}
+.am-slider-a1 .am-control-nav li a { background:#FFF; /*opacity:.5;*/}
+.am-slider-a1 .am-control-nav li a:hover { background:#03cbdd;}
+.am-slider-a1 .am-control-nav li a.am-active { background:#03cbdd; -webkit-box-shadow:none; box-shadow:none; opacity:1;}
+.am-slider-a1 .am-control-nav { bottom:18px; z-index:2;}
+.pet_slider_shadow { position:absolute; -webkit-background-size:100%; background-size:100%; width:100%; height:100%; bottom:0; left:0; z-index:1;}
+.pet_slider_font { position:absolute; bottom:35px; left:20px; z-index:8; color:#fff;}
+.pet_slider_emoji { display:block; font-size:12px;}
+
+/*用药详情*/
+.conbox1 { width:100%; float:left; background:#FFF; padding:10px; box-sizing:border-box; display:inherit; box-shadow:2px 2px 3px #EEE;}
+.conbox1 .tit01 { width:100%; float:left; font-size:18px; padding:12px 0;}
+.conbox1 .con01 { line-height:180%;}
+
+/*添加用药记录*/
+.conbox2 { width:100%; float:left; background:#FFF; padding:0 10px; box-sizing:border-box; display:inherit; box-shadow:2px 2px 3px #EEE;}
+.conbox2 div { width:100%; float:left; line-height:3.6rem; height:3.4rem; font-size:14px; position:relative; overflow:hidden;}
+.conbox2 div:before{ content: ""; display: block; position: absolute; left: -50%; width: 200%; height: 1px; background: #ddd; -webkit-transform:scale(0.5);}
+.conbox2 div .addtime { position:absolute; right:0; color:#03cbdd; font-size:26px; }
+.conbox2 div i { float:left; margin-right:6px; color:#999;}
+.conbox2 div dd { float:left;}
+.conbox2 div dl { float:left; width:20%;}
+.conbox2 div input { border:none; outline:none; font-size:14px;}
+.conbox2 div dd select { position:absolute; top:15px; right:15px; border:none; outline:none; -webkit-appearance:none; background:none;}
+.conbox2 div dd em { position:absolute; right:0px; top:-2px; color:#999;}
+.beizhu1 { width:100%; float:left; margin:10px 0; background:#FFF; box-shadow:2px 2px 3px #EEE;}
+.beizhu1 textarea { width:100%; float:left; min-height:150px; border:none; outline:none; font-size:14px; padding:10px; box-sizing:border-box;}
+.btn01 { width:100%; float:left; padding:0 20px; box-sizing:border-box; margin:40px 0; text-align:center; line-height:3rem; font-size:18px;}
+.btn01 a { display:block; border-radius:6px; background:#03cbdd; color:#FFF;}
+.time1 { background:#03cadd; border-radius:5px; color:#FFF; padding:0 5px; box-sizing:border-box; margin:13px 0 0 13px; float:left; line-height:1.6em; height:1.4em;}
+
+/*患者天地*/
+.userbox { width:100%; float:left; background:url(../images/userbg.jpg) bottom no-repeat #03cbdd; background-size:100%; min-height:20rem; padding:20px; box-sizing:border-box;}
+.userbox .tx { text-align:center;}
+.userbox .tx img { width:7rem; height:7rem; border:4px solid #7fe4ee; border-radius:100px;}
+.userbox .nr { color:#FFF; text-align:center; font-size:18px; margin:20px 0;}
+.usernav { width:100%; float:left; background:#FFF; box-shadow:2px 2px 3px #EEE; padding:0 0 20px 0; box-sizing:border-box;}
+.usernav dd { width:33.33%; float:left; text-align:center; font-size:15px; line-height:120%;}
+.usernav dd img { width:30%;}
+.usernav dd a { display:block;}
+.conbox3 { width:100%; float:left; background:#FFF; padding:0 10px; box-sizing:border-box; margin-top:10px; display:inherit; box-shadow:2px 2px 3px #EEE;}
+.conbox3 div { width:100%; float:left; line-height:3.6rem; height:3.4rem; font-size:14px; position:relative; overflow:hidden; background:url(../images/more1.png) right no-repeat; background-size:4%;}
+/*conbox3 div:before{ content: ""; display: block; position: absolute; left: -50%; width: 200%; height: 1px; background:#ddd; -webkit-transform:scale(0.5);}*/
+.conbox3 div a { display:block;}
+.conbox3 dl { width:100%; float:left; padding-top:10px;}
+.conbox3 dl img { width:100%;}
+.conbox3 div i { float:left; margin-right:6px;}
+.line01 { width:100%; float:left; height:0; line-height:0; /*border-bottom:1pt solid #DDD;*/ position:relative;}
+.line01:after{ content: ""; display: block; position: absolute; left: -50%; width: 200%; height: 1px; background: #ddd; -webkit-transform:scale(0.5); }
+
+/*资讯列表*/
+.newlist1 { width:100%; float:left; background:#FFF; padding:10px; box-sizing:border-box; margin-bottom:10px; box-shadow:2px 2px 3px #EEE;}
+.newlist1 .bt { font-size:16px; line-height:2.2em; height:2.2em; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.newlist1 .nr { color:#999; line-height:160%; overflow:hidden; display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:3;}
+
+/*资讯详情*/
+.conbox4 { width:100%; float:left; background:#FFF; padding:10px; box-sizing:border-box; display:inherit; box-shadow:2px 2px 3px #EEE;}
+.conbox4 .tit01 { width:100%; float:left; font-size:18px; padding-top:12px;}
+.conbox4 .con01 { line-height:180%;}
+.conbox4 .con01 img { max-width:100%;}
+.conbox4 .time2 { color:#CCC; line-height:2.4em; margin-bottom:9px;}
+.conbox4 .time2:after{ content: ""; display: block; position: absolute; left: -50%; width: 200%; height: 1px; background: #ddd; -webkit-transform:scale(0.5);}
+
+/*个人设置*/
+.shezhi { width:100%; float:left; line-height:3em; font-size:16px;}
+.shezhi .cbt1 { width:25%; float:left;}
+.shezhi .cbt2 { width:75%; float:left;}
+.shezhi .cbt3 { width:35%; float:left;}
+.shezhi input { width:100%; height:2.4em; line-height:1.8em; font-size:16px; border:none; outline:none;}
+.shezhi .cbt4 { width:40%; float:left;}
+.shezhi .cbt4 span { background:#03cbdd; display:block; color:#FFF; font-size:14px; border-radius:6px; margin-left:9px; line-height:2em; text-align:center; margin-top:9px;}
+.shezh2 { width:100%; float:left; line-height:2em; font-size:16px; margin:10% 0; text-align:center;}
+.shezh2 .tel { font-size:20px; color:#03cbdd;}

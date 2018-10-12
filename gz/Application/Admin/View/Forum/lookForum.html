@@ -1,0 +1,149 @@
+<html><head>
+    <meta name="viewport" content="width=device-width">
+    <title>Form</title>
+    <link rel="stylesheet" href="__JS__/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="__CSS__/font-awesome.min.css">
+    <link rel="stylesheet" href="__CSS__/index.css">
+    <link rel="stylesheet" href="__CSS__/style.min.css">
+    <link rel="stylesheet" href="__CSS__/framework-ui.css">
+    <link rel="stylesheet" type="text/css" href="__CSS__/zoomify.min.css">
+<script src="__JS__/jquery/jQuery-2.2.0.min.js"></script>
+<script src="__JS__/bootstrap/js/bootstrap.min.js"></script>
+<script src="__JS__/validate/jquery.validate.min.js"></script>
+<script src="__JS__/layer/layer.js"></script>
+<script src="__JS__/framework-ui.js"></script>
+<script type="text/javascript" src="__STATIC__/uploadify/jquery.uploadify.min.js"></script>
+<script src="__JS__/zoomify.min.js"></script>
+<script>
+function submitForm() {
+  if (!$('#commentForm').formValid()) {
+       return false;
+  }
+  $.submitForm({
+            url: "{:U('Forum/lookForum')}",
+            param: $("#commentForm").formSerialize(),
+            success: function () {
+                $.currentWindow().Refresh();
+            }
+  })
+
+}
+function dianji(){
+    $('.icon').zoomify();
+}
+</script>
+<style type="text/css">
+    input{
+        border: 0;
+    }
+</style>
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        
+        <div class="row">
+            <div class="col-sm-12">       
+  <form class="form-horizontal" id="commentForm" action="{:U('Forum/lookForum')}" method="post">
+      <div style="padding-top: 20px; margin-right: 20px;">
+        <table class="form">
+            <tbody>
+            <tr>
+                <th class="formTitle">发布人：</th>
+                <td class="formValue">
+                    <input type="hidden" name="id" id="id" value="{$forum.id}">
+                    <input id="username" name="username" type="text" class="form-control required" disabled value="{$forum.username}">
+                </td>
+                <th class="formTitle">论坛类别：</th>
+                <td class="formValue">
+                    <input id="setting_id" name="setting_id" type="text" class="form-control required" disabled value="{$forum.stitle}">
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">标题：</th>
+                <td class="formValue">
+                    <input id="title" name="title" type="text" class="form-control required" disabled value="{$forum.title}">
+                </td>
+                <th class="formTitle">发布时间：</th>
+                <td class="formValue">
+                    <input id="create_time" name="create_time" type="text" class="form-control" disabled value="{$forum.create_time|date='Y-m-d',###}">
+                </td>
+            </tr>
+            <if condition="$forum['item_thumb'] neq ''">
+                <tr>
+                    <th class="formTitle">图片：</th>
+                    <td class="formValue">
+                        <volist name="forum['item_thumb']" id="images">
+                            <img src="{$http_img_url}{$images}" style="width: 50px;height: 50px;margin-left: 5px;" class="icon" onClick="dianji();">
+                        </volist>
+                    </td>    
+                
+                </tr>
+            </if>
+            <if condition="$forum['video'] neq ''">
+                <tr>
+                    <th class="formTitle">视频：</th>
+                    <td class="formValue">
+                        <div style="width: 90px;">
+                            <video src="{$http_img_url}{$forum.video}"  controls="controls">
+                        </div>
+                    
+                        
+                    </video>   
+                  <!--   <input id="video" name="video" type="text" class="form-control required" disabled value="{$forum.video}"> -->
+                    </td>
+                </tr>
+            </if>
+           <!--  <tr>
+                <th class="formTitle">音频：</th>
+                <td class="formValue">
+
+                    <input id="audio" name="audio" type="text" class="form-control" disabled value="{$forum.audio}">
+                </td>
+               
+            </tr> -->
+            <tr>
+                <th class="formTitle">内容：</th>
+                <td class="formValue">
+                    <textarea style="margin: 0px; width: 570px; height: 100px;" readonly="readonly">{$forum.content}</textarea>
+                </td>
+            </tr>
+            
+            <tr>
+                <th class="formTitle">类型：</th>
+                <td class="formValue">
+                    <switch name="forum.type">
+                        <case value="1">图文</case>
+                        <case value="2">视频</case>
+                        <default />
+                    </switch>
+                   
+                </td>
+                <th class="formTitle">状态：</th>
+                <td class="formValue">
+                    <select name="status" id="status">
+                        <option <if condition="$forum.status eq 0">selected</if> value="0">未审核</option>
+                        <option <if condition="$forum.status eq 2">selected</if> value="2">审核未通过</option>
+                        <option <if condition="$forum.status eq 1">selected</if> value="1">审核通过</option>
+                    </select>
+                   
+                </td>
+            </tr>
+            
+           
+        </tbody></table>
+    </div>
+ 
+					</form>
+
+   
+            </div>
+
+            
+        </div>
+
+    </div>
+   
+
+
+</body>
+</html>

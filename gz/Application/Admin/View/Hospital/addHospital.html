@@ -1,0 +1,175 @@
+
+<html><head>
+    <meta name="viewport" content="width=device-width">
+    <title>Form</title>
+    <link rel="stylesheet" href="__JS__/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="__CSS__/font-awesome.min.css">
+    <link rel="stylesheet" href="__CSS__/index.css">
+    <link rel="stylesheet" href="__CSS__/style.min.css">
+    <link rel="stylesheet" href="__CSS__/framework-ui.css">
+  
+<script src="__JS__/jquery/jQuery-2.2.0.min.js"></script>
+<script src="__JS__/bootstrap/js/bootstrap.min.js"></script>
+<script src="__JS__/validate/jquery.validate.min.js"></script>
+<script src="__JS__/layer/layer.js"></script>
+<script src="__JS__/framework-ui.js"></script>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=8hawtXTf423cdezdv0VvH6QlmYGAIpgz"></script>
+<script type="text/javascript" src="__JS__/jquery.chained.js"></script>
+<style type="text/css">
+		#allmap {width: 100%;height: 300px;overflow: hidden;margin:0;font-family:"微软雅黑";}
+	</style>
+<!-- <script type="text/javascript" src="__STATIC__/uploadify/jquery.uploadify.min.js"></script> -->
+<script>
+function submitForm() {
+  if (!$('#commentForm').formValid()) {
+       return false;
+  }
+  $.submitForm({
+            url: "{:U('Hospital/addHospital')}",
+            param: $("#commentForm").formSerialize(),
+            success: function () {
+                $.currentWindow().Refresh();
+            }
+  })
+
+}
+</script>
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        
+        <div class="row">
+            <div class="col-sm-12">       
+   <form class="form-horizontal" id="commentForm" action="{:U('Hospital/addHospital')}" method="post">
+   		<input type="hidden" name="lng" id="lng" value="" class="form-control required"  />
+        <input type="hidden" name="lat" id="lat"  value="" class="form-control required" />
+      <div style="padding-top: 20px; margin-right: 20px;">
+        <table class="form">
+            <tbody>
+            <tr>
+                <th class="formTitle">所属区域：</th>
+                <td class="formValue">
+                     <select id="province" name="province" class="required">
+                  		<php>$province=M('District')->where("upid=0")->select();</php>
+                        	 <option value="0">选择省</option>
+                        	<volist name="province" id="pvo">
+                            <option value="{$pvo.id}">{$pvo.name}</option>
+                            </volist>
+                    </select>
+                    <select id="city" name="city" class="required">
+                  <php>$province=M('District')->where("upid=0")->select();</php>
+                            <volist name="province" id="pvo">
+                            <php>$city=M('District')->where("upid=".$pvo['id'])->select();</php>
+                            	<volist name="city" id="cvo">
+                            <option value="{$cvo.id}" class="{$pvo.id}">{$cvo.name}</option>
+                            	</volist>
+                            </volist>
+                            
+                           
+              
+                    </select>
+                    <select id="district" name="district" class="required">
+                  
+                            <php>$province=M('District')->where("upid=0")->select();</php>
+                            <volist name="province" id="pvo">
+                            <php>$city=M('District')->where("upid=".$pvo['id'])->select();</php>
+                            	<volist name="city" id="cvo">
+                                	<php>$district=M('District')->where("upid=".$cvo['id'])->select();</php>
+                                    <volist name="district" id="dvo">
+                            			<option value="{$dvo.id}" class="{$cvo.id}">{$dvo.name}</option>
+                            		</volist>
+                            	</volist>
+                            </volist>
+                            
+              
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">医院名称：</th>
+                <td class="formValue">
+                    <input id="name" name="name" type="text" class="form-control required" placeholder="请输入医院名称">
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">联系方式：</th>
+                <td class="formValue">
+                    <input id="phone" name="phone" type="text" class="form-control required" placeholder="请输入联系方式">
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">医院地址：</th>
+                <td class="formValue">
+                    <input id="address" name="address" type="text" class="form-control required" placeholder="请输入医院地址">
+                </td>
+            </tr>
+            
+            <tr>
+                <th class="formTitle">状态：</th>
+                <td class="formValue">
+                     <select id="status" name="status" class="form-control">
+                  
+                         <option value="1">显示</option>
+                         <option value="0">不显示</option>
+              
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">排序：</th>
+                <td class="formValue">
+                    <input id="sort" name="sort" type="text" class="form-control required" placeholder="请输入排序">
+                </td>
+            </tr>
+            
+            
+             <tr>
+                <th class="formTitle">地图：</th>
+                <td class="formValue">
+                    <div id="allmap"></div>
+                </td>
+            </tr>
+            
+        </tbody></table>
+        <script type="text/javascript">
+	// 百度地图API功能
+	var map = new BMap.Map("allmap");            
+	map.centerAndZoom("西安",12);  
+	 var navigationControl = new BMap.NavigationControl({
+    // 靠左上角位置
+    anchor: BMAP_ANCHOR_TOP_LEFT,
+    // LARGE类型
+    type: BMAP_NAVIGATION_CONTROL_LARGE,
+    // 启用显示定位
+    enableGeolocation: true
+	  });
+	  map.addControl(navigationControl);         
+	//单击获取点击的经纬度
+	
+	map.addEventListener("click",function(e){
+		map.clearOverlays(); 
+		var marker = new BMap.Marker(new BMap.Point(e.point.lng,e.point.lat));
+		$('#lng').val(e.point.lng);
+		$('#lat').val(e.point.lat);
+		map.addOverlay(marker);
+	});
+	
+	$("#city").chained("#province");
+	$("#district").chained("#city");
+</script>
+    </div>
+ 
+					</form>
+
+   
+            </div>
+
+            
+        </div>
+
+    </div>
+   
+
+
+</body>
+</html>

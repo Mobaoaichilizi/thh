@@ -1,0 +1,50 @@
+﻿<!DOCTYPE html><html><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
+<title>广正云医下载页面</title>
+<link rel="stylesheet" type="text/css" href="__CSS__/download.css" />
+<script src="__JS__/jquery.min.js"></script>
+</head>
+
+<body>
+
+<div class="btn">
+	<dd><a href="http:/api.sxgzyl.com//Apk/android0.2.2.apk" class="click"><img src="__IMG__/btn01.png" /></a></dd>
+	<dd><a href="https://itunes.apple.com/cn/app/id1238664623?mt=8"><img src="__IMG__/btn02.png" /></a></dd>
+</div>
+<div class="hidden" style="display: none;position: relative;z-index: 999;">
+	<img src="__IMG__/download1.png" style="float: right;margin-right: 2.1rem">
+</div>
+<!-- <script type="text/javascript">
+	if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) {
+	    // alert(navigator.userAgent);  
+	   
+	} else if (/(Android)/i.test(navigator.userAgent)) {
+	    // alert(navigator.userAgent); 
+	   
+	}
+</script> -->
+<script type="text/javascript">
+	window.onload = function(){
+		var ua = navigator.userAgent.toLowerCase(); 
+        if(ua.match(/MicroMessenger/i)=="micromessenger") { 
+            $('.click').addClass('download');  
+            $('.download').click(function(){
+				
+				$(".hidden").css('display','block');
+				$(".hidden").height($(window).height());
+				$(".hidden").width($(window).width());
+				$(".hidden").addClass("show");
+				
+			})
+			$('.hidden').click(function(){
+				$(".hidden").css('display','none');
+				$(".hidden").removeClass('show');
+			})  
+        }else{
+        	$(".click").attr("href","http:/api.sxgzyl.com/Apk/android0.2.2.apk"); 
+        }
+	}
+</script>
+
+</body>
+</html>

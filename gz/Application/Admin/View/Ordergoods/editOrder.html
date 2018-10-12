@@ -1,0 +1,196 @@
+<html><head>
+    <meta name="viewport" content="width=device-width">
+    <title>Index</title>
+    <link rel="stylesheet" href="__JS__/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="__CSS__/dataTables.bootstrap.css">
+    <link rel="stylesheet" href="__CSS__/font-awesome.min.css">
+    <link rel="stylesheet" href="__CSS__/style.min.css">
+    <link rel="stylesheet" href="__CSS__/framework-ui.css">
+     <script src="__JS__/jquery/jQuery-2.2.0.min.js"></script>
+   <script src="__JS__/bootstrap/js/bootstrap.min.js"></script>
+   <script src="__JS__/layer/layer.js"></script>
+   <script src="__JS__/framework-ui.js"></script>
+</head>
+<script>
+function submitForm() {
+  $.submitForm({
+            url: "{:U('Ordergoods/editOrder')}",
+            param: $("#commentForm").formSerialize(),
+            success: function () {
+                Refresh();
+            }
+  })
+
+}
+function submitpayForm() {
+  $.submitForm({
+            url: "{:U('Ordergoods/editpayOrder')}",
+            param: $("#commentForm").formSerialize(),
+            success: function () {
+                Refresh();
+            }
+  })
+
+}
+function Refresh()
+{
+	location.reload();
+}
+</script>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>订单管理</h5>
+                        <div class="ibox-tools">
+                           
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+						<div id="DataTables_Table_0_wrapper" class="dataTables_wrapper form-inline" role="grid">
+                        <div class="topPanel">
+    <div class="toolbar">
+        <div class="btn-group">
+            
+        </div>
+        <div class="btn-group">
+           <a id="NF-add" authorize="yes" class="btn btn-primary dropdown-text" href="{:U('Ordergoods/index')}"><i class="fa fa-plus"></i>订单管理</a>
+        </div>
+    </div>
+    <div class="search">
+        <table>
+            <tbody><tr>
+                <td>
+              
+                </td>
+            </tr>
+        </tbody></table>
+    </div>
+</div>
+                        <table class="table table-bordered dataTable">
+                          	 <thead>
+                                <tr>
+                                    <th colspan="4" style="text-align:center;">基本信息</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            	
+                             
+                                <tr class="gradeC">
+                                    <th style="text-align:right">订单号：</th>
+                                    <td>{$result.order_sn}</td>
+                                    <th style="text-align:right">订单状态：</th>
+                                    <td>
+                                        <php>if($result['status_type']==124){</php>待收货<php>}else if($result['status_type']==125){</php>已完成<php>}</php>
+                                    <!-- <php>if($result['is_show']==1){</php>
+                                    订单已取消
+                                    <php>}else{</php>
+                                    <php>if($result['order_status']==0){</php>未确认<php>}else if($result['order_status']==1){</php>已确认<php>}else if($result['order_status']==2){</php>已完成<php>}else{</php>订单已取消<php>}</php>,<php>if($result['pay_status']==0){</php>未支付<php>}else if($result['pay_status']==1){</php>已支付<php>}</php>,<php>if($result['evaluation_status']==0){</php>未发货<php>}else{</php>已发货<php>}</php></td>
+                                   <php>}</php> -->
+                                </tr>
+                                
+                                 <tr class="gradeC">
+                                    <th style="text-align:right">下单人：</th>
+                                    <td>{$result.order_phone}</td>
+                                    <th style="text-align:right">下单时间：</th>
+                                    <td>{$result['createtime']|date='Y-m-d H:i:s',###}</td>
+                                   
+                                </tr>
+                                <tr class="gradeC">
+                                    <th style="text-align:right">收货人：</th>
+                                    <td>{$result.name}</td>
+                                    <th style="text-align:right">收货人电话：</th>
+                                    <td>{$result.phone}</td>
+                                   
+                                </tr>
+                                <tr class="gradeC">
+                                    <th style="text-align:right">收货地址：</th>
+                                    <td  colspan="3">{$result.address}</td>
+                                </tr>
+                         
+                                
+                              
+                            </tbody>
+                           
+                        </table>
+                        
+                        
+                        <table class="table table-bordered dataTable">
+                          	 <thead>
+                                <tr>
+                                    <th colspan="4" style="text-align:center;">商品信息</th>
+                                </tr>
+                                 <tr>
+                                    <th>商品名称</th>
+                                    <th>价格</th>
+                                    <th>数量</th>
+                                    <th>小计</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            	
+                             
+                               
+                                <volist name="goods_list" id="vo">
+                                 <tr class="gradeC">
+                                    <td>{$vo.goods_name}</td>
+                                    <td>{$vo.price} 元</td>
+                                    <td>{$vo.number}</td>
+                                    <td>{$vo.goods_total} 元</td>
+                                </tr>
+                         		</volist>
+                                
+                                <tr>
+                                    <th colspan="4" style="text-align:right;">总价格：{$total} 元</th>
+                                </tr>
+                            </tbody>
+                           	
+                        </table>
+                        
+                        
+                         <table class="table table-bordered dataTable"  style="display:none;">
+                          	 <thead>
+                                <tr>
+                                    <th colspan="4" style="text-align:center;">操作信息</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                 <tr class="gradeC">
+                                    <td colspan="4" style="text-align:center;">
+   <php>if($result['is_show']==0){</php>
+
+   <form class="form-horizontal" id="commentForm" action="{:U('Ordergoods/editOrder')}" method="post">
+   <input type="hidden" name="id" id="id" value="{$result.id}">
+   <input type="hidden" name="order_status" id="order_status" value="1">
+   <input type="hidden" name="pay_status" id="pay_status" value="1">
+   <php>if($result['order_status']==0){</php>
+
+ <button class="btn btn-primary" type="button" onClick="submitForm();">确认订单</button>  
+ <php>}</php>
+
+ <php>if($result['pay_status']==0){</php>
+ <button class="btn btn-primary" type="button" onClick="submitpayForm();">确认支付</button>  
+ <php>}</php>     
+	</form>
+    <php>}</php>
+        </td>
+        </tr>
+                            </tbody>
+                        </table>
+                       
+ 					</div>
+                    </div>
+                    
+                </div>
+                
+            </div>
+            
+        </div>
+        
+    </div>
+  
+  
+</body>
+</html>

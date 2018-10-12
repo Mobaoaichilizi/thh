@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" /><meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+<meta content="yes" name="apple-mobile-web-app-capable" />
+<meta content="black" name="apple-mobile-web-app-status-bar-style" />
+<meta name="format-detection" content="telephone=no"/>
+<title>产品详情</title>
+
+<script src="__JS__/jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="__JS__/jquery.lazyload.js" type="text/javascript"></script>
+<script src="__JS__/notification.js" type="text/javascript"></script>
+<script src="__JS__/swiper.min.js" type="text/javascript"></script>
+<script src="__JS__/main.js" type="text/javascript"></script>
+<link rel="stylesheet" type="text/css" href="__CSS__/css.css" />
+<link type="text/css" rel="stylesheet" href="__CSS__/style_touch.css">
+
+</head>
+<body>
+<div id="scnhtm5" class="m-body">
+<div class="m-detail-mainout">
+<style>
+#content{display:none;width:100%;overflow:hidden;position:absolute;top:0;}
+
+#imgs li{float:left;text-align:center;height:100%;padding-top:65px;}
+#imgs img{width:94%;-webkit-transform:translate3d(0px,0px,0px);}
+.bg{width:100%;top:0;left:0;background:#000;opacity:0.8;position:absolute;display:none;}
+.close{display:none;position:absolute;z-index:10;right:3%;top:20px;color:#fff;cursor:pointer;background:#999;border-radius:3px;padding:5px 8px;}
+.s_count{display:none;position:absolute;z-index:10;right:3%;top:25px;color:#fff;margin-right:60px;}
+.infodetail img{
+    max-width: 100%;
+}
+</style>
+<!--轮播--->
+<div class="focusPic">
+	<div class="views">
+		
+			<ul class="warp" id="fd">
+				<li class="li"><img src="{$product.img_thumb}"></li>
+			</ul>
+
+	</div>
+	
+		<ul class="tabs"><li>0</li></ul>
+
+</div>
+<script>
+var focusPic = new Swiper('.focusPic .views',{pagination: '.focusPic .tabs',autoplay:3000})
+</script>
+<!--轮播结束--->
+<div class="d-info">
+<form id="product_buy_form" name="product_buy_form" action="#" method="POST">
+<h1>{$product.title}</h1>
+<div class="price">
+<span class="okp">销售价：<em id="xsprice">￥{$product.original_price}</em></span>
+<span class="okp">市场价：<em id="vprice">￥{$product.price}</em></span>
+</div>
+
+
+<div class="i-row">
+<div class="t">数量：</div>
+<div class="c buynum">
+<i style="cursor: pointer;" class="numadjust dec" onClick="plus_minus({$product.id}, -1,{$product.price})"></i>
+<input id="buy_num" name="goods[num]" type="text" value="1" readonly>
+<i style="cursor: pointer;" class="numadjust add" onClick="plus_minus({$product.id},1,{$product.price})"></i>
+<span class="stock">(库存<span id="stock">{$product.stock}</span>)</span>
+</div>
+</div>
+
+<div class="i-row act">
+<a href="javascript:;" onClick="QuickBuy()" class="buynow">立即购买</a>
+<a href="javascript:;" id="btn_add_cart" class="addcart" onClick="add_cart();">加入购物车</a>
+</div>
+</form>
+</div>
+<div class="d-info">
+<div class="detailinfo">
+<ul class="tabs"><li>详情</li></ul>
+<div class="views">
+<div class="warp">
+<div class="li">
+<ul class="detail-list">
+<div class="infodetail">{$product.process}</div>
+</ul>
+<div class="goods_intro"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<script type="text/javascript"> 
+var detailinfo = new Swiper('.detailinfo .views',{pagination: '.detailinfo .tabs',autoplay:false});
+var SysSecond; 
+var InterValObj; 
+var buyDetailId = '';
+$(document).ready(function() {
+	$(".norms").click(function(){
+		if ($(this).attr('class') != 'norms on') {
+			$(this).addClass('on').siblings().removeClass('on');
+			var id = $(this).attr('id');
+			var nextid = 'color_0';
+			$('.color').each(function(){
+				if ($(this).attr('class') == 'color on') {
+					nextid = $(this).attr('id');
+				}
+			});
+			if ($("#" + nextid + "_" + id).val() != '' && $("#" + nextid + "_" + id).val() != null) {
+				buyDetailId = nextid + "_" + id;
+				$("#stock").text($("#" + nextid + "_" + id).val());
+				$("#xsprice").text('￥' + $("#" + nextid + "_" + id).attr('price'));
+				$("#vprice").text('￥' + $("#" + nextid + "_" + id).attr('vprice'));
+			} else {
+				$("#stock").text(0);
+			}
+		} else {
+			$(this).removeClass('on');
+		}
+	});
+}); 
+
+//加减
+function plus_minus(rowid, number,price) {
+    var num = parseInt($('#buy_num').val());
+    num = num + parseInt(number);
+    if (num > parseInt($('#stock').text())) {
+    	num = parseInt($('#stock').text());
+    }
+    if (num < 1) {
+        return false;
+    }
+     $('#buy_num').attr('value',num);
+}
+function add_cart() {
+	$("#btn_add_cart").attr("disable", false);
+	var count = parseInt($('#buy_num').val());
+	if (count > parseInt($("#stock").text())) {
+		return floatNotify.simple('抱歉，您的购买量超过了库存了');
+	}
+	$.ajax({
+		url: "{:U('Index/addProductToCart',array('id'=>$product['id']))}" + '&count='+count,
+		
+		success: function() {
+                return floatNotify.simple('加入购物车成功');
+		}
+	});
+}
+
+function QuickBuy() {
+	var count = parseInt($('#buy_num').val());
+	if (count > parseInt($("#stock").text())) {
+		return floatNotify.simple('抱歉，您的购买量超过了库存了');
+	}
+	$.ajax({
+		url: "{:U('Index/addProductToCart',array('id'=>$product['id']))}" + '&count='+count,
+		
+		success: function() {
+                location.href = "{:U('Index/cart')}";
+		}
+	});
+}
+
+</script>
+</body>
+
+</html>

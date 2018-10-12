@@ -1,0 +1,163 @@
+
+<html><head>
+    <meta name="viewport" content="width=device-width">
+    <title>Form</title>
+    <link rel="stylesheet" href="__JS__/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="__CSS__/font-awesome.min.css">
+    <link rel="stylesheet" href="__CSS__/index.css">
+    <link rel="stylesheet" href="__CSS__/style.min.css">
+    <link rel="stylesheet" href="__CSS__/framework-ui.css">
+  
+<script src="__JS__/jquery/jQuery-2.2.0.min.js"></script>
+<script src="__JS__/bootstrap/js/bootstrap.min.js"></script>
+<script src="__JS__/validate/jquery.validate.min.js"></script>
+<script src="__JS__/layer/layer.js"></script>
+<script src="__JS__/framework-ui.js"></script>
+<script type="text/javascript" src="__STATIC__/uploadify/jquery.uploadify.min.js"></script>
+<script>
+function submitForm() {
+  if (!$('#commentForm').formValid()) {
+       return false;
+  }
+  $.submitForm({
+            url: "{:U('Department/addDepartment')}",
+            param: $("#commentForm").formSerialize(),
+            success: function () {
+                $.currentWindow().Refresh();
+            }
+  })
+
+}
+</script>
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        
+        <div class="row">
+            <div class="col-sm-12">       
+   <form class="form-horizontal" id="commentForm" action="{:U('Department/addDepartment')}" method="post">
+      <div style="padding-top: 20px; margin-right: 20px;">
+        <table class="form">
+            <tbody>
+           
+            <tr>
+                <th class="formTitle">名称：</th>
+                <td class="formValue">
+                    <input id="name" name="name" type="text" class="form-control required" placeholder="请输入名称">
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">图标：</th>
+                <td class="formValue">
+                    <input type="file" id="upload_picture_imgitem">
+                    <input type="hidden" name="img_thumb" id="img_thumb"/>
+                        
+                    <script type="text/javascript">
+
+
+                    //上传图片
+
+
+                    /* 初始化上传插件 */
+
+
+                    $("#upload_picture_imgitem").uploadify({
+
+                        "height"          : 30,
+
+                        "swf"             : "__STATIC__/uploadify/uploadify.swf",
+
+                        "fileObjName"     : "download",
+
+                        "buttonText"      : "上传图片",
+
+                        "uploader"        : "{:U('File/uploadPicture',array('session_id'=>session_id()))}",
+
+                        "width"           : 120,
+
+                        'removeTimeout'   : 1,
+
+                        'fileTypeExts'    : '*.jpg; *.png; *.gif;',
+
+                        "onUploadSuccess" : uploadPictureimg,
+                        'onFallback' : function() {
+
+                            alert('未检测到兼容版本的Flash.');
+
+                        }
+
+                    });
+
+                    function uploadPictureimg(file, data){
+                        var data = $.parseJSON(data);
+                        var src = '';
+                        if(data.status){
+                            $("#img_thumb").val(data.data.path);
+                            src = data.data.path;
+                            $("#img_thumb").parent().parent().parent().find('.upload-img-box').html(
+                                '<div class="upload-pre-item"><img src="' +http_img_url+ src + '"/></div>'
+                            );
+                        } else {
+                            alert(data.info);
+                        }
+                    }
+
+                    </script>
+                </td>
+            </tr>
+            
+            <tr>
+                <th class="formTitle"></th>
+                <td class="formValue">
+                   <div class="upload-img-box">
+                        
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">所属：</th>
+                <td class="formValue">
+                     <select id="type" name="type" class="form-control">
+                  
+                         <option value="1">寻医诊疗</option>
+                         <option value="2">膏方专家</option>
+                         <option value="3">慢病调制</option>
+                         <option value="4">膏方和慢病</option>
+              
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">状态：</th>
+                <td class="formValue">
+                     <select id="status" name="status" class="form-control">
+                  
+                         <option value="1">显示</option>
+                         <option value="0">不显示</option>
+              
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">排序：</th>
+                <td class="formValue">
+                    <input id="sort" name="sort" type="text" class="form-control required" placeholder="请输入排序">
+                </td>
+            </tr>
+        </tbody></table>
+    </div>
+ 
+					</form>
+
+   
+            </div>
+
+            
+        </div>
+
+    </div>
+   
+
+
+</body>
+</html>

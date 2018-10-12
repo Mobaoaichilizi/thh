@@ -1,0 +1,383 @@
+<html><head>
+    <meta name="viewport" content="width=device-width">
+    <title>Form</title>
+    <link rel="stylesheet" href="__JS__/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="__CSS__/font-awesome.min.css">
+    <link rel="stylesheet" href="__CSS__/index.css">
+    <link rel="stylesheet" href="__CSS__/style.min.css">
+    <link rel="stylesheet" href="__CSS__/framework-ui.css">
+     <link rel="stylesheet" href="__CSS__/UploadImages.css">
+  
+<script src="__JS__/jquery/jQuery-2.2.0.min.js"></script>
+<script src="__JS__/bootstrap/js/bootstrap.min.js"></script>
+<script src="__JS__/validate/jquery.validate.min.js"></script>
+<script src="__JS__/layer/layer.js"></script>
+<script src="__JS__/framework-ui.js"></script>
+<!-- <script type="text/javascript" src="__STATIC__/uploadify/jquery.uploadify.min.js"></script> -->
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=8hawtXTf423cdezdv0VvH6QlmYGAIpgz"></script>
+<script type="text/javascript" src="__JS__/jquery.chained.js"></script>
+<script type="text/javascript" src="__STATIC__/uploadify/jquery.uploadify.min.js"></script>
+<script src="__JS__/UploadImages.js"></script>
+<style type="text/css">
+		#allmap {width: 100%;height: 300px;overflow: hidden;margin:0;font-family:"微软雅黑";}
+	</style>
+<script>
+function submitForm() {
+  if (!$('#commentForm').formValid()) {
+       return false;
+  }
+  $.submitForm({
+            url: "{:U('Institutions/editInstitutions')}",
+            param: $("#commentForm").formSerialize(),
+            success: function () {
+                $.currentWindow().Refresh();
+            }
+  })
+
+}
+</script>
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        
+        <div class="row">
+            <div class="col-sm-12">       
+   <form class="form-horizontal" id="commentForm" action="{:U('Institutions/editInstitutions')}" method="post">
+   		<input type="hidden" name="id" id="id" value="{$institutions.id}">
+        <input type="hidden" name="lng" id="lng" value="{$institutions.lng}" class="form-control required"  />
+        <input type="hidden" name="lat" id="lat"  value="{$institutions.lat}" class="form-control required" />
+      <div style="padding-top: 20px; margin-right: 20px;">
+        <table class="form">
+            <tbody>
+            <tr>
+                <th class="formTitle">所属区域：</th>
+                <td class="formValue">
+                     <select id="province" name="province" class="required">
+                  		<php>$province=M('District')->where("upid=0")->select();</php>
+                        	 <option value="0">选择省</option>
+                        	<volist name="province" id="pvo">
+                            <option value="{$pvo.id}" <php>if($institutions['province']==$pvo['id']){</php>selected<php>}</php>>{$pvo.name}</option>
+                            </volist>
+                    </select>
+                    <select id="city" name="city" class="required">
+                  <php>$province=M('District')->where("upid=0")->select();</php>
+                            <volist name="province" id="pvo">
+                            <php>$city=M('District')->where("upid=".$pvo['id'])->select();</php>
+                            	<volist name="city" id="cvo">
+                            <option value="{$cvo.id}" class="{$pvo.id}" <php>if($institutions['city']==$cvo['id']){</php>selected<php>}</php>>{$cvo.name}</option>
+                            	</volist>
+                            </volist>
+                            
+                           
+              
+                    </select>
+                    <select id="district" name="district" class="required">
+                  
+                            <php>$province=M('District')->where("upid=0")->select();</php>
+                            <volist name="province" id="pvo">
+                            <php>$city=M('District')->where("upid=".$pvo['id'])->select();</php>
+                            	<volist name="city" id="cvo">
+                                	<php>$district=M('District')->where("upid=".$cvo['id'])->select();</php>
+                                    <volist name="district" id="dvo">
+                            			<option value="{$dvo.id}" class="{$cvo.id}" <php>if($institutions['district']==$dvo['id']){</php>selected<php>}</php>>{$dvo.name}</option>
+                            		</volist>
+                            	</volist>
+                            </volist>
+                            
+              
+                    </select>
+                </td>
+            </tr>
+            
+             <tr>
+                <th class="formTitle">所属分类：</th>
+                <td class="formValue">
+                    <select id="settimg_id" name="settimg_id" class="form-control required">
+                    <volist name="catelist" id="vo">
+                   	 <option value="{$vo.id}" <php>if($institutions['settimg_id']==$vo['id']){</php>selected<php>}</php>>{$vo.title}</option>
+                     </volist>
+                    </select>
+                </td>
+            </tr>
+            
+            <tr>
+                <th class="formTitle">机构名称：</th>
+                <td class="formValue">
+                    <input id="name" name="name" type="text" class="form-control required"  placeholder="请输入机构名称" value="{$institutions.name}">
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">联系方式：</th>
+                <td class="formValue">
+                    <input id="phone" name="phone" type="text" class="form-control required"  placeholder="请输入联系方式" value="{$institutions.phone}">
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">机构地址：</th>
+                <td class="formValue">
+                    <input id="address" name="address" type="text" class="form-control required" placeholder="请输入机构地址" value="{$institutions.address}">
+                </td>
+            </tr>
+            
+             <tr>
+                <th class="formTitle">介绍：</th>
+                <td class="formValue">
+                	<textarea name="description" id="description" class="form-control" rows="3">{$institutions.description}</textarea>
+                </td>
+            </tr>
+            
+             <tr>
+                <th class="formTitle">等级：</th>
+                <td class="formValue">
+                	 <select id="level" name="level" class="form-control">
+                  
+                         <option value="0" <php>if($institutions['level']==0){</php>selected<php>}</php>>普通</option>
+                         <option value="1" <php>if($institutions['level']==1){</php>selected<php>}</php>>VIP</option>
+                         <option value="2" <php>if($institutions['level']==2){</php>selected<php>}</php>>SVIP</option>
+              
+                    </select>
+                </td>
+            </tr>
+            
+              <tr>
+                <th class="formTitle">图片：</th>
+                <td class="formValue">
+       
+					<input type="file" id="upload_picture_img">
+				<input type="hidden" name="img_thumb" id="img_thumb" value="{$institutions.img_thumb}"/>
+						
+		
+                    <script type="text/javascript">
+
+					//上传图片
+
+
+				    /* 初始化上传插件 */
+
+
+					$("#upload_picture_img").uploadify({
+
+				        "height"          : 30,
+
+				        "swf"             : "__STATIC__/uploadify/uploadify.swf",
+
+				        "fileObjName"     : "download",
+
+				        "buttonText"      : "上传图片",
+
+				        "uploader"        : "{:U('File/uploadPicture',array('session_id'=>session_id()))}",
+
+				        "width"           : 120,
+
+				        'removeTimeout'	  : 1,
+
+				        'fileTypeExts'	  : '*.jpg; *.png; *.gif;',
+
+				        "onUploadSuccess" : uploadPictureimg,
+				        'onFallback' : function() {
+
+				            alert('未检测到兼容版本的Flash.');
+
+				        }
+
+				    });
+
+					function uploadPictureimg(file, data){
+
+				    	var data = $.parseJSON(data);
+				    	var src = '';
+				        if(data.status){
+
+				        	$("#img_thumb").val(data.data.path);
+				        	src = data.data.path;
+				        	$("#img_thumb").parent().parent().parent().find('.upload-img-box').html(
+				        		'<div class="upload-pre-item"><img src="' + http_img_url + src + '"/></div>'
+				        	);
+				        } else {
+				        	alert(data.info);
+				        }
+				    }
+
+					</script>
+                </td>
+            </tr>
+            
+             <tr>
+                <th class="formTitle"></th>
+                <td class="formValue">
+                   <div class="upload-img-box">
+						<notempty name="institutions['img_thumb']">
+							<div class="upload-pre-item"><img src="{$http_img_url}{$institutions.img_thumb}"/></div>
+						</notempty>
+					</div>
+                </td>
+            </tr>
+            
+             <tr>
+                <th class="formTitle">多图上传：</th>
+                <td class="formValue">
+       
+					<input type="file" id="upload_picture_itemimg">
+				<input type="hidden" name="img_item" id="img_item" class="icon imgitem" value="{$institutions.img_item}"/>
+						
+		
+                    <script type="text/javascript">
+
+
+					//上传图片
+
+
+				    /* 初始化上传插件 */
+
+
+					$("#upload_picture_itemimg").uploadify({
+
+				        "height"          : 30,
+
+				        "swf"             : "__STATIC__/uploadify/uploadify.swf",
+
+				        "fileObjName"     : "download",
+
+				        "buttonText"      : "上传图片",
+
+				        "uploader"        : "{:U('File/uploadPicture',array('session_id'=>session_id()))}",
+
+				        "width"           : 120,
+
+				        'removeTimeout'	  : 1,
+
+				        'fileTypeExts'	  : '*.jpg; *.png; *.gif;',
+
+				        "onUploadSuccess" : uploadPictureimgitem,
+				        'onFallback' : function() {
+
+				            alert('未检测到兼容版本的Flash.');
+
+				        }
+
+				    });
+				$(document).on("click",'.btn-close-imgitem',function(event){
+					event.preventDefault();
+					$(this).parent().remove();
+					picsbox = $("#upload_picture_itemimg").siblings('.upload-itemimg-box');
+					picArr = [];
+					for (var i = 0; i < picsbox.children().length ; i++) {
+						picArr.push(picsbox.children('.upload-pre-item:eq('+i+')').find('img').attr('tid'));
+					};
+					picStr = picArr.join(',');
+					$('.icon.imgitem').val(picStr);
+				});
+				function uploadPictureimgitem(file, data){
+					var data = $.parseJSON(data);
+					var src = '';
+					if(data.status){
+						src = data.data.path;
+						upload_img = "<div class='upload-pre-item'><img src=" + http_img_url + src +" title='点击显示大图' tid=" + src +"> <span class='btn-close btn-close-imgitem' title='删除图片'></span></div>";
+						picsbox = $("#upload_picture_itemimg").siblings('.upload-itemimg-box');
+						picsbox.append(upload_img)
+						picArr = [];
+						for (var i = 0; i < picsbox.children().length ; i++) {
+							picArr.push(picsbox.children('.upload-pre-item:eq('+i+')').find('img').attr('tid'));
+						};
+						picStr = picArr.join(',');
+						$('.icon.imgitem').val(picStr);
+					} else {
+						updateAlert(data.info);
+						setTimeout(function(){
+							$('#top-alert').find('button').click();
+							$(that).removeClass('disabled').prop('disabled',false);
+						},1500);
+					}
+   			 }
+
+					</script>
+                   <div class="upload-itemimg-box">
+						<notempty name="institutions['img_item']">
+                        	<php>$imgres=explode(',',$institutions['img_item']);
+                            foreach($imgres as $val)
+                            {
+                            </php>
+                           
+							<div class="upload-pre-item"><img tid="{$val}" src="{$http_img_url}{$val}" title='点击显示大图'/> <span class='btn-close btn-close-imgitem' title='删除图片'></span></div>
+                            <php>}</php>
+						</notempty>
+					</div>
+                </td>
+            </tr>
+            
+             <tr>
+                <th class="formTitle"></th>
+                <td class="formValue">
+                    
+                </td>
+            </tr>
+            
+            <tr>
+                <th class="formTitle">状态：</th>
+                <td class="formValue">
+                     <select id="status" name="status" class="form-control">
+                  
+                         <option value="1"  <php>if($institutions['status']==1){</php>selected<php>}</php>>显示</option>
+                         <option value="0" <php>if($institutions['status']==0){</php>selected<php>}</php>>不显示</option>
+              
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">消费排序：</th>
+                <td class="formValue">
+                    <input id="sort" name="sort" type="text" class="form-control required" placeholder="" value="{$institutions.sort}">
+                </td>
+            </tr>
+            
+             <tr>
+                <th class="formTitle">地图：</th>
+                <td class="formValue">
+                    <div id="allmap"></div>
+                </td>
+            </tr>
+            
+        </tbody></table>
+    </div>
+   <script type="text/javascript">
+	// 百度地图API功能
+	$("#city").chained("#province");
+	$("#district").chained("#city");
+	var map = new BMap.Map("allmap");            
+	map.centerAndZoom("西安",12);  
+	 var navigationControl = new BMap.NavigationControl({
+    // 靠左上角位置
+    anchor: BMAP_ANCHOR_TOP_LEFT,
+    // LARGE类型
+    type: BMAP_NAVIGATION_CONTROL_LARGE,
+    // 启用显示定位
+    enableGeolocation: true
+	  });
+	  map.addControl(navigationControl);         
+	//单击获取点击的经纬度
+	var marker = new BMap.Marker(new BMap.Point({$institutions.lng},{$institutions.lat}));
+	map.addOverlay(marker);
+	map.addEventListener("click",function(e){
+		map.clearOverlays(); 
+		var marker = new BMap.Marker(new BMap.Point(e.point.lng,e.point.lat));
+		$('#lng').val(e.point.lng);
+		$('#lat').val(e.point.lat);
+		map.addOverlay(marker);
+	});
+	
+	
+</script>
+	</form>
+
+   
+            </div>
+
+            
+        </div>
+
+    </div>
+   
+
+
+</body>
+</html>

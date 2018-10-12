@@ -1,0 +1,14 @@
+ <ul class="sidebar-menu" id="sidebar-menu"> 
+   <!--<li class="header">导航菜单</li>--> 
+   <volist name="menu_list" id="item" key='k'>
+   <li <php>if($k==1){</php> class="treeview active" <php>}else{</php> class="treeview"<php>}</php>><a href="#"><i class="fa {$item.ico}"></i><span>{$item['name']}</span><i class="fa fa-angle-left pull-right"></i></a>
+    <ul class="treeview-menu menu-open" <php>if($k==1){</php> style="display: block;" <php>}else{</php>style="display: none;"<php>}</php>>
+    <volist name="item['voo']" id='dd'>
+     	<li><a class="menuItem" data-id="{$dd.id}" href="{:U($dd['app'].'/'.$dd['model'].'/'.$dd['action'])}"><i class="fa {$dd.ico}"></i>{$dd.name}</a></li>
+     </volist>
+     			</li>
+    </ul></li>
+    
+    </volist>
+    
+  </ul>       

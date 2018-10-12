@@ -1,0 +1,14 @@
+@charset "utf-8";
+#calendar h2 { font-size:18px;}
+#calendar table { background-color:#FFFFFF;}
+#calendar td{ text-align:center; }
+#calendar .month { background-color:#cfebe9;}
+#calendar .week { width:100px; height:30px; font-weight:bold; text-align:center; background-color:#BD8A5D; color:#FFFFFF; }
+#calendar .day{ width:100px; height:70px; vertical-align:top; }
+#calendar .day span.date { display:block; height:50px;  font-size:35px; line-height:50px; font-family:Arial; }
+#calendar .before { color:#dcdcdc; background-color:#f0f0f0; }
+#calendar .after { background-color:#FFF;}
+#calendar .after a{ color:#444}
+#calendar .today { background-color:#ffe381; }
+#calendar .price { font-size:14px; font-family:"微软雅黑";}
+

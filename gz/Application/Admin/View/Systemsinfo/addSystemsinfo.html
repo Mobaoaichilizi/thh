@@ -1,0 +1,88 @@
+<html><head>
+    <meta name="viewport" content="width=device-width">
+    <title>Form</title>
+    <link rel="stylesheet" href="__JS__/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="__CSS__/font-awesome.min.css">
+    <link rel="stylesheet" href="__CSS__/index.css">
+    <link rel="stylesheet" href="__CSS__/style.min.css">
+    <link rel="stylesheet" href="__CSS__/framework-ui.css">
+  
+<script src="__JS__/jquery/jQuery-2.2.0.min.js"></script>
+<script src="__JS__/bootstrap/js/bootstrap.min.js"></script>
+<script src="__JS__/validate/jquery.validate.min.js"></script>
+<script src="__JS__/layer/layer.js"></script>
+<script src="__JS__/framework-ui.js"></script>
+<script type="text/javascript" src="__STATIC__/uploadify/jquery.uploadify.min.js"></script>
+<script>
+function submitForm() {
+  if (!$('#commentForm').formValid()) {
+       return false;
+  }
+  $.submitForm({
+            url: "{:U('Systemsinfo/addSystemsinfo')}",
+            param: $("#commentForm").serialize(),
+            success: function () {
+                $.currentWindow().Refresh();
+            }
+  })
+
+}
+</script>
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        
+        <div class="row">
+            <div class="col-sm-12">       
+   <form class="form-horizontal" id="commentForm" action="{:U('Systemsinfo/addSystemsinfo')}" method="post">
+         
+      <div style="padding-top: 20px; margin-right: 20px;">
+        <table class="form">
+            <tbody>
+           
+            <tr>
+                <th class="formTitle">标题：</th>
+                <td class="formValue">
+                    <input id="title" name="title" type="text" class="form-control" placeholder="请输入标题">
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">描述：</th>
+                <td class="formValue">
+                     <textarea class="form-control" cols="5" name="description" id="description"></textarea>
+                    <input id="type" name="type" type="hidden" class="form-control required" value="1">
+                    <input id="send_uid" name="send_uid" type="hidden" class="form-control required" value="0">
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">接收者：</th>
+                <td class="formValue">
+                    <select id="receive_uid" name="receive_uid" class="form-control required">
+                        <option value="0_0">全部用户</option>
+                        <option value="0_1">全部医生</option>
+                   	    <option value="0_2">全部患者</option>
+     
+                    </select>
+                </td>
+            </tr>
+            
+            
+            
+            
+        </tbody></table>
+    </div>
+
+					</form>
+
+   
+            </div>
+
+            
+        </div>
+
+    </div>
+   
+
+
+</body>
+</html>

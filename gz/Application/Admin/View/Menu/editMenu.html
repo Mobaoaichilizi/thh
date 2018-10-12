@@ -1,0 +1,132 @@
+<html><head>
+    <meta name="viewport" content="width=device-width">
+    <title>Form</title>
+    <link rel="stylesheet" href="__JS__/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="__CSS__/font-awesome.min.css">
+    <link rel="stylesheet" href="__CSS__/index.css">
+    <link rel="stylesheet" href="__CSS__/style.min.css">
+    <link rel="stylesheet" href="__CSS__/framework-ui.css">
+
+  
+<script src="__JS__/jquery/jQuery-2.2.0.min.js"></script>
+<script src="__JS__/bootstrap/js/bootstrap.min.js"></script>
+<script src="__JS__/validate/jquery.validate.min.js"></script>
+<script src="__JS__/layer/layer.js"></script>
+<script src="__JS__/framework-ui.js"></script>
+
+<script>
+function submitForm() {
+  if (!$('#commentForm').formValid()) {
+       return false;
+  }
+  
+  $.submitForm({
+            url: "{:U('Menu/editMenu')}",
+            param: $("#commentForm").formSerialize(),
+            success: function () {
+                $.currentWindow().Refresh();
+            }
+  })
+
+}
+</script>
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        
+        <div class="row">
+            <div class="col-sm-12">       
+   <form class="form-horizontal" id="commentForm" action="{:U('Menu/editMenu')}" method="post">
+   	 <input type="hidden" name="id" id="id" value="{$result.id}">
+      <div style="padding-top: 20px; margin-right: 20px;">
+        <table class="form">
+            <tbody>
+           
+            <tr>
+                <th class="formTitle">上级：</th>
+                <td class="formValue">
+                     <select id="parentid" name="parentid" class="form-control">
+                  
+                   			<option value="0">作为一级菜单</option>
+                            {$select_categorys}
+              
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">名称：</th>
+                <td class="formValue">
+                    <input id="name" name="name" type="text" class="form-control required"  value="{$result.name}" placeholder="请输入名称">
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">应用：</th>
+                <td class="formValue">
+                    <input id="app" name="app" type="text" class="form-control required" placeholder="请输入应用" value="{$result.app}">
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">控制器：</th>
+                <td class="formValue">
+                    <input id="model" name="model" type="text" class="form-control required" placeholder="请输入控制器" value="{$result.model}">
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">方法：</th>
+                <td class="formValue">
+                    <input id="action" name="action" type="text" class="form-control required" placeholder="请输入方法" value="{$result.action}">
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">参数：</th>
+                <td class="formValue">
+                    <input id="data" name="data" type="text" class="form-control" value="{$result.data}">
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">备注：</th>
+                <td class="formValue">
+                    <textarea name="remark" id="remark" class="form-control" rows="3">{$result.remark}</textarea>
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">状态：</th>
+                <td class="formValue">
+                     <select id="status" name="status" class="form-control">
+                  
+                         <option value="1"  <php>if($result['status']==1){</php>selected<php>}</php>>显示</option>
+                         <option value="0" <php>if($result['status']==0){</php>selected<php>}</php>>不显示</option>
+              
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">排序：</th>
+                <td class="formValue">
+                    <input id="listorder" name="listorder" type="text" class="form-control" value="{$result.listorder}">
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">ico图标：</th>
+                <td class="formValue">
+                    <input id="ico" name="ico" type="text" class="form-control" value="{$result.ico}">
+                </td>
+            </tr>
+            
+        </tbody></table>
+    </div>
+ 
+					</form>
+
+   
+            </div>
+
+            
+        </div>
+
+    </div>
+   
+
+
+</body>
+</html>

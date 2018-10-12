@@ -1,0 +1,126 @@
+<html><head>
+    <meta name="viewport" content="width=device-width">
+    <title>Form</title>
+    <link rel="stylesheet" href="__JS__/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="__CSS__/font-awesome.min.css">
+    <link rel="stylesheet" href="__CSS__/index.css">
+    <link rel="stylesheet" href="__CSS__/style.min.css">
+    <link rel="stylesheet" href="__CSS__/framework-ui.css">
+  
+<script src="__JS__/jquery/jQuery-2.2.0.min.js"></script>
+<script src="__JS__/bootstrap/js/bootstrap.min.js"></script>
+<script src="__JS__/validate/jquery.validate.min.js"></script>
+<script src="__JS__/layer/layer.js"></script>
+<script src="__JS__/framework-ui.js"></script>
+<script type="text/javascript" src="__STATIC__/uploadify/jquery.uploadify.min.js"></script>
+<!-- <script>
+function submitForm() {
+  if (!$('#commentForm').formValid()) {
+       return false;
+  }
+  $.submitForm({
+            url: "{:U('PatientMember/lookPatientMember')}",
+            param: $("#commentForm").formSerialize(),
+            success: function () {
+                $.currentWindow().Refresh();
+            }
+  })
+
+}
+</script> -->
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        
+        <div class="row">
+            <div class="col-sm-12">       
+   <form class="form-horizontal" id="commentForm" action="" method="post">
+      <div style="padding-top: 20px; margin-right: 20px;">
+        <table class="form">
+            <tbody>
+            <tr>
+                <th class="formTitle">序号：</th>
+                <td class="formValue">
+                    <input id="id" name="id" type="text" class="form-control required" disabled value="{$patientmember.id}" >
+                </td>
+            </tr>
+
+            <tr>
+                <th class="formTitle">名称：</th>
+                <td class="formValue">
+                    <input id="username" name="username" type="text" class="form-control required" disabled value="{$patientmember.name}">
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">头像：</th>
+                <td class="formValue">
+                    <img src="{$patientmember.img_thumb}" style="width: 100px;height: 100px;">
+                   
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">年龄：</th>
+                <td class="formValue">
+                    <input id="age" name="age" type="text" class="form-control required" disabled value="{$patientmember.age}">
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">性别：</th>
+                <td class="formValue">
+                    <if condition="$patientmember.sex eq 1">女
+                    <else />男
+                    </if>
+                </td>
+            </tr>
+            
+            <tr>
+                <th class="formTitle">电话：</th>
+                <td class="formValue">
+                    <input id="phone" name="phone" type="text" class="form-control" disabled value="{$patientmember.username}">
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">身份证号码：</th>
+                <td class="formValue">
+                    <input id="card" name="card" type="text" class="form-control" disabled value="{$patientmember.card}">
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">会员：</th>
+                <td class="formValue">
+                   <switch name="patientmember.member_level">
+                        <case value="0">非会员</case>
+                        <case value="1">VIP</case>
+                        <case value="2">SVIP</case>
+                        <default />
+                   </switch>
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">状态：</th>
+                <td class="formValue">
+                   <switch name="patientmember.status">
+                        <case value="0">异常</case>
+                        <case value="1">正常</case>
+                        <default />
+                   </switch>
+                </td>
+            </tr>
+           
+        </tbody></table>
+    </div>
+ 
+					</form>
+
+   
+            </div>
+
+            
+        </div>
+
+    </div>
+   
+
+
+</body>
+</html>

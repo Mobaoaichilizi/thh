@@ -1,0 +1,209 @@
+<html><head>
+    <meta name="viewport" content="width=device-width">
+    <title>Form</title>
+    <link rel="stylesheet" href="__JS__/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="__CSS__/font-awesome.min.css">
+    <link rel="stylesheet" href="__CSS__/index.css">
+    <link rel="stylesheet" href="__CSS__/style.min.css">
+    <link rel="stylesheet" href="__CSS__/framework-ui.css">
+    <link rel="stylesheet" type="text/css" href="__CSS__/zoomify.min.css">
+    <link rel="stylesheet" href="__CSS__/UploadImages.css">
+<script src="__JS__/jquery/jQuery-2.2.0.min.js"></script>
+<script src="__JS__/bootstrap/js/bootstrap.min.js"></script>
+<script src="__JS__/validate/jquery.validate.min.js"></script>
+<script src="__JS__/layer/layer.js"></script>
+<script src="__JS__/framework-ui.js"></script>
+<script type="text/javascript" src="__STATIC__/uploadify/jquery.uploadify.min.js"></script>
+<script src="__JS__/UploadImages.js"></script>
+<!-- <script src="__JS__/zoomify.min.js"></script> -->
+<script>
+function submitForm() {
+  if (!$('#commentForm').formValid()) {
+       return false;
+  }
+  $.submitForm({
+            url: "{:U('Customer/editworkCustomer')}",
+            param: $("#commentForm").formSerialize(),
+            success: function () {
+                $.currentWindow().Refresh();
+            }
+  })
+
+}
+// function dianji(){
+//     $('.icon').zoomify();
+// }
+
+
+</script>
+<style type="text/css">
+    input{
+        border: 0;
+    }
+</style>
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        
+        <div class="row">
+            <div class="col-sm-12">       
+  <form class="form-horizontal" id="commentForm" action="{:U('Customer/editworkCustomer')}" method="post">
+      <div style="padding-top: 20px; margin-right: 20px;">
+        <table class="form">
+            <tbody>
+            <tr>
+                <th class="formTitle">个人简介：</th>
+                <td class="formValue" colspan="3">
+                    <input type="hidden" name="id" id="id" value="{$customer.id}">
+                    <input type="hidden" name="user_id" id="user_id" value="{$customer.user_id}">
+                    <textarea name="profile" id="profile" rows="5" style="width: 100%;">{$customer.profile}</textarea>
+                </td>
+                
+            </tr>
+            <tr>
+                <th class="formTitle">擅长疾病：</th>
+                <td class="formValue" colspan="3">
+                    <textarea name="disease" id="disease" rows="5" style="width: 100%;">{$customer.disease}</textarea>
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">其他证书：</th>
+                <td class="formValue">
+       
+                    <input type="file" id="upload_picture_itemimg">
+                    <input type="hidden" name="othercert" id="othercert" class="icon imgitem" value="{$customer.othercert}"/>
+                        
+        
+                    <script type="text/javascript">
+
+
+                    //上传图片
+
+
+                    /* 初始化上传插件 */
+
+
+                    $("#upload_picture_itemimg").uploadify({
+
+                        "height"          : 30,
+
+                        "swf"             : "__STATIC__/uploadify/uploadify.swf",
+
+                        "fileObjName"     : "download",
+
+                        "buttonText"      : "多图上传",
+
+                        "uploader"        : "{:U('File/uploadPicture',array('session_id'=>session_id()))}",
+
+                        "width"           : 120,
+
+                        'removeTimeout'   : 1,
+
+                        'fileTypeExts'    : '*.jpg; *.png; *.gif;',
+
+                        "onUploadSuccess" : uploadPictureimgitem,
+                        'onFallback' : function() {
+
+                            alert('未检测到兼容版本的Flash.');
+
+                        }
+
+                    });
+                $(document).on("click",'.btn-close-imgitem',function(event){
+                    event.preventDefault();
+                    $(this).parent().remove();
+                    picsbox = $("#upload_picture_itemimg").siblings('.upload-itemimg-box');
+                    picArr = [];
+                    for (var i = 0; i < picsbox.children().length ; i++) {
+                        picArr.push(picsbox.children('.upload-pre-item:eq('+i+')').find('img').attr('tid'));
+                    };
+                    picStr = picArr.join(',');
+                    $('.icon.imgitem').val(picStr);
+                });
+                function uploadPictureimgitem(file, data){
+                    var data = $.parseJSON(data);
+                    var src = '';
+                    if(data.status){
+                        src = data.data.path;
+                        upload_img = "<div class='upload-pre-item'><img src=" + http_img_url + src +" title='点击显示大图' tid=" + src +"> <span class='btn-close btn-close-imgitem' title='删除图片'></span></div>";
+                        picsbox = $("#upload_picture_itemimg").siblings('.upload-itemimg-box');
+                        picsbox.append(upload_img)
+                        picArr = [];
+                        for (var i = 0; i < picsbox.children().length ; i++) {
+                            picArr.push(picsbox.children('.upload-pre-item:eq('+i+')').find('img').attr('tid'));
+                        };
+                        picStr = picArr.join(',');
+                        $('.icon.imgitem').val(picStr);
+                    } else {
+                        updateAlert(data.info);
+                        setTimeout(function(){
+                            $('#top-alert').find('button').click();
+                            $(that).removeClass('disabled').prop('disabled',false);
+                        },1500);
+                    }
+             }
+
+                    </script>
+                   <div class="upload-itemimg-box">
+                        <notempty name="customer['othercert']">
+                            <php>$othercert = explode(",", $customer['othercert']);</php>
+                            <volist name="othercert" id="val">
+                                <div class="upload-pre-item"><img tid="{$val}" src="{$http_img_url}{$val}" title='点击显示大图'/> <span class='btn-close btn-close-imgitem' title='删除图片'></span></div>
+                            </volist>
+                        </notempty>
+                        
+                    </div>
+                </td>
+            </tr>
+            
+             <tr>
+                <th class="formTitle"></th>
+                <td class="formValue">
+                    
+                </td>
+            </tr>
+            
+            <tr>
+                <th class="formTitle">图文咨询：</th>
+                <td class="formValue">
+                    <!-- <img src="{$http_img_url}{$customer.img_thumb}" style="width: 50px;height: 50px;" class="icon" onClick="dianji();"> -->
+                    <input id="graphic_price" name="graphic_price" type="number" class="form-control required"  value="{$customer.graphic_price}">
+                   
+                </td>
+                <th class="formTitle">预约就诊：</th>
+                <td class="formValue">
+                    <input id="reserve_price" name="reserve_price" type="number" class="form-control required"  value="{$customer.reserve_price}">
+                </td>
+                
+            </tr>
+            <tr>
+                <th class="formTitle">坐诊地址：</th>
+                <td class="formValue">
+                    <input type="text" name="address" id="address" value="{$customer.address}" class="form-control required" >
+                   
+                </td>
+                
+            </tr>
+            
+            
+            
+            
+            
+           
+        </tbody></table>
+    </div>
+ 
+					</form>
+
+   
+            </div>
+
+            
+        </div>
+
+    </div>
+   
+
+
+</body>
+</html>

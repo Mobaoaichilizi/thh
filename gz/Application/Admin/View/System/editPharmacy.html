@@ -1,0 +1,99 @@
+<html><head>
+    <meta name="viewport" content="width=device-width">
+    <title>Form</title>
+    <link rel="stylesheet" href="__JS__/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="__CSS__/font-awesome.min.css">
+    <link rel="stylesheet" href="__CSS__/index.css">
+    <link rel="stylesheet" href="__CSS__/style.min.css">
+</head>
+
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        
+        <div class="row">
+            <div class="col-sm-12">
+           
+                    
+            
+                <div class="tabs-container" style="margin-top:10px; margin-left:10px; margin-right:10px;">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a data-toggle="tab" href="#tab-1" aria-expanded="true">修改处方设置</a></li>
+                    </ul>
+                     <form class="form-horizontal" id="commentForm" action="{:U('System/editPharmacy')}" method="post">
+                       <input type="hidden" name="id" id="id" value="{$admin_user.id}">
+                    <div class="tab-content">
+                        
+                        <div class="tab-pane active">
+                            <div style="padding-left: 61px;padding-top: 10px;width: 500px;text-align: center;border-left: 1px solid #e7eaec">设置分佣<strong style="color: #f00;">%</strong>百分比，将对应信息填写到以下表单，当前余额为<strong style="color: #f00;">{$admin_user.balance}</strong>
+                            </div>
+                            <div class="panel-body">
+
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">药房回报率(给医生)：</label>
+                                    <div class="col-sm-7">
+                                    
+                                        <input type="text" class="form-control" name="rate" id="rate" value="{$admin_user.rate}">
+                                      
+                                    </div>
+                                </div>
+                                    
+                                     
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">药房回报率(给平台)：</label>
+                                    <div class="col-sm-7">
+                                    
+                                        <input type="text" class="form-control" name="platform" id="platform" value="{$admin_user.platform}">
+                                      
+                                    </div>
+                                </div>
+                                <div style="padding-left: 61px;padding-bottom: 10px;width: 500px;text-align: left;border-left: 1px solid #e7eaec">设置运费,单位：<strong style="color: #f00;">元</strong>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">运费：</label>
+                                    <div class="col-sm-7">
+                                    
+                                        <input type="text" class="form-control" name="yun_free" id="yun_free" value="{$admin_user.yun_free}">
+                                      
+                                    </div>
+                                </div>   
+                          
+                                 
+                                
+                                <div class="form-group">
+                                <div class="col-sm-12 col-sm-offset-3">
+                                    <button class="btn btn-primary" type="submit">提交</button>
+                                </div>
+                            	</div>
+                                
+                                 
+                         
+
+                            </div>
+                        </div>
+                        
+                        
+                       
+                    </div>
+</form>
+
+                </div>
+            </div>
+
+            
+        </div>
+
+    </div>
+   <script src="__JS__/jquery/jQuery-2.2.0.min.js"></script>
+   <script src="__JS__/bootstrap/js/bootstrap.min.js"></script>
+   <script src="__JS__/validate/jquery.validate.min.js"></script>
+   <script src="__JS__/validate/messages_zh.min.js"></script>
+<script>
+$().ready(function() {
+	$("#commentForm").validate();
+});
+</script>
+
+
+
+</body>
+</html>

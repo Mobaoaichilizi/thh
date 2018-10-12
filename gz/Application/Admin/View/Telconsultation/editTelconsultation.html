@@ -1,0 +1,140 @@
+<html><head>
+    <meta name="viewport" content="width=device-width">
+    <title>Form</title>
+    <link rel="stylesheet" href="__JS__/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="__CSS__/font-awesome.min.css">
+    <link rel="stylesheet" href="__CSS__/index.css">
+    <link rel="stylesheet" href="__CSS__/style.min.css">
+    <link rel="stylesheet" href="__CSS__/framework-ui.css">
+  
+<script src="__JS__/jquery/jQuery-2.2.0.min.js"></script>
+<script src="__JS__/bootstrap/js/bootstrap.min.js"></script>
+<script src="__JS__/validate/jquery.validate.min.js"></script>
+<script src="__JS__/layer/layer.js"></script>
+<script src="__JS__/framework-ui.js"></script>
+<script>
+function submitForm() {
+  if (!$('#commentForm').formValid()) {
+       return false;
+  }
+  $.submitForm({
+            url: "{:U('Telconsultation/editTelconsultation')}",
+            param: $("#commentForm").formSerialize(),
+            success: function () {
+                $.currentWindow().Refresh();
+            }
+  })
+
+}
+</script>
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        
+        <div class="row">
+            <div class="col-sm-12">       
+   <form class="form-horizontal" id="commentForm" action="{:U('Telconsultation/editTelconsultation')}" method="post">
+   		<input type="hidden" name="id" id="id" value="{$result.id}">
+      <div style="padding-top: 20px; margin-right: 20px;">
+        <table class="form">
+            <tbody>
+            <tr>
+                <th class="formTitle">选择医生：</th>
+                <td class="formValue">
+                    <select id="doctor_id" name="doctor_id" class="form-control required">
+                    <volist name="userlist" id="vo">
+                   	 <option value="{$vo.id}" <php>if($result['doctor_id']==$vo['id']){</php>selected<php>}</php>>{$vo.username}</option>
+                     </volist>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">星期一上午：</th>
+                <td class="formValue">
+                    <input id="mon_morning" name="mon_morning" type="text" class="form-control required number" value="{$result.mon_morning}" >
+                </td>
+                <th class="formTitle">星期一下午：</th>
+                <td class="formValue">
+                    <input id="mon_afternoon" name="mon_afternoon" type="text" class="form-control required number" value="{$result.mon_afternoon}" >
+                </td>
+            </tr>
+            
+            <tr>
+                <th class="formTitle">星期二上午：</th>
+                <td class="formValue">
+                    <input id="tues_morning" name="tues_morning" type="text" class="form-control required number" value="{$result.tues_morning}" >
+                </td>
+                <th class="formTitle">星期二下午：</th>
+                <td class="formValue">
+                    <input id="tues_afternoon" name="tues_afternoon" type="text" class="form-control required number" value="{$result.tues_afternoon}" >
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">星期三上午：</th>
+                <td class="formValue">
+                    <input id="wed_morning" name="wed_morning" type="text" class="form-control required number" value="{$result.wed_morning}" >
+                </td>
+                <th class="formTitle">星期三下午：</th>
+                <td class="formValue">
+                    <input id="wed_afternoon" name="wed_afternoon" type="text" class="form-control required number" value="{$result.wed_afternoon}" >
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">星期四上午：</th>
+                <td class="formValue">
+                    <input id="thur_morning" name="thur_morning" type="text" class="form-control required number" value="{$result.thur_morning}" >
+                </td>
+                <th class="formTitle">星期四下午：</th>
+                <td class="formValue">
+                    <input id="thur_afternoon" name="thur_afternoon" type="text" class="form-control required number" value="{$result.thur_afternoon}" >
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">星期五上午：</th>
+                <td class="formValue">
+                    <input id="fri_morning" name="fri_morning" type="text" class="form-control required number" value="{$result.fri_morning}" >
+                </td>
+                <th class="formTitle">星期五下午：</th>
+                <td class="formValue">
+                    <input id="fri_afternoon" name="fri_afternoon" type="text" class="form-control required number" value="{$result.fri_afternoon}" >
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">星期六上午：</th>
+                <td class="formValue">
+                    <input id="sat_morning" name="sat_morning" type="text" class="form-control required number" value="{$result.sat_morning}" >
+                </td>
+                <th class="formTitle">星期六下午：</th>
+                <td class="formValue">
+                    <input id="sat_afternoon" name="sat_afternoon" type="text" class="form-control required number" value="{$result.sat_afternoon}" >
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">星期日上午：</th>
+                <td class="formValue">
+                    <input id="sun_morning" name="sun_morning" type="text" class="form-control required number" value="{$result.sun_morning}" >
+                </td>
+                <th class="formTitle">星期日下午：</th>
+                <td class="formValue">
+                    <input id="sun_afternoon" name="sun_afternoon" type="text" class="form-control required number" value="{$result.sun_afternoon}" >
+                </td>
+            </tr>
+            
+            
+        </tbody></table>
+    </div>
+ 
+					</form>
+
+   
+            </div>
+
+            
+        </div>
+
+    </div>
+   
+
+
+</body>
+</html>

@@ -1,0 +1,632 @@
+<html><head>
+    <meta name="viewport" content="width=device-width">
+    <title>Form</title>
+    <link rel="stylesheet" href="__JS__/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="__CSS__/font-awesome.min.css">
+    <link rel="stylesheet" href="__CSS__/index.css">
+    <link rel="stylesheet" href="__CSS__/style.min.css">
+    <link rel="stylesheet" href="__CSS__/framework-ui.css">
+    <link rel="stylesheet" type="text/css" href="__CSS__/zoomify.min.css">
+<script src="__JS__/jquery/jQuery-2.2.0.min.js"></script>
+<script src="__JS__/bootstrap/js/bootstrap.min.js"></script>
+<script src="__JS__/validate/jquery.validate.min.js"></script>
+<script src="__JS__/layer/layer.js"></script>
+<script src="__JS__/framework-ui.js"></script>
+<script type="text/javascript" src="__STATIC__/uploadify/jquery.uploadify.min.js"></script>
+<!-- <script src="__JS__/UploadImages.js"></script> -->
+<script src="__JS__/zoomify.min.js"></script>
+<script>
+function submitForm() {
+  if (!$('#commentForm').formValid()) {
+       return false;
+  }
+  $.submitForm({
+            url: "{:U('Customer/editCustomer')}",
+            param: $("#commentForm").formSerialize(),
+            success: function () {
+                $.currentWindow().Refresh();
+            }
+  })
+
+}
+
+function btn_access(cid) {
+
+        var linkurl="{:U('Customer/saveAccess',array('id'=>'nidval'))}";
+        linkurl=linkurl.replace('nidval', cid),
+        $.modalOpen({ 
+            id: "Form1",
+            title: "病症选择",
+            url: linkurl,
+            width: "450px",
+            height: "600px",
+            callBack: function (iframeId) {
+                top.frames[iframeId].submitForm();
+            }
+        });
+}
+
+</script>
+<style type="text/css">
+    input{
+        border: 0;
+    }
+    select{
+        width: 100%;
+        height: 30px;
+        border-color: rgb(229, 230, 231);
+    }
+    
+</style>
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        
+        <div class="row">
+            <div class="col-sm-12">       
+  <form class="form-horizontal" id="commentForm" action="{:U('Customer/editCustomer')}" method="post">
+      <div style="padding-top: 20px; margin-right: 20px;">
+        <table class="form">
+            <tbody>
+            <tr>
+                <th class="formTitle">姓名：</th>
+                <td class="formValue">
+                    <input type="hidden" name="id" id="id" value="{$customer.id}">
+                    <input type="hidden" name="user_id" id="user_id" value="{$customer.user_id}">
+                    <input id="username" name="username" type="text" class="form-control required"  value="{$customer.name}">
+                </td>
+                <th class="formTitle">年龄：</th>
+                <td class="formValue">
+                    <input id="age" name="age" type="text" class="form-control required"  value="{$customer.age}">
+                </td>
+            </tr>
+            
+           
+            <tr>
+                <th class="formTitle">性别：</th>
+                <td class="formValue">
+                    
+                    <select name="sex" id="sex">
+                        <option <if condition="$customer.sex eq 0">selected</if> value="0">未知</option>
+                        <option <if condition="$customer.sex eq 1">selected</if> value="1">女</option>
+                        <option <if condition="$customer.sex eq 2">selected</if> value="2">男</option>
+                        
+                    </select>
+                </td>
+                <th class="formTitle">身份证号码：</th>
+                <td class="formValue">
+                    <input id="card" name="card" type="text" class="form-control" value="{$customer.card}">
+                </td>
+            <tr>
+                <th class="formTitle">头像：</th>
+                <td class="formValue">
+                    <input type="file" id="upload_picture_img">
+                    <input type="hidden" name="img_thumb" id="img_thumb" value="{$customer.img_thumb}"/>
+                     <script type="text/javascript">
+
+                    //上传图片
+
+
+                    /* 初始化上传插件 */
+
+
+                    $("#upload_picture_img").uploadify({
+
+                        "height"          : 30,
+
+                        "swf"             : "__STATIC__/uploadify/uploadify.swf",
+
+                        "fileObjName"     : "download",
+
+                        "buttonText"      : "上传头像",
+
+                        "uploader"        : "{:U('File/uploadPicture',array('session_id'=>session_id()))}",
+
+                        "width"           : 120,
+
+                        'removeTimeout'   : 1,
+
+                        'fileTypeExts'    : '*.jpg; *.png; *.gif;',
+
+                        "onUploadSuccess" : uploadPictureimg,
+                        'onFallback' : function() {
+
+                            alert('未检测到兼容版本的Flash.');
+
+                        }
+
+                    });
+
+                    function uploadPictureimg(file, data){
+
+                        var data = $.parseJSON(data);
+                        var src = '';
+                        if(data.status){
+
+                            $("#img_thumb").val(data.data.path);
+                            src = data.data.path;
+                            $("#img_thumb").parent().parent().parent().find('.upload-img-box0').html(
+                                '<div class="upload-pre-item"><img src="'+ http_img_url + src + '"/></div>'
+                            );
+                        } else {
+                            alert(data.info);
+                        }
+                    }
+
+                    </script>
+                </td>
+                <th class="formTitle">执业证书：</th>
+                <td class="formValue">
+                    <!-- <img src="{$http_img_url}{$customer.certificate}" style="width: 120px;height: 70px;" class=""> -->
+                    <input type="file" id="upload_picture_img1">
+                    <input type="hidden" name="certificate" id="certificate" value="{$customer.certificate}"/>
+                     <script type="text/javascript">
+
+                    //上传图片
+
+
+                    /* 初始化上传插件 */
+
+
+                    $("#upload_picture_img1").uploadify({
+
+                        "height"          : 30,
+
+                        "swf"             : "__STATIC__/uploadify/uploadify.swf",
+
+                        "fileObjName"     : "download",
+
+                        "buttonText"      : "上传执业证书",
+
+                        "uploader"        : "{:U('File/uploadPicture',array('session_id'=>session_id()))}",
+
+                        "width"           : 120,
+
+                        'removeTimeout'   : 1,
+
+                        'fileTypeExts'    : '*.jpg; *.png; *.gif;',
+
+                        "onUploadSuccess" : uploadPictureimg,
+                        'onFallback' : function() {
+
+                            alert('未检测到兼容版本的Flash.');
+
+                        }
+
+                    });
+
+                    function uploadPictureimg(file, data){
+
+                        var data = $.parseJSON(data);
+                        var src = '';
+                        if(data.status){
+
+                            $("#certificate").val(data.data.path);
+                            src = data.data.path;
+                            $("#certificate").parent().parent().parent().find('.upload-img-box1').html(
+                                '<div class="upload-pre-item"><img src="'+ http_img_url + src + '"/></div>'
+                            );
+                        } else {
+                            alert(data.info);
+                        }
+                    }
+
+                    </script>
+                   
+                </td>
+            </tr>
+
+            <tr>
+                <th class="formTitle"></th>
+                <td class="formValue">
+                   <div class="upload-img-box upload-img-box0">
+                        <notempty name="customer['img_thumb']">
+                            <div class="upload-pre-item"><img src="{$http_img_url}{$customer.img_thumb}"/></div>
+                        </notempty>
+                    </div>
+                </td>
+                <th class="formTitle"></th>
+                <td class="formValue">
+                   <div class="upload-img-box upload-img-box1">
+                        <notempty name="customer['certificate']">
+                            <div class="upload-pre-item"><img src="{$http_img_url}{$customer.certificate}"/></div>
+                        </notempty>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">身份证正面：</th>
+                <td class="formValue">
+                    <input type="file" id="upload_picture_img2">
+                    <input type="hidden" name="card_correct" id="card_correct" value="{$customer.card_correct}"/>
+                     <script type="text/javascript">
+
+                    //上传图片
+
+
+                    /* 初始化上传插件 */
+
+
+                    $("#upload_picture_img2").uploadify({
+
+                        "height"          : 30,
+
+                        "swf"             : "__STATIC__/uploadify/uploadify.swf",
+
+                        "fileObjName"     : "download",
+
+                        "buttonText"      : "上传身份证正面",
+
+                        "uploader"        : "{:U('File/uploadPicture',array('session_id'=>session_id()))}",
+
+                        "width"           : 120,
+
+                        'removeTimeout'   : 1,
+
+                        'fileTypeExts'    : '*.jpg; *.png; *.gif;',
+
+                        "onUploadSuccess" : uploadPictureimg,
+                        'onFallback' : function() {
+
+                            alert('未检测到兼容版本的Flash.');
+
+                        }
+
+                    });
+
+                    function uploadPictureimg(file, data){
+
+                        var data = $.parseJSON(data);
+                        var src = '';
+                        if(data.status){
+
+                            $("#card_correct").val(data.data.path);
+                            src = data.data.path;
+                            $("#card_correct").parent().parent().parent().find('.upload-img-box2').html(
+                                '<div class="upload-pre-item"><img src="'+ http_img_url + src + '"/></div>'
+                            );
+                        } else {
+                            alert(data.info);
+                        }
+                    }
+
+                    </script>
+                </td>
+                <th class="formTitle">身份证反面：</th>
+                <td class="formValue">
+                    <!-- <img src="{$http_img_url}{$customer.certificate}" style="width: 120px;height: 70px;" class=""> -->
+                    <input type="file" id="upload_picture_img3">
+                    <input type="hidden" name="card_opposite" id="card_opposite" value="{$customer.card_opposite}"/>
+                     <script type="text/javascript">
+
+                    //上传图片
+
+
+                    /* 初始化上传插件 */
+
+
+                    $("#upload_picture_img3").uploadify({
+
+                        "height"          : 30,
+
+                        "swf"             : "__STATIC__/uploadify/uploadify.swf",
+
+                        "fileObjName"     : "download",
+
+                        "buttonText"      : "上传身份证反面",
+
+                        "uploader"        : "{:U('File/uploadPicture',array('session_id'=>session_id()))}",
+
+                        "width"           : 120,
+
+                        'removeTimeout'   : 1,
+
+                        'fileTypeExts'    : '*.jpg; *.png; *.gif;',
+
+                        "onUploadSuccess" : uploadPictureimg,
+                        'onFallback' : function() {
+
+                            alert('未检测到兼容版本的Flash.');
+
+                        }
+
+                    });
+
+                    function uploadPictureimg(file, data){
+
+                        var data = $.parseJSON(data);
+                        var src = '';
+                        if(data.status){
+
+                            $("#card_opposite").val(data.data.path);
+                            src = data.data.path;
+                            $("#card_opposite").parent().parent().parent().find('.upload-img-box3').html(
+                                '<div class="upload-pre-item"><img src="'+ http_img_url + src + '"/></div>'
+                            );
+                        } else {
+                            alert(data.info);
+                        }
+                    }
+
+                    </script>
+                   
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle"></th>
+                <td class="formValue">
+                   <div class="upload-img-box upload-img-box2">
+                        <notempty name="customer['card_correct']">
+                            <div class="upload-pre-item"><img src="{$http_img_url}{$customer.card_correct}"/></div>
+                        </notempty>
+                    </div>
+                </td>
+                <th class="formTitle"></th>
+                <td class="formValue">
+                   <div class="upload-img-box upload-img-box3">
+                        <notempty name="customer['card_opposite']">
+                            <div class="upload-pre-item"><img src="{$http_img_url}{$customer.card_opposite}"/></div>
+                        </notempty>
+                    </div>
+                </td>
+            </tr>    
+            <tr>
+                <th class="formTitle">资格证书：</th>
+                <td class="formValue">
+                    <input type="file" id="upload_picture_img4">
+                    <input type="hidden" name="qualification" id="qualification" value="{$customer.qualification}"/>
+                     <script type="text/javascript">
+
+                    //上传图片
+
+
+                    /* 初始化上传插件 */
+
+
+                    $("#upload_picture_img4").uploadify({
+
+                        "height"          : 30,
+
+                        "swf"             : "__STATIC__/uploadify/uploadify.swf",
+
+                        "fileObjName"     : "download",
+
+                        "buttonText"      : "上传资格证书",
+
+                        "uploader"        : "{:U('File/uploadPicture',array('session_id'=>session_id()))}",
+
+                        "width"           : 120,
+
+                        'removeTimeout'   : 1,
+
+                        'fileTypeExts'    : '*.jpg; *.png; *.gif;',
+
+                        "onUploadSuccess" : uploadPictureimg,
+                        'onFallback' : function() {
+
+                            alert('未检测到兼容版本的Flash.');
+
+                        }
+
+                    });
+
+                    function uploadPictureimg(file, data){
+
+                        var data = $.parseJSON(data);
+                        var src = '';
+                        if(data.status){
+
+                            $("#qualification").val(data.data.path);
+                            src = data.data.path;
+                            $("#qualification").parent().parent().parent().find('.upload-img-box4').html(
+                                '<div class="upload-pre-item"><img src="'+ http_img_url + src + '"/></div>'
+                            );
+                        } else {
+                            alert(data.info);
+                        }
+                    }
+
+                    </script>
+                </td>
+                <th class="formTitle">最高资格证书：</th>
+                <td class="formValue">
+                    <input type="file" id="upload_picture_img5">
+                    <input type="hidden" name="highest_professional" id="highest_professional" value="{$customer.highest_professional}"/>
+                     <script type="text/javascript">
+
+                    //上传图片
+
+
+                    /* 初始化上传插件 */
+
+
+                    $("#upload_picture_img5").uploadify({
+
+                        "height"          : 30,
+
+                        "swf"             : "__STATIC__/uploadify/uploadify.swf",
+
+                        "fileObjName"     : "download",
+
+                        "buttonText"      : "上传最高资格证书",
+
+                        "uploader"        : "{:U('File/uploadPicture',array('session_id'=>session_id()))}",
+
+                        "width"           : 120,
+
+                        'removeTimeout'   : 1,
+
+                        'fileTypeExts'    : '*.jpg; *.png; *.gif;',
+
+                        "onUploadSuccess" : uploadPictureimg,
+                        'onFallback' : function() {
+
+                            alert('未检测到兼容版本的Flash.');
+
+                        }
+
+                    });
+
+                    function uploadPictureimg(file, data){
+
+                        var data = $.parseJSON(data);
+                        var src = '';
+                        if(data.status){
+
+                            $("#highest_professional").val(data.data.path);
+                            src = data.data.path;
+                            $("#highest_professional").parent().parent().parent().find('.upload-img-box5').html(
+                                '<div class="upload-pre-item"><img src="'+ http_img_url + src + '"/></div>'
+                            );
+                        } else {
+                            alert(data.info);
+                        }
+                    }
+
+                    </script>
+                   
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle"></th>
+                <td class="formValue">
+                   <div class="upload-img-box upload-img-box4">
+                        <notempty name="customer['qualification']">
+                            <div class="upload-pre-item"><img src="{$http_img_url}{$customer.qualification}"/></div>
+                        </notempty>
+                    </div>
+                </td>
+                <th class="formTitle"></th>
+                <td class="formValue">
+                   <div class="upload-img-box upload-img-box5">
+                        <notempty name="customer['highest_professional']">
+                            <div class="upload-pre-item"><img src="{$http_img_url}{$customer.highest_professional}"/></div>
+                        </notempty>
+                    </div>
+                </td>
+            </tr> 
+            <!-- <tr>
+                <th class="formTitle">资格证书：</th>
+                <td class="formValue">
+                    <img src="{$http_img_url}{$customer.qualification}" style="width: 120px;height: 70px;" class="">
+                   
+                </td>
+                <th class="formTitle">最高职称证书：</th>
+                <td class="formValue">
+                    <img src="{$http_img_url}{$customer.highest_professional}" style="width: 120px;height: 70px;" class="">
+                   
+                </td>
+                
+            </tr> -->
+            
+            <tr>
+                <th class="formTitle">科室类别：</th>
+                <td class="formValue">
+                    <select name="department_id" id="department_id">
+                        <volist name="department" id="vo">
+                            <option <if condition="$customer['department_id'] eq $vo['id']">selected</if> value="{$vo.id}">{$vo.name}</option>
+                        </volist>
+
+                       
+                        
+                    </select>
+                </td>
+                <th class="formTitle">医院：</th>
+                <td class="formValue">
+                    <select name="hospital_id" id="hospital_id">
+                        <volist name="hospital" id="vo">
+                            <option <if condition="$customer['hospital_id'] eq $vo['id']">selected</if> value="{$vo.id}">{$vo.name}</option>
+                        </volist>
+
+                        
+                    </select>
+                </td>
+            </tr>
+            
+            
+            <tr>
+                <th class="formTitle">会员：</th>
+                <td class="formValue">
+                    <select name="member_level" id="member_level">
+                        <option <if condition="$customer.member_level eq 0">selected</if> value="0">非会员</option>
+                        <option <if condition="$customer.member_level eq 1">selected</if> value="1">VIP</option>
+                        <option <if condition="$customer.member_level eq 2">selected</if> value="2">SVIP</option>
+                        
+                    </select>
+                    <!-- <switch name="customer.member_level">
+                        <case value="0">非会员</case>
+                        <case value="1">VIP</case>
+                        <case value="2">SVIP</case>
+                        <default />
+                    </switch> -->
+                   
+                </td>
+                <th class="formTitle">状态：</th>
+                <td class="formValue">
+                    <select name="status" id="status">
+                        <option <if condition="$customer.status eq 0">selected</if> value="0">未审核</option>
+                        <option <if condition="$customer.status eq 2">selected</if> value="2">审核中</option>
+                        <option <if condition="$customer.status eq 1">selected</if> value="1">审核通过</option>
+                        <option <if condition="$customer.status eq 3">selected</if> value="3">审核未通过</option>
+                        
+                    </select>
+                   
+                </td>
+            </tr>
+            
+             <tr>
+                <th class="formTitle">充值金额：</th>
+                <td class="formValue">
+                   	<select name="operation" id="operation" style="float:left; line-height:30px; height:30px;width: 45px;">
+                        <option value="+">加</option>
+                        <option value="-">减</option>
+                    </select>
+                    <input id="balance" name="balance" type="text" class="form-control" style="width:84%" >
+                   
+                </td>
+                 <th class="formTitle">职称：</th>
+                <td class="formValue">
+                    <input id="professional" name="professional" type="text" class="form-control" style="width:100%" value="{$customer.professional}">
+                   
+                </td>
+            
+            </tr>
+            <tr>
+                <th class="formTitle">首页推荐：</th>
+                <td class="formValue">
+                    <select name="is_position" id="is_position">
+                        <option <if condition="$customer.is_position eq 0">selected</if> value="0">否</option>
+                        <option <if condition="$customer.is_position eq 1">selected</if> value="1">是</option>
+                    </select>
+                   
+                </td>
+                <th class="formTitle">擅长病症：</th>
+                <td class="formValue">
+                    <a onClick="btn_access({$customer['user_id']})" class="LGQ_ico"><i class="fa fa-search-plus"></i> 病症选择</a>
+                </td>
+            </tr>
+            
+            
+           
+        </tbody></table>
+    </div>
+ 
+					</form>
+
+   
+            </div>
+
+            
+        </div>
+
+    </div>
+   
+<script type="text/javascript">
+  
+    $('.upload-pre-item').zoomify();
+    
+
+</script>
+
+</body>
+</html>

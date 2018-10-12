@@ -1,0 +1,91 @@
+<html><head>
+    <meta name="viewport" content="width=device-width">
+    <title>Form</title>
+    <link rel="stylesheet" href="__JS__/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="__CSS__/font-awesome.min.css">
+    <link rel="stylesheet" href="__CSS__/index.css">
+    <link rel="stylesheet" href="__CSS__/style.min.css">
+    <link rel="stylesheet" href="__CSS__/framework-ui.css">
+  
+<script src="__JS__/jquery/jQuery-2.2.0.min.js"></script>
+<script src="__JS__/bootstrap/js/bootstrap.min.js"></script>
+<script src="__JS__/validate/jquery.validate.min.js"></script>
+<script src="__JS__/layer/layer.js"></script>
+<script src="__JS__/framework-ui.js"></script>
+
+<script>
+function submitForm() {
+  if (!$('#commentForm').formValid()) {
+       return false;
+  }
+  $.submitForm({
+            url: "{:U('Singlehrebs/editSinglehrebs')}",
+            param: $("#commentForm").formSerialize(),
+            success: function () {
+                $.currentWindow().Refresh();
+            }
+  })
+
+}
+</script>
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        
+        <div class="row">
+            <div class="col-sm-12">       
+   <form class="form-horizontal" id="commentForm" action="{:U('Singlehrebs/editSinglehrebs')}" method="post">
+         <input type="hidden" name="id" id="id" value="{$result.id}">
+         
+      <div style="padding-top: 20px; margin-right: 20px;">
+        <table class="form">
+            <tbody>
+           
+            <tr>
+                <th class="formTitle">名称：</th>
+                <td class="formValue">
+                    <input id="hrebs_name" name="hrebs_name" type="text" class="form-control required" placeholder="请输入名称" value="{$result.hrebs_name}">
+                </td>
+            </tr>
+             <tr>
+                <th class="formTitle">所属类别：</th>
+                <td class="formValue">
+                    <select id="setting_id_model" name="setting_id_model" class="form-control required">
+                    <volist name="catelist" id="vo">
+                   	 <option value="{$vo.id}" <php>if($result['setting_id_model']==$vo['id']){</php>selected<php>}</php>>{$vo.title}</option>
+                     </volist>
+                    </select>
+                </td>
+            </tr>
+            
+             <tr>
+                <th class="formTitle">单价：</th>
+                <td class="formValue">
+                    <input id="unit_price" name="unit_price" type="text" class="form-control" placeholder="请输入单价" value="{$result.unit_price}">
+                </td>
+            </tr>
+            
+            <tr>
+                <th class="formTitle">首字母：</th>
+                <td class="formValue">
+                    <input id="firstletter" name="firstletter" type="text" class="form-control required" placeholder="请输入首字母" value="{$result.firstletter}">
+                </td>
+            </tr>
+   
+            
+        </tbody></table>
+    </div>
+</form>
+
+   
+            </div>
+
+            
+        </div>
+
+    </div>
+   
+
+
+</body>
+</html>

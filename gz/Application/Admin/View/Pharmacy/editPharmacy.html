@@ -1,0 +1,280 @@
+<html><head>
+    <meta name="viewport" content="width=device-width">
+    <title>Index</title>
+    <link rel="stylesheet" href="__JS__/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="__CSS__/dataTables.bootstrap.css">
+    <link rel="stylesheet" href="__CSS__/font-awesome.min.css">
+    <link rel="stylesheet" href="__CSS__/style.min.css">
+    <link rel="stylesheet" href="__CSS__/framework-ui.css">
+     <script src="__JS__/jquery/jQuery-2.2.0.min.js"></script>
+   <script src="__JS__/bootstrap/js/bootstrap.min.js"></script>
+   <script src="__JS__/layer/layer.js"></script>
+   <script src="__JS__/framework-ui.js"></script>
+   <script src="__JS__/zoomify.min.js"></script>
+</head>
+<script>
+function submitForm() {
+  $.submitForm({
+            url: "{:U('Pharmacy/editPharmacy')}",
+            param: $("#commentForm").formSerialize(),
+            success: function () {
+                // Refresh();
+                $.currentWindow().Refresh();
+            }
+  })
+
+}
+
+function btn_add(cid) {
+        var setting_id_dostype = $('#setting_id_dostype option:selected').val();
+        var hrebs_number = $('#hrebs_number').val();
+         var linkurl="{:U('Pharmacy/addHrebs',array('id'=>'nidval','setting_id_dostype'=>'asetting_id','hrebs_number'=>'ahrebs'))}";
+         linkurl=linkurl.replace('nidval', cid),
+         linkurl=linkurl.replace('asetting_id', setting_id_dostype),
+         linkurl=linkurl.replace('ahrebs', hrebs_number),
+         $.modalOpen({
+             id: "Form1",
+             title: "添加药材",
+             url: linkurl,
+             width: "670px",
+             height: "500px",
+             callBack: function (iframeId) {
+                 top.frames[iframeId].submitForm();
+             }
+         });
+ }
+function btn_delete(id){
+    $.deleteForm({
+            url: "{:U('Pharmacy/delHrebs')}",
+            param: { id: id},
+            success: function () {
+                top.Form.Refresh();
+            }
+        })
+}
+function dianji(){
+    $('.icon').zoomify();
+}
+function Refresh()
+{
+	location.reload();
+}
+</script>
+
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <form class="form-horizontal" id="commentForm" action="{:U('Pharmacy/editPharmacy')}" method="post">
+                    <div class="ibox-content">
+						<div id="DataTables_Table_0_wrapper" class="dataTables_wrapper form-inline" role="grid">
+                        <input type="hidden" name="id" id="id" value="{$result.id}">
+                        <table class="table table-bordered dataTable">
+                          	 <thead>
+                                <tr>
+                                    <th colspan="4" style="text-align:center;">基本信息</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            	
+                                <tr class="gradeC">
+                                    <th style="text-align:right">订单号：</th>
+                                    <td>{$result.order_sn}</td>
+                                    <th style="text-align:right">订单状态：</th>
+                                    <td>
+                                      <input type="text" id="order_statuss" name="order_statuss" value="{$result.order_status}" class="form-control" style="width: 100%;" disabled="disabled">
+                                    </td>
+                                     
+                                    
+                                </tr>
+                                
+                                 <tr class="gradeC">
+                                    <th style="text-align:right">下单人：</th>
+                                    <td>{$result.username}</td>
+                                    <th style="text-align:right">下单时间：</th>
+                                    <td>{$result['create_time']|date='Y-m-d H:i:s',###}</td>
+                                   
+                                </tr>
+                                <tr class="gradeC">
+                                    <th style="text-align:right">收货人：</th>
+                                    <td>{$result.consignee}</td>
+                                    <th style="text-align:right">收货人电话：</th>
+                                    <td>{$result.phone}</td>
+                                   
+                                </tr>
+                                <tr class="gradeC">
+                                    <th style="text-align:right"><span style="color: #f00;">*</span>运费：</th>
+                                    <td><input type="text" id="yun_free" name="yun_free" value="{$result.yun_free}" class="form-control" style="width: 100%;" disabled="disabled" onChange="free()"></td>
+                                   <!--  <th style="text-align:right">审核价格：</th>
+                                    <td><input type="text" id="price" name="price" value="{$result.price}" class="form-control" style="width: 100%;"></td> -->
+                                    <th style="text-align:right"><span style="color: #f00;">*</span>审核：</th>
+                                    <td  colspan="3">
+                                        <select name="is_show" id="is_show" style="border: none;width: 100px;" <php>if($result['order_status']=='待审核'){</php><php>}else{</php>disabled="disabled"<php>}</php>>
+                                            <option <if condition="$result.is_show eq 0">selected</if> value="0">未审核</option>
+                                            <option <if condition="$result.is_show eq 1">selected</if> value="1">审核通过</option>
+                                            <option <if condition="$result.is_show eq 2">selected</if> value="2">审核未通过</option>
+                                            
+                                        </select>
+                                    </td>
+                                   
+                                </tr>
+                                <tr class="gradeC">
+                                    <th style="text-align:right"><span style="color: #f00;">*</span>副数：</th>
+                                    <td  class="formValue" style="width:200px;">
+                                        <input type="text" onChange="hrebsnumber()" id="hrebs_number" name="hrebs_number" value="{$result.hrebs_number}" class="form-control"   
+                                        <php>if($result['order_status']=='核价中'){</php><php>}else{</php>disabled="disabled"<php>}</php>>
+                                    </td>
+                                    <th style="text-align:right"><span style="color: #f00;">*</span>剂型选择：</th>
+                                    <td  colspan="3">
+                                        
+                                         <select name="setting_id_dostype" id="setting_id_dostype" style="border: none;width: 100px;" <if condition="$result['order_status'] neq '核价中'">disabled="disabled"</if> onChange="cll();">
+                                            <option <if condition="$result.setting_id_dostype eq 131">selected</if> value="131">原药</option>
+                                            <option <if condition="$result.setting_id_dostype eq 132">selected</if> value="132">汤药代煎</option>
+                                            <option <if condition="$result.setting_id_dostype eq 133">selected</if> value="133">膏方制作</option>
+                                            
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr class="gradeC">
+                                  <th style="text-align:right">收货地址：</th>
+                                    <td colspan="3">{$result.address}</td>
+                                </tr>
+                                <tr class="gradeC">
+                                  <th style="text-align:right">图片：</th>
+                                  <td colspan="3" class="formValue" style="position: relative;width: auto;padding: 5px;">
+                                    <volist name="images" id="img">
+                                      <img src="{$http_img_url}{$img}" style="width: auto;margin-left: 20%;margin-bottom: 5px;" class="icon" onClick="dianji();">
+                                    </volist>
+                                  </td>
+                                </tr>
+                                
+                              
+                            </tbody>
+                           
+                        </table>
+                        
+                        <div class="btn-group" style="float: right;">
+                            <!-- <a id="NF-add" authorize="yes" class="btn btn-primary dropdown-text" href="{:U('Pharmacy/btn_export',array('id'=>$result['id']));}"><i class="fa fa-file-excel-o"></i>导出</a> -->
+                            <a target="_blank" class="btn btn-primary dropdown-text" href="{:U('Pharmacy/printPharmacy',array('id'=>$result['id']));}"><i class="fa fa-file-excel-o"></i>导出</a>
+                        </div>
+                        <div class="btn-group">
+                           <!--  <php> if($result['status'] == '核价中' and ($result['setting_id_class'] == 44)){</php>
+                                    <a onClick="btn_add({$result['id']})" class="LGQ_ico" style="position: relative;left:712px;top: 46px;color:#07D;"><i class="fa fa-pencil-square-o"></i> 点击添加</a><php>  }</php> -->
+                                    <php> if($result['order_status'] == '核价中'){</php>
+                                    <a onClick="btn_add({$result['id']})" class="LGQ_ico" style="position: relative;left:712px;top: 46px;color:#07D;"><i class="fa fa-pencil-square-o"></i> 点击添加</a><php>  }</php>
+                        </div>
+                        <table class="table table-bordered dataTable">
+                          	 <thead>
+                                <tr>
+                                    <th colspan="5" style="text-align:center;">商品信息</th> <!-- <php> if($result['order_status'] == '核价中'){</php>
+                                    <a onClick="btn_add({$result['id']})" class="LGQ_ico" style="position: relative;left:712px;top: 34px;color:#07D;"><i class="fa fa-pencil-square-o"></i> 点击添加</a><php>  }</php> -->
+                                </tr>
+                                 <tr>
+                                    <th>商品名称</th>
+                                    <th>价格</th>
+                                    <th>数量</th>
+                                    <th>小计</th>
+                                     <php> if($result['order_status'] == '核价中'){</php><th>操作</th><php>  }</php>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            	
+                             
+                               
+                                <volist name="hrebs" id="vo">
+                                 <tr class="gradeC">
+                                    <td>{$vo.hrebs_name}</td>
+                                    <td>{$vo.unit_price} 元</td>
+                                    <td>
+                                        {$vo.hrebs_dosage}
+                                        <if condition="$vo['setting_id_model'] eq 51">袋
+                                        <else/>克
+                                        </if>
+                                    </td>
+                                    <td>{$vo['unit_price']*$vo['hrebs_dosage']} 元</td>
+                                     <php> if($result['order_status'] == '核价中'){</php><td><a onClick="btn_delete({$vo['id']})" class="LGQ_ico"><i class="fa fa-trash-o"></i> 删除</a></td><php>  }</php>
+                                </tr>
+                         		</volist>
+                                
+                                <tr>
+                                    <th colspan="5" style="text-align:right;">药材总价：<span id="single_price"><if condition="$total neq 0"> {$total*$result['hrebs_number']}<else/>0.00</if></span>元</th>
+                                    <input type="hidden" name="price" id="price" value="{$total}">
+                                </tr>
+                                <tr>
+                                    <th colspan="5" style="text-align:right;">加工费：
+                                      <span id="jz_price"><if condition="$result.process_price neq 0.00">{$result['process_price']}<else/>0.00</if></span> 
+                                      
+                                    元</th>
+                                </tr>
+                                <tr>
+                                    <th colspan="5" style="text-align:right;">处方总价：<span id="hrebs_total_count"><if condition="$total neq 0"> {$total*$result['hrebs_number']+$result['process_price']}<else/>0.00</if></span>元</th>
+                                </tr>
+                               <tr>
+                                    <th colspan="5" style="text-align:right;">运费： <span id="yun"><if condition="$result.yun_free neq 0.00">{$result['yun_free']}<else/>0.00</if></span>元</th>
+                                </tr>   
+                                <tr>
+                                    <th colspan="5" style="text-align:right;">总价格： <span id="all_total">{$total*$result['hrebs_number']+$result['process_price']+$result['yun_free']}</span>元</th>
+                                </tr>                         </tbody>
+                           	
+                        </table>
+                        
+                         
+                       
+ 					</div>
+                    </div>
+                    </form>
+                    
+                </div>
+                
+            </div>
+            
+        </div>
+        
+    </div>
+  <script type="text/javascript">
+
+    function cll(){
+      var id = document.getElementById('setting_id_dostype').value;
+      if(id==131){
+        document.getElementById('jz_price').innerHTML = <?php echo $jgf['technical_price'];?>;
+         $('#hrebs_total_count').html(parseFloat(<?php echo $jgf['technical_price'];?>)+parseFloat(parseFloat($('#single_price').html())));
+         $('#all_total').html(parseFloat(<?php echo $jgf['technical_price'];?>)+parseFloat(parseFloat($('#single_price').html()))+parseFloat($('#yun_free').val()));
+      }else if(id==132){
+         document.getElementById('jz_price').innerHTML = parseFloat((<?php echo $jgf['frying_price'];?>)*($('#hrebs_number').val()));
+        $('#hrebs_total_count').html(parseFloat(parseFloat(<?php echo $jgf['frying_price'];?>)*parseFloat($('#hrebs_number').val()))+parseFloat(parseFloat($('#single_price').html())));
+         $('#all_total').html(parseFloat(parseFloat(<?php echo $jgf['frying_price'];?>)*parseFloat($('#hrebs_number').val()))+parseFloat(parseFloat($('#single_price').html()))+parseFloat($('#yun_free').val()));
+      }else if(id==133){
+        document.getElementById('jz_price').innerHTML = parseFloat((<?php echo $jgf['paste_price'];?>)*($('#hrebs_number').val()));
+        $('#hrebs_total_count').html(parseFloat(<?php echo $jgf['paste_price'];?>)*parseFloat($('#hrebs_number').val())+parseFloat(parseFloat($('#single_price').html())));
+        $('#all_total').html(parseFloat(<?php echo $jgf['paste_price'];?>)*parseFloat($('#hrebs_number').val())+parseFloat(parseFloat($('#single_price').html()))+parseFloat($('#yun_free').val()));
+      }
+   
+    }
+    function free(){
+      var yun_free = document.getElementById("yun_free").value;
+      document.getElementById('yun').innerHTML = yun_free;
+      $('#all_total').html(parseFloat($('#hrebs_total_count').html())+parseFloat($('#yun_free').val()));
+    }
+    function hrebsnumber(){
+      var id=$("#setting_id_dostype option:selected").val();
+
+    //alert($('#hrebs_number').val());
+      $('#single_price').html(parseFloat(<?php echo $total?>)*parseFloat($('#hrebs_number').val()));
+      if(id==131){
+      $('#hrebs_total_count').html(parseFloat(<?php echo $jgf['technical_price'];?>)+parseFloat(parseFloat($('#single_price').html())));
+      $('#all_total').html(parseFloat(<?php echo $jgf['technical_price'];?>)+parseFloat(parseFloat($('#single_price').html()))+parseFloat($('#yun_free').val()));
+      $("#jz_price").html(parseFloat(parseFloat(<?php echo $jgf['technical_price'];?>)));
+      }else if(id==132){
+      $('#hrebs_total_count').html(parseFloat(parseFloat(<?php echo $jgf['frying_price'];?>)*parseFloat($('#hrebs_number').val()))+parseFloat(parseFloat($('#single_price').html())));
+      $('#all_total').html(parseFloat(parseFloat(<?php echo $jgf['frying_price'];?>)*parseFloat($('#hrebs_number').val()))+parseFloat(parseFloat($('#single_price').html())*parseFloat($('#hrebs_number').val()))+parseFloat($('#yun_free').val()));
+       $("#jz_price").html(parseFloat(parseFloat(<?php echo $jgf['frying_price'];?>)*parseFloat($('#hrebs_number').val())));
+      }else if(id==133){
+      $('#hrebs_total_count').html(parseFloat(<?php echo $jgf['paste_price'];?>)*parseFloat($('#hrebs_number').val())+parseFloat(parseFloat($('#single_price').html())));
+      $('#all_total').html(parseFloat(<?php echo $jgf['paste_price'];?>)*parseFloat($('#hrebs_number').val())+parseFloat(parseFloat($('#single_price').html()))+parseFloat($('#yun_free').val()));
+      $("#jz_price").html(parseFloat(parseFloat(<?php echo $jgf['paste_price'];?>)*parseFloat($('#hrebs_number').val())));
+      }
+    }
+  </script>
+</body>
+</html>
