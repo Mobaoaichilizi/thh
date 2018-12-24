@@ -1,0 +1,171 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>会员卡信息</title>
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <link rel="stylesheet" type="text/css" href="__CSS__/aui.css" />
+    <link rel="stylesheet" type="text/css" href="__CSS__/aui-base.css" />
+    <link rel="stylesheet" type="text/css" href="__CSS__/style.css" />
+</head>
+<body>
+  <header class="aui-bar aui-bar-nav header">
+    <a class="aui-btn aui-pull-left" href="JavaScript:history.go(-1)">
+      <span class="aui-iconfont aui-icon-left"></span>
+    </a>
+    <div class="aui-title">会员卡</div>
+  </header>
+  <div class="aui-content">
+      <div class="aui-tab" id="tab">
+        <div class="aui-tab-item aui-active" tapmode="" data-item-order="0">会员卡</div>
+        <div class="aui-tab-item" tapmode="" data-item-order="1">次卡</div>
+        <div class="aui-tab-item" tapmode="" data-item-order="2">期限卡</div>
+        <div class="aui-tab-item" tapmode="" data-item-order="3">疗程卡</div>
+      </div>
+      <div class="pad075">
+        <div class="cardbox">
+            <div class="card_list">
+            
+            
+              <div class="card_item bg_d7b371 c_fff">
+                <div class="card_top">{$shop_info.shop_name}</div>
+                <div class="card_content">
+                  <div class="card_img"><img src="__IMG__/card.jpg" /></div>
+                  <dl class="card_dl fs7">
+                    <dd>余额：¥<span class="bold fs8 padl02">{$member_info.balance}</span></dd>
+                    <dd>NO：{$member_info.member_no}</dd>
+                    <dd>卡有效期：永久有效</dd>
+                  </dl>
+                </div>
+                <div class="card_bottom">{$shop_info.address}<span class="left"></span><span class="right"></span></div>
+              </div>
+              
+              
+              <volist name="numcard_info" id="vo">
+              <div class="card_item bg_c7c7c7 c_fff">
+                <div class="card_top">{$shop_info.shop_name}</div>
+                <div class="card_content">
+                  <div class="card_img"><img src="__IMG__/card.jpg" /></div>
+                  <dl class="card_dl fs7">
+                    <dd>{$vo['project_info']['item_name']}</dd>
+                    <dd><span class="padr05">价格：¥{$vo.average}/次</span>剩余：¥{$vo.numcard_money}/{$vo.card_num}次</dd>
+                    <dd>服务时长：{$vo['project_info']['item_duration']}分钟</dd>
+                  </dl>
+                </div>
+                <div class="card_bottom">{$shop_info.address}<span class="left"></span><span class="right"></span></div>
+              </div>
+              </volist>
+              
+              
+               <volist name="deadlinecard_info" id="vo">
+              <div class="card_item bg_f17797 c_fff">
+                <div class="card_top">{$shop_info.shop_name}</div>
+                <div class="card_content">
+                  <div class="card_img"><img src="__IMG__/card.jpg" /></div>
+                  <dl class="card_dl fs7">
+                    <dd>{$vo['project_info']['item_name']}</dd>
+                    <dd><span class="padr05 textdel">价格：¥{$vo.card_money}</span>剩余天数：<php>echo round(($vo['end_time']-time())/(24*3600))</php>天</dd>
+                    <dd>服务时长：{$vo['project_info']['item_duration']}分钟　单日使用上限：{$vo.day_ceiling}次</dd>
+                  </dl>
+                </div>
+                <div class="card_bottom">{$shop_info.address}<span class="left"></span><span class="right"></span></div>
+              </div>
+               </volist>
+               
+               
+              <volist name="coursecard_info" id="vo">
+              <div class="card_item bg_00c8b1 c_fff">
+                <div class="card_top">{$shop_info.shop_name}</div>
+                <div class="card_content">
+                  <div class="card_img"><img src="__IMG__/card.jpg" /></div>
+                  <dl class="card_dl fs7">
+                    <dd>项目名称</dd>
+                    <dd>共{$vo.courseproject_count}个种项目</dd>
+                    <dd>服务时长：{$vo.long_time}分钟　办卡价格：¥{$vo.card_money}</dd>
+                  </dl>
+                </div>
+                <div class="card_bottom">{$shop_info.address}<span class="left"></span><span class="right"></span></div>
+              </div>
+               </volist>
+              
+              
+            </div>
+
+            <div class="card_list" style="display:none">
+            
+            <volist name="numcard_info" id="vo">
+              <div class="card_item bg_c7c7c7 c_fff">
+                <div class="card_top">{$shop_info.shop_name}</div>
+                <div class="card_content">
+                  <div class="card_img"><img src="__IMG__/card.jpg" /></div>
+                  <dl class="card_dl fs7">
+                    <dd>{$vo['project_info']['item_name']}</dd>
+                    <dd><span class="padr05">价格：¥{$vo.average}/次</span>剩余：¥{$vo.numcard_money}/{$vo.card_num}次</dd>
+                    <dd>服务时长：{$vo['project_info']['item_duration']}分钟</dd>
+                  </dl>
+                </div>
+                <div class="card_bottom">{$shop_info.address}<span class="left"></span><span class="right"></span></div>
+              </div>
+              </volist>
+              
+              
+            </div>
+
+            <div class="card_list" style="display:none">
+            
+             <volist name="deadlinecard_info" id="vo">
+              <div class="card_item bg_f17797 c_fff">
+                <div class="card_top">{$shop_info.shop_name}</div>
+                <div class="card_content">
+                  <div class="card_img"><img src="__IMG__/card.jpg" /></div>
+                  <dl class="card_dl fs7">
+                    <dd>{$vo['project_info']['item_name']}</dd>
+                    <dd><span class="padr05 textdel">价格：¥{$vo.card_money}</span>剩余天数：<php>echo round(($vo['end_time']-time())/(24*3600))</php>天</dd>
+                    <dd>服务时长：{$vo['project_info']['item_duration']}分钟　单日使用上限：{$vo.day_ceiling}次</dd>
+                  </dl>
+                </div>
+                <div class="card_bottom">{$shop_info.address}<span class="left"></span><span class="right"></span></div>
+              </div>
+               </volist>
+              
+            </div>
+
+            <div class="card_list" style="display:none">
+            
+            <volist name="coursecard_info" id="vo">
+              <div class="card_item bg_00c8b1 c_fff">
+                <div class="card_top">{$shop_info.shop_name}</div>
+                <div class="card_content">
+                  <div class="card_img"><img src="__IMG__/card.jpg" /></div>
+                  <dl class="card_dl fs7">
+                    <dd>项目名称</dd>
+                    <dd>共{$vo.courseproject_count}个种项目</dd>
+                    <dd>服务时长：{$vo.long_time}分钟　办卡价格：¥{$vo.card_money}</dd>
+                  </dl>
+                </div>
+                <div class="card_bottom">{$shop_info.address}<span class="left"></span><span class="right"></span></div>
+              </div>
+               </volist>
+              
+              
+            </div>
+        </div>
+      </div>
+  </div>
+
+  <script type="text/javascript" src="__JS__/api.js"></script>
+  <script type="text/javascript" src="__JS__/aui-tab.js"></script>
+  <script type="text/javascript" src="__JS__/jquery-2.2.3.min.js"></script>
+  <script type="text/javascript">
+    apiready = function(){
+        api.parseTapmode();
+    }
+    var tab = new auiTab({
+        element:document.getElementById("tab"),
+    },function(ret){
+      $('.cardbox .card_list').hide().eq(ret.index-1).show();
+    });
+  </script>
+</body>
+</html>

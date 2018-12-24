@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Form</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <link rel="stylesheet" href="__STATIC__/layuiadmin/layui/css/layui.css" media="all">
+</head>
+<body>
+<div>
+      <div class="layui-card-body">
+        <form class="layui-form" action="" lay-filter="component-form-group" id="commentForm">
+         <input type="hidden" name="chain_id" id="chain_id" value="{$chain_id}" >
+        <input type="hidden" name="id" id="id" value="{$result.id}">
+          <div class="layui-form-item">
+            <label class="layui-form-label">手机号：</label>
+            <div class="layui-input-block">
+              <input type="text" name="username" lay-verify="required" disabled value="{$result.username}" autocomplete="off" placeholder="请输入手机号码" class="layui-input">
+            </div>
+          </div>
+          
+          
+           <div class="layui-form-item">
+            <label class="layui-form-label">姓名：</label>
+            <div class="layui-input-block">
+              <input type="text" name="name" lay-verify="required" autocomplete="off" value="{$result.name}" placeholder="请输入姓名" class="layui-input">
+            </div>
+          </div>
+          
+          <div class="layui-form-item">
+            <label class="layui-form-label">所属门店：</label>
+            <div class="layui-input-block">
+            	 <select id="shop_id" name="shop_id" class="layui-input">
+                   <volist name="shoplist" id="vo">
+                   	 <option value="{$vo.id}"  <php>if($result['shop_id']==$vo['id']){</php>selected<php>}</php> >{$vo.shop_name}</option>
+                     </volist>
+                    </select>
+            </div>
+          </div>
+          
+          
+          
+           <div class="layui-form-item">
+            <label class="layui-form-label">状态：</label>
+            <div class="layui-input-block">
+                <select id="state" name="state" class="layui-input">
+                  
+                        <option value="1"  <php>if($result['state']==1){</php>selected<php>}</php>>启用</option>
+                         <option value="0" <php>if($result['state']==0){</php>selected<php>}</php>>禁用</option>
+              
+                    </select>
+            </div>
+          </div>
+          
+          
+          <div class="layui-form-item layui-hide">
+      <input type="button" lay-submit lay-filter="LAY-user-front-submit" id="LAY-user-front-submit" value="确认">
+    </div>
+
+        </form>
+      </div>
+    </div>
+
+ <script src="__JS__/jquery/jQuery-2.2.0.min.js"></script>
+ <script src="__JS__/framework-ui.js"></script>
+  <script src="__STATIC__/layuiadmin/layui/layui.js"></script> 
+ <script>
+ layui.config({
+    base: '__STATIC__/layuiadmin/' //静态资源所在路径
+  }).extend({
+    index: 'lib/index' //主入口模块
+  }).use(['index', 'form'], function(){
+    var $ = layui.$
+    ,form = layui.form
+	
+	form.on('submit(LAY-user-front-submit)', function(data){
+	  	$.submitForm({
+		url: "{:U('Shopuser/editShopuser')}",
+		param: $("#commentForm").serialize(),
+		success: function () {
+			$.currentWindow().Refresh();
+		}
+	}) 
+	return false;  
+})
+});
+</script>
+
+</body>
+</html>

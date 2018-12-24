@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>添加用户</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <link rel="stylesheet" href="__STATIC__/layuiadmin/layui/css/layui.css" media="all">
+</head>
+<body>
+<div>
+      <div class="layui-card-body">
+        <form class="layui-form" action="" lay-filter="component-form-group" id="commentForm">
+         <input type="hidden" name="chain_id" id="chain_id" value="{$chain_id}" >
+         <input type="hidden" name="shop_id" id="shop_id" value="{$shop_id}" >
+        <input type="hidden" name="id" id="id" value="{$result.id}">
+          <div class="layui-form-item">
+            <label class="layui-form-label">名称：</label>
+            <div class="layui-input-block">
+              <input type="text" name="name" lay-verify="required" autocomplete="off" placeholder="请输入名称" class="layui-input" value="{$result.name}">
+            </div>
+          </div>
+          
+          <div class="layui-form-item">
+            <label class="layui-form-label">排序：</label>
+            <div class="layui-input-block">
+              <input type="text" name="sort" lay-verify="required" autocomplete="off" placeholder="请输入排序" class="layui-input" value="{$result.sort}">
+            </div>
+          </div>
+          
+           <div class="layui-form-item">
+            <label class="layui-form-label">状态：</label>
+            <div class="layui-input-block">
+              <input type="checkbox" <php>if($result['status']==1){</php>checked<php>}</php>  name="status" value="1" lay-skin="switch" lay-filter="component-form-switchTest" lay-text="开启|禁用">
+            </div>
+          </div>
+          
+          <div class="layui-form-item">
+            <label class="layui-form-label">是否跨天：</label>
+            <div class="layui-input-block">
+              <input type="checkbox" <php>if($result['is_day']==1){</php>checked<php>}</php> name="is_day" value="1" lay-skin="switch" lay-filter="component-form-switchTest" lay-text="是|否">
+            </div>
+          </div>
+          
+          
+          <div class="layui-form-item">
+            <label class="layui-form-label">开始时间：</label>
+            <div class="layui-input-block">
+              <input type="text" class="layui-input" lay-verify="required" id="start_time" name="start_time" placeholder="HH:mm:ss" lay-key="6" value="{$result.start_time}">
+            </div>
+          </div>
+          
+           <div class="layui-form-item">
+            <label class="layui-form-label">结束时间：</label>
+            <div class="layui-input-block">
+              <input type="text" class="layui-input" lay-verify="required" id="end_time" name="end_time" placeholder="HH:mm:ss" lay-key="6" value="{$result.end_time}">
+            </div>
+          </div>
+          <div class="layui-form-item layui-hide">
+      <input type="button" lay-submit lay-filter="LAY-user-front-submit" id="LAY-user-front-submit" value="确认">
+    </div>
+
+        </form>
+      </div>
+    </div>
+
+ <script src="__JS__/jquery/jQuery-2.2.0.min.js"></script>
+ <script src="__JS__/framework-ui.js"></script>
+  <script src="__STATIC__/layuiadmin/layui/layui.js"></script> 
+ <script>
+ layui.config({
+    base: '__STATIC__/layuiadmin/' //静态资源所在路径
+  }).extend({
+    index: 'lib/index' //主入口模块
+  }).use(['index', 'form', 'laydate'], function(){
+    var $ = layui.$
+    ,form = layui.form
+	,laydate = layui.laydate
+	
+	 //时间选择器
+    laydate.render({
+      elem: '#start_time'
+      ,type: 'time'
+    });
+	
+	laydate.render({
+      elem: '#end_time'
+      ,type: 'time'
+    });
+
+	
+	form.on('submit(LAY-user-front-submit)', function(data){
+	  	$.submitForm({
+		url: "{:U('Shoptime/editShoptime')}",
+		param: $("#commentForm").serialize(),
+		success: function () {
+			$.currentWindow().Refresh();
+		}
+	}) 
+	return false;  
+})
+});
+</script>
+
+</body>
+</html>

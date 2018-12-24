@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>消费记录</title>
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <link rel="stylesheet" type="text/css" href="__CSS__/aui.css" />
+    <link rel="stylesheet" type="text/css" href="__CSS__/aui-base.css" />
+    <link rel="stylesheet" type="text/css" href="__CSS__/style.css" />
+</head>
+<body>
+  <header class="aui-bar aui-bar-nav header">
+    <a class="aui-btn aui-pull-left" href="JavaScript:history.go(-1)">
+      <span class="aui-iconfont aui-icon-left"></span>
+    </a>
+    <div class="aui-title">消费记录</div>
+  </header>
+  <div class="aui-content">
+      <div class="pad075">
+
+<volist name="financial_list" id="vo">
+        <div class="marb075 bg_fff pad075 fs7">
+          <div class="record_row">
+            <div class="record_label c_777 padl02 padr05">项目名称：</div>
+            <div>{$vo.project_name}</div>
+          </div>
+          <div class="record_row">
+            <div class="record_label c_777 padl02 padr05">会员卡类型：</div>
+            <div>
+            <php>if($vo['transaction_type']==1){</php>
+            会员卡打折
+             <php>}else if($vo['transaction_type']==2){</php>
+             次卡消费
+             <php>}else if($vo['transaction_type']==3){</php>
+             期限卡消费
+             <php>}else if($vo['transaction_type']==4){</php>
+             疗程卡消费
+             <php>}else {</php>
+             无折扣
+             <php>}</php>
+            </div>
+          </div>
+          <div class="record_row">
+            <div class="record_label c_777 padl02 padr05">消费时间：</div>
+            <div class="fs7">{$vo.createtime|date='Y-m-d H:i:s',###}</div>
+          </div>
+        </div>
+</volist>
+        
+      </ul>
+      </div>
+  </div>
+</body>
+</html>

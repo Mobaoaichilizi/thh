@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>营业日报</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <link rel="stylesheet" href="__STATIC__/layuiadmin/layui/css/layui.css" media="all">
+  <link rel="stylesheet" href="__STATIC__/layuiadmin/style/admin.css" media="all">
+</head>
+<body>
+  
+  <div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+      <div class="layui-col-md12">
+           <div class="layui-card">
+            <div class="layui-card-header">营业日报</div>
+            <div class="layui-card-body layui-form">
+            <form name="fm" id="fm" action="{:U('Dataanalysis/business')}" method="post">
+          <div class="layui-form-item">
+
+            <div class="layui-inline">
+                  <div class="layui-input-inline">
+                    <input type="text" class="layui-input" id="test-laydate-start" name="start_time" value="{$start_time}" placeholder="开始日期">
+                  </div>
+                  <div class="layui-form-mid">
+                    -
+                  </div>
+                  <div class="layui-input-inline">
+                    <input type="text" class="layui-input" id="test-laydate-end" name="end_time" value="{$end_time}"  placeholder="结束日期">
+                  </div>
+                </div>
+                  <button class="layui-btn" data-type="reload">搜 索</button>
+      </div>
+            </form>
+                <!---****-->
+                <!--<div class="layui-card">-->
+                    <div class="layui-tab layui-tab-brief" lay-filter="component-tabs-brief">
+                        <ul class="layui-tab-title">
+                            <li class="layui-this">汇总</li>
+                            <li>订单明细</li>
+                            <li>售卡明细</li>
+                            <li>会员消费明细</li>
+                            <li>新增会员明细</li>
+                            <li>上客人数明细</li>
+                            <li>项目统计明细</li>
+                            <li>商品统计明细</li>
+                        </ul>
+                        <!---***-->
+                        <div class="layui-tab-content">
+                            <!--***-->
+                            <div class="layui-tab-item layui-show">
+                                <table  class="layui-table">
+                                    <thead>
+                                    <tr>
+                                        <th><div class="layui-table-cell" style="text-align:center;">营业收入</div></th>
+                                        <th><div class="layui-table-cell" style="text-align:center;">订单收入</div></th>
+                                        <th><div class="layui-table-cell" style="text-align:center;">售卡收入</div></th>
+                                        <th><div class="layui-table-cell" style="text-align:center;">会员消费</div></th>
+                                        <th><div class="layui-table-cell" style="text-align:center;">新增会员数</div></th>
+                                        <th><div class="layui-table-cell" style="text-align:center;">上客人数</div></th>
+                                        <th><div class="layui-table-cell" style="text-align:center;">项目统计</div></th>
+                                        <th><div class="layui-table-cell" style="text-align:center;">商品统计</div></th>
+                                        <th><div class="layui-table-cell" style="text-align:center;">加钟率</div></th>
+                                        <th><div class="layui-table-cell" style="text-align:center;">点钟率</div></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td align="center">{$ordermoney+$cardmoney}</td>
+                                        <td align="center">{$ordermoney?$ordermoney:0}</td>
+                                        <td align="center">{$cardmoney?$cardmoney:0}</td>
+                                        <td align="center">{$memberfee?$memberfee:0}</td>
+                                        <td align="center">{$addmembernum?$addmembernum:0}</td>
+                                        <td align="center">{$ordermembernum?$ordermembernum:0}</td>
+                                        <td align="center">{$projectmoney?$projectmoney:0}</td>
+                                        <td align="center">{$productmoney?$productmoney:0}</td>
+                                        <td align="center">{$addpointrate?$addpointrate:0}%</td>
+                                        <td align="center">{$pointrate?$pointrate:0}%</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <div class="layui-card">
+                                    <!--订单收入-->
+                                    <div class="layui-col-md8">
+                                        <div class="layui-card">
+                                            <div class="layui-card-body">
+                                                <div id="Canvas1" style="height:500px;"></div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <!--售卡收入-->
+                                    <div class="layui-col-md4">
+                                        <div class="layui-card">
+                                            <div class="layui-card-body">
+                                                <div id="Canvas2" style="height:500px;"></div>
+                                                <!-- <div id="Canvas3" style="height:250px;"></div> -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div style="clear: both"></div>
+                                </div>
+                            </div>
+                            <!---***-->
+                            <div class="layui-tab-item" >
+                                <div style="margin-bottom: 10px;">
+                                    <a href="{:U('Dataanalysis/importlist',array('act'=>'order'))}">
+                                        <button type="button" class="layui-btn">导出</button>
+                                    </a>
+                                </div>
+
+                                <table class="layui-hide"  id="data-table-totalRow" lay-filter="data-table-totalRow" ></table>
+                            </div>
+                            <!---***-->
+                            <!---***-->
+                            <div class="layui-tab-item" >
+                                <div style="margin-bottom: 10px;">
+                                    <a href="{:U('Dataanalysis/importlist',array('act'=>'card'))}">
+                                        <button type="button" class="layui-btn">导出</button>
+                                    </a>
+                                </div>
+                                <table class="layui-hide"  id="data-table-totalRow1" lay-filter="data-table-totalRow1"></table>
+                            </div>
+                            <!---***-->
+                            <!---***-->
+                            <div class="layui-tab-item" >
+                                <div style="margin-bottom: 10px;">
+                                    <a href="{:U('Dataanalysis/importlist',array('act'=>'memberfee'))}">
+                                        <button type="button" class="layui-btn">导出</button>
+                                    </a>
+                                </div>
+                                <table class="layui-hide"  id="data-table-totalRow6" lay-filter="data-table-totalRow6"></table>
+                            </div>
+                            <!---***-->
+                            <!---***-->
+                            <div class="layui-tab-item" >
+                                <div style="margin-bottom: 10px;">
+                                    <a href="{:U('Dataanalysis/importlist',array('act'=>'addmember'))}">
+                                        <button type="button" class="layui-btn">导出</button>
+                                    </a>
+                                </div>
+                                <table class="layui-hide"  id="data-table-totalRow2" lay-filter="data-table-totalRow1"></table>
+                            </div>
+                            <!---***-->
+                            <!---***-->
+                            <div class="layui-tab-item" >
+                                <div style="margin-bottom: 10px;">
+                                    <a href="{:U('Dataanalysis/importlist',array('act'=>'member'))}">
+                                        <button type="button" class="layui-btn">导出</button>
+                                    </a>
+                                </div>
+                                <table class="layui-hide"  id="data-table-totalRow3" lay-filter="data-table-totalRow1"></table>
+                            </div>
+                            <!---***-->
+                            <!---***-->
+                            <div class="layui-tab-item" >
+                                <div style="margin-bottom: 10px;">
+                                    <a href="{:U('Dataanalysis/importlist',array('act'=>'project'))}">
+                                        <button type="button" class="layui-btn">导出</button>
+                                    </a>
+                                </div>
+                                <table class="layui-hide"  id="data-table-totalRow4" lay-filter="data-table-totalRow1"></table>
+                            </div>
+                            <!---***-->
+                            <!---***-->
+                            <div class="layui-tab-item" >
+                                <div style="margin-bottom: 10px;">
+                                    <a href="{:U('Dataanalysis/importlist',array('act'=>'product'))}">
+                                        <button type="button" class="layui-btn">导出</button>
+                                    </a>
+                                </div>
+                                <table class="layui-hide"  id="data-table-totalRow5" lay-filter="data-table-totalRow1"></table>
+                            </div>
+                            <!---***-->
+                        </div>
+                        <!---***-->
+                    </div>
+                <!--</div>-->
+                <!---****-->
+          
+       
+            </div>
+              </div>
+           </div>
+      
+    </div>
+      </div>
+      
+  
+ <script src="__JS__/jquery/jQuery-2.2.0.min.js"></script>
+ <script src="__JS__/charts/echarts.min.js"></script>
+ <script src="__JS__/framework-ui.js"></script>
+  <script src="__STATIC__/layuiadmin/layui/layui.js"></script> 
+  <script language="javascript">
+    $(document).ready(function(){ 
+      //第一列不进行排序(索引从0开始) 
+      $.tablesorter.defaults.headers = {0: {sorter: false}}; 
+      $(".tablesorter").tablesorter(); 
+  }); 
+  layui.config({
+    base: '__STATIC__/layuiadmin/' //静态资源所在路径
+  }).extend({
+    index: 'lib/index' //主入口模块
+  }).use(['index', 'table','admin','laydate'], function(){
+      var table = layui.table;
+      var $ = layui.$;
+      var  form = layui.form,laydate = layui.laydate,admin = layui.admin,element = layui.element,router = layui.router();
+
+
+      //示例代码
+      table.render({
+          elem: '#data-table-totalRow'
+          ,url:'{:U("dataanalysis/detailist",array("act"=>"order"))}'
+          ,totalRow: true
+          ,cols: [[
+              {field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true, totalRowText: '合计'}
+              ,{field:'order_sn', title:'订单编号', width:200 }
+              ,{field:'createtime', title:'开单时间', width:180, sort: true}
+              ,{field:'status', title:'状态', width:80,  sort: true}
+              ,{field:'room_id', title:'包间', width:130, sort: true}
+              ,{field:'total_amount', title:'订单原价', width:100,  sort: true, totalRow: true}
+              ,{field:'invoice_money', title:'税费', width:100,  sort: true, totalRow: true}
+              ,{field:'pay_time', title:'收费时间', minWidth:180, sort: true}
+              ,{field:'pay_amount', title:'已收金额', width:100, edit: 'text', sort: true, totalRow: true}
+          ]]
+          ,page: true
+      });
+      //示例代码
+      table.render({
+          elem: '#data-table-totalRow1'
+          ,url:'{:U("dataanalysis/detailist",array("act"=>"card"))}'
+          ,totalRow: true
+          ,cols: [[
+              {field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true, totalRowText: '合计'}
+              ,{field:'card_id', title:'卡名称', minWidth:180 }
+              ,{field:'transaction_type', title:'卡类型', width:150, sort: true}
+              ,{field:'transaction_money',title:'金额', minWidth:80,  sort: true}
+              ,{field:'createtime',title:'时间', width:150, sort: true}
+          ]]
+          ,page: true
+      });
+      //示例代码
+      table.render({
+          elem: '#data-table-totalRow2'
+          ,url:'{:U("dataanalysis/detailist",array("act"=>"addmember"))}'
+          ,totalRow: true
+          ,cols: [[
+              {field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true, totalRowText: '合计'}
+              ,{field:'member_no', title:'会员编号', minWidth:180 }
+              ,{field:'member_name', title:'会员名称', width:150, sort: true}
+              ,{field:'sex',title:'性别', minWidth:80,  sort: true}
+              ,{field:'member_tel',title:'手机号码', width:150, sort: true}
+          ]]
+          ,page: true
+      });
+
+      //示例代码
+      table.render({
+          elem: '#data-table-totalRow3'
+          ,url:'{:U("dataanalysis/detailist",array("act"=>"member"))}'
+          ,totalRow: true
+          ,cols: [[
+              {field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true, totalRowText: '合计'}
+              ,{field:'title', title:'项目名称', minWidth:180 }
+              ,{field:'types', title:'类型', width:150, sort: true}
+              ,{field:'total_price',title:'项目金额', minWidth:80,  sort: true}
+              ,{field:'pay_money',title:'付款金额', minWidth:80,  sort: true}
+              ,{field:'createtime',title:'时间', width:150, sort: true}
+          ]]
+          ,page: true
+      });
+
+      //示例代码
+      table.render({
+          elem: '#data-table-totalRow4'
+          ,url:'{:U("dataanalysis/detailist",array("act"=>"project"))}'
+          ,totalRow: true
+          ,cols: [[
+              {field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true, totalRowText: '合计'}
+              ,{field:'title', title:'项目名称', minWidth:180 }
+              ,{field:'total_price', title:'项目总价', width:150, sort: true}
+              ,{field:'types',title:'上钟类型', minWidth:80,  sort: true}
+              ,{field:'createtime',title:'创建时间', width:150, sort: true}
+          ]]
+          ,page: true
+      });
+      table.render({
+          elem: '#data-table-totalRow5'
+          ,url:'{:U("dataanalysis/detailist",array("act"=>"product"))}'
+          ,totalRow: true
+          ,cols: [[
+              {field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true, totalRowText: '合计'}
+              ,{field:'title', title:'产品名称', minWidth:180 }
+              ,{field:'unit_price',title:'产品单价', minWidth:80,  sort: true}
+              ,{field:'number',title:'产品数量', width:150, sort: true}
+              ,{field:'total_price', title:'产品总价', width:150, sort: true}
+              ,{field:'createtime',title:'创建时间', width:150, sort: true}
+
+          ]]
+          ,page: true
+      });
+      table.render({
+          elem: '#data-table-totalRow6'
+          ,url:'{:U("dataanalysis/detailist",array("act"=>"memberfee"))}'
+          ,totalRow: true
+          ,cols: [[
+              {field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true, totalRowText: '合计'}
+              ,{field:'project_id', title:'项目名称', minWidth:180 }
+              ,{field:'transaction_type',title:'类型', width:150, sort: true}
+              ,{field:'transaction_money',title:'金额', minWidth:80,  sort: true}
+              ,{field:'createtime',title:'消费时间', width:150, sort: true}
+
+          ]]
+          ,page: true
+      });
+    //开始日期
+    var insStart = laydate.render({
+      elem: '#test-laydate-start'
+      ,done: function(value, date){
+        //更新结束日期的最小日期
+        insEnd.config.min = lay.extend({}, date, {
+          month: date.month - 1
+        });
+        
+        //自动弹出结束日期的选择器
+       insEnd.config.elem[0].focus();
+      }
+    });
+    
+    //结束日期
+    var insEnd = laydate.render({
+      elem: '#test-laydate-end'
+      ,done: function(value, date){
+        //更新开始日期的最大日期
+        insStart.config.max = lay.extend({}, date, {
+          month: date.month - 1
+        });
+      }
+    });
+
+  
+});
+  </script>
+<script language="javascript">
+var dom = document.getElementById("Canvas1");
+var myChart = echarts.init(dom);
+var app = {};
+option = null;
+option = {
+    tooltip: {
+        trigger: 'axis'
+    },
+    legend: {
+        data:['订单收入','售卡收入']
+    },
+    grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true
+    },
+    xAxis: {
+        type: 'category',
+        boundaryGap: false,
+        data: {$redata_time}
+    },
+    yAxis: {
+        type: 'value'
+    },
+    series: [
+        {
+            name:'订单收入',
+            type:'line',
+            //stack: '总量',
+            data:{$business_res}
+        },
+        {
+            name:'售卡收入',
+            type:'line',
+            //stack: '总量',
+            data:{$sell_card_res}
+        }
+    ]
+};
+if (option && typeof option === "object") {
+    myChart.setOption(option, true);
+}
+var dom2 = document.getElementById("Canvas2");
+var myChart2 = echarts.init(dom2);
+option2 = null;
+option2 = {
+    legend: {
+        orient: 'vertical',
+        left: 'left',
+        data: ['订单收入','售卡收入']
+    },
+    series : [
+        {
+            name: '收入构成',
+            type: 'pie',
+            radius : '55%',
+            center: ['50%', '60%'],
+            data:[
+                {value:{$business_res_count}, name:'订单收入'},
+                {value:{$sell_card_res_count}, name:'售卡收入'},
+            ],
+            itemStyle: {
+                emphasis: {
+                    shadowBlur: 10,
+                    shadowOffsetX: 0,
+                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
+            }
+        }
+    ]
+};
+if (option2 && typeof option2 === "object") {
+    myChart2.setOption(option2, true);
+}
+var dom3 = document.getElementById("Canvas3");
+var myChart3 = echarts.init(dom3);
+option3 = null;
+option3 = {
+    legend: {
+        orient: 'vertical',
+        left: 'left',
+        data: ['抵扣卡','现金','银行卡','微信','支付宝']
+    },
+    series : [
+        {
+            name: '支付构成',
+            type: 'pie',
+            radius : '55%',
+            center: ['50%', '60%'],
+            data:[
+                {value:335, name:'抵扣卡'},
+                {value:310, name:'现金'},
+                {value:234, name:'银行卡'},
+                {value:135, name:'微信'},
+                {value:1548, name:'支付宝'}
+            ],
+            itemStyle: {
+                emphasis: {
+                    shadowBlur: 10,
+                    shadowOffsetX: 0,
+                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
+            }
+        }
+    ]
+};
+if (option3 && typeof option3 === "object") {
+    myChart3.setOption(option3, true);
+}
+  </script>
+</body>
+</html>

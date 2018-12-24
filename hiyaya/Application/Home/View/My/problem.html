@@ -1,0 +1,97 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<title>我的问题</title>
+<link rel="stylesheet" type="text/css" href="__CSS__/public.css" />
+<script src="__JS__/jquery.min.js"></script>
+</head>
+<body>
+
+<div class="tabs">
+    <span class="part active"><a href="{:U('Mentor/problem')}" hidefocus="true" >未回答</a></span>
+    <span class="part"><a href="{:U('Mentor/answer')}" hidefocus="true">已回答</a></span>
+</div>
+
+<div class="swiper-container001">
+    <div class="swiper-wrapper">
+        <div class="swiper-slide">
+            <div class="content-slide" id="m_list">
+           		 <volist name="list" id="vo">
+                    <a href="JavaScript:;">
+                        <div class="wentilist01">
+                            <ul>
+                                <dd class="bt01">{$vo.card_name}</dd>
+                                <dd class="data">{$vo.createtime|date='Y年m月d日 H:i',###}</dd>
+                            </ul>
+                            <ul class="bt02">我向 {$vo.nickname} 提问</ul>
+                            <ul class="nrxx">{$vo.content}</ul>
+                        </div>
+                    </a>
+				</volist>
+            </div>
+             <div class="more" id="show_more" page="2" style="display: none; width:100%; text-align:center; color:#FF0000; font-size:14px; line-height:35px; font-weight:bold;" href="javascript:void(0);">加载更多</div>
+        </div>
+        <script type="text/javascript">
+$(function() {
+	/*---------------------加载更多--------------------*/
+	var total = {$count},
+		pagesize = 5,
+		pages = Math.ceil(total / pagesize);
+		var com_link = '{:U('Mentor/ajaxproblem')}';
+		var b_url = '{:U('Mentor/problem_c')}';
+		if (pages > 1) {
+		var _page = $('#show_more').attr('page');
+		$(window).bind("scroll",function() {
+			if ($(document).scrollTop() + $(window).height() >= $(document).height()) {
+				$('#show_more').show().html('加载中...');
+				if (_page > pages) {
+					$('#show_more').show().html('全部加载完毕...');
+					return;
+				}
+				if($('#canScroll').val()==0){//不要重复加载
+					return;
+				}
+				$('#canScroll').attr('value',0);
+				$.ajax({
+					type : "POST",
+					data : {'page' : _page, 'inajax' : 1, 'pagesize' : pagesize},
+					url :  com_link ,
+					dataType : "json",
+					success : function(RES) {
+						$('#canScroll').attr('value',1);
+						$('#show_more').hide().html('加载更多');
+						data = RES.products;
+						if(data.length){
+							$('#show_more').attr('page',parseInt(_page)+1);
+						}
+						_page = $('#show_more').attr('page');
+						var _tmp_html = '';
+						$.each(data, function(x, y) {
+						_tmp_html += ' <a href="JavaScript:;">' +
+							'<div class="wentilist01">' + 
+							'<ul>' + 
+							'<dd class="bt01">'+ y.card_name +'</dd>' + 
+							'<dd class="data">'+ y.createtime +'</dd>' + 
+							'</ul>' + 
+							'<ul class="bt02">'+ y.nickname +' 向您提问</ul>' + 
+                            '<ul class="nrxx">'+ y.content +'</ul>' +
+							'</div>' + 
+							'</a>';
+						});
+						$('#m_list').append(_tmp_html);
+					}
+				});
+			}
+		});
+	}
+});
+</script>
+    </div>
+</div>
+</body>
+</html>
+

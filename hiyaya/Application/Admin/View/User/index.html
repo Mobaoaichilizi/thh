@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>用户管理</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <link rel="stylesheet" href="__STATIC__/layuiadmin/layui/css/layui.css" media="all">
+  <link rel="stylesheet" href="__STATIC__/layuiadmin/style/admin.css" media="all">
+</head>
+<body>
+  
+  <div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+      <div class="layui-col-md12">
+        <div class="layui-card">
+          <div class="layui-card-header">用户管理</div>
+          <div class="layui-card-body">
+          
+            <div class="test-table-reload-btn" style="margin-bottom: 10px;">
+              搜索：
+              <div class="layui-inline">
+                <input class="layui-input" name="admin_login" id="test-table-demoReload" placeholder="请输入用户名"  autocomplete="off">
+              </div>
+              <button class="layui-btn" data-type="reload">搜索</button>
+              
+              <button class="layui-btn layuiadmin-btn-role" data-type="add">添加</button>
+            </div>
+            
+            
+             
+            <table class="layui-hide" id="test-table-reload" lay-filter="user"></table> 
+            <script type="text/html" id="test-table-operate-barDemo">
+              <a lay-event="edit" class="layui-btn layui-btn-normal layui-btn-xs"><i class="layui-icon layui-icon-edit"></i>编辑</a>
+              <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
+            </script>
+           
+            
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+ <script src="__JS__/jquery/jQuery-2.2.0.min.js"></script>
+ <script src="__JS__/framework-ui.js"></script>
+  <script src="__STATIC__/layuiadmin/layui/layui.js"></script> 
+  <script>
+  layui.config({
+    base: '__STATIC__/layuiadmin/' //静态资源所在路径
+  }).extend({
+    index: 'lib/index' //主入口模块
+  }).use(['index', 'table'], function(){
+    var table = layui.table;
+  
+    //方法级渲染
+    table.render({
+      elem: '#test-table-reload'
+      ,url: "{:U('User/get_index')}"
+	  ,layout: ['limit', 'count', 'prev', 'page', 'next', 'skip'] //自定义分页布局
+      ,cols: [[
+        {checkbox: true, fixed: true}
+        ,{field:'id', title: 'ID', width:80, sort: true, fixed: true}
+        ,{field:'admin_login', title: '用户名', width:80}
+        ,{field:'admin_name', title: '姓名'}
+        ,{field:'role_name', title: '用户组'}
+        ,{field:'last_login_ip', title: '最后登录IP', width:120}
+        ,{field:'last_login_time', title: '最后登录时间', sort: true, width:230}
+        ,{field:'create_time', title: '创建时间', sort: true, width:230}
+		,{width:150,title: '操作', align:'center', fixed: 'right', toolbar: '#test-table-operate-barDemo'}
+      ]]
+      ,page: true
+      ,height: 480
+    });
+	
+	
+	 //监听工具条
+    table.on('tool(user)', function(obj){
+      var data = obj.data;
+      if(obj.event === 'del'){
+	  	$.deleteForm({
+            url: "{:U('User/delUser')}",
+            param: { id: data.id},
+            success: function () {
+               Refresh();
+            }
+      	});
+      } else if(obj.event === 'edit'){
+        	var linkurl="{:U('User/editUser',array('id'=>'nidval'))}";
+			linkurl=linkurl.replace('nidval', data.id),
+			$.modalOpen({
+				id: "Form",
+				title: "修改用户",
+				url: linkurl,
+				width: "450px",
+				height: "300px",
+				callBack: function (index, layero) {
+					 var iframeWindow = window['layui-layer'+ index]
+					,submitID = 'LAY-user-front-submit'
+					,submit = layero.find('iframe').contents().find('#'+ submitID);
+					submit.click();
+            	}
+			});
+      }
+    });
+    
+    var $ = layui.$, active = {
+      reload: function(){
+        var demoReload = $('#test-table-demoReload');
+        
+        //执行重载
+        table.reload('test-table-reload', {
+          page: {
+            curr: 1 //重新从第 1 页开始
+          }
+          ,where: {
+              admin_login: demoReload.val()
+          }
+        });
+      }
+	  ,add: function(){
+	   	$.modalOpen({
+            id: "Form1",
+            title: "添加用户",
+            url: "{:U('User/addUser')}",
+            width: "450px",
+            height: "350px",
+            callBack: function (index, layero) {
+				 var iframeWindow = window['layui-layer'+ index]
+				,submitID = 'LAY-user-front-submit'
+				,submit = layero.find('iframe').contents().find('#'+ submitID);
+				submit.click();
+            }
+        });
+	  }
+    };
+    
+    $('.test-table-reload-btn .layui-btn').on('click', function(){
+      var type = $(this).data('type');
+      active[type] ? active[type].call(this) : '';
+    });  
+});
+function Refresh()
+{
+	layui.table.reload('test-table-reload');
+}
+  </script>
+</body>
+</html>

@@ -1,0 +1,34 @@
+<ul class="layui-nav layui-nav-tree" lay-shrink="all" id="LAY-system-side-menu" lay-filter="layadmin-system-side-menu">
+           <volist name="menu_list" id="item" key='k'>
+            <li data-name="{$item['model']}" class="layui-nav-item">
+              <a href="javascript:;" lay-tips="{$item['name']}" lay-direction="2">
+                <i class="layui-icon {$item.ico}"></i>
+                <cite>{$item['name']}</cite>
+              </a>
+                 <volist name="item['voo']" id='dd'>
+              <dl class="layui-nav-child">
+                <dd data-name="grid">
+                  <a data-id="{$dd.id}" <php>if($dd['ttt']){</php> href="javascript:;" <php>}else{</php> lay-href="{:U($dd['app'].'/'.$dd['model'].'/'.$dd['action'])}" <php>}</php>>{$dd.name}</a>
+                  <php>if($dd['ttt']){</php>
+                  <dl class="layui-nav-child">
+                  <volist name="dd['ttt']" id='tt'>        	
+                	<dd><a lay-href="{:U($tt['app'].'/'.$tt['model'].'/'.$tt['action'])}">{$tt.name}</a></dd>
+                  </volist>
+                    
+                  </dl>
+                   <php>}</php>
+                </dd>
+
+         
+              </dl>
+              
+                 </volist>
+              
+            </li>
+              </volist>
+            
+            
+            
+            
+            
+          </ul>

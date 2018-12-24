@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>技师级别分类</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <link rel="stylesheet" href="__STATIC__/layuiadmin/layui/css/layui.css" media="all">
+  <link rel="stylesheet" href="__STATIC__/layuiadmin/style/admin.css" media="all">
+</head>
+<body class="layui-layout-body">
+<div class="layui-fluid">
+  <div class="layui-row layui-col-space15">
+    <div class="layui-col-md12">
+      <div class="layui-card">
+
+
+        <div class="layui-card-body">
+          <div class="data-table-reload-btn" style="margin-bottom: 10px;">
+
+            分类名称：
+            <div class="layui-inline">
+              <input class="layui-input" name="keywords" id="data-table-search" autocomplete="off">
+            </div>
+            <button class="layui-btn" data-type="reload">搜 索</button>
+            <button class="layui-btn" data-type="add">添加级别名称</button>
+          </div>
+
+              <table class="layui-hide" id="data-table-operate"lay-filter="data-table-operate"></table>
+              <script type="text/html" id="data-table-operate-barDemo">
+
+                <a class="layui-btn layui-btn-sm"  lay-event="edit">编辑级别名称</a>
+                <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">删除</a>
+              </script>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+</div>
+  <script src="__JS__/jquery/jQuery-2.2.0.min.js"></script>
+  <script src="__JS__/framework-ui.js"></script>
+<script src="__STATIC__/layuiadmin/layui/layui.js"></script>
+<script>
+    layui.use('table', function(){
+        var table = layui.table;
+        var $ = layui.$;
+
+        table.render({
+            elem: '#data-table-operate'
+            ,url: "{:U('Masseurcategory/json')}"
+            ,layout: ['limit', 'count', 'prev', 'page', 'next', 'skip'] //自定义分页布局
+            ,cols: [[
+                {type:'checkbox'}
+                ,{field:'id', width:50, title: 'ID', sort: true}
+                ,{field:'category_name', minWidth:80, title: '项目分类名称', sort: true}
+				,{field:'level_proportion', minWidth:80, title: '价格', sort: true}
+                ,{field:'sort', title: '排序', width: 60}
+                ,{width:208, align:'center',title: '操作', field: 'right', toolbar:  '#data-table-operate-barDemo'}
+            ]]
+            ,page: true
+        });
+
+
+        //查看详情
+        //监听表格复选框选择
+        table.on('checkbox(data-table-operate)', function(obj){
+            console.log(obj)
+        });
+        //监听工具条
+        table.on('tool(data-table-operate)', function(obj){
+
+            var data = obj.data;
+            if(obj.event === 'detail'){
+                layer.msg('ID：'+ data.id + ' 的查看操作');
+            } else if(obj.event === 'del'){
+                layer.confirm('真的要删除此健康师级别吗？', function(index) {
+                    //obj.del();
+
+                    $.ajax({
+                        type: "post",
+                        url: "{:U('Masseurcategory/del')}",
+                        data: {id:data.id},
+                        success: function (res)
+                        {
+                            if (res.state == "success")
+                            {
+                                layer.msg(res.info);//成功提示
+                                layer.close(index);   //关闭弹窗
+                                Refresh();
+                            }
+                            if (res.state == "fail")
+                            {
+                                layer.msg(res.info);
+                            }
+                        }
+                    });
+
+                })
+
+
+            } else if(obj.event === 'edit'){
+                var shopid=data.id;
+                var linkurl="{:U('Masseurcategory/edit',array('id'=>'idval'))}";
+                linkurl=linkurl.replace('idval', shopid),
+                layer.open({
+                    type: 2,
+                    title: '编辑健康师级别',
+                    shadeClose: true, //点击遮罩关闭层
+                    area : ['500px' , '330px'],
+                    btn: ['确认', '关闭'],
+                    content:linkurl,
+                    btnclass: ['btn btn-primary', 'btn btn-danger'],
+                    yes: function(index, layero){
+                        var iframeWindow = window['layui-layer-iframe'+ index]
+                            ,submitID = 'LAY-user-front-submit'
+                            ,submit = layero.find('iframe').contents().find('#'+ submitID);
+
+                        submit.click();
+                    }
+                });
+               // layer.alert('编辑行：<br>'+ JSON.stringify(data))
+            }
+        });
+
+        var element = layui.element;
+        var $ = layui.$,active = {
+            reload: function(){
+                var keywords= $('#data-table-search');
+
+                //执行重载
+                table.reload('data-table-operate', {
+                    page: {
+                        curr: 1 //重新从第 1 页开始
+                    }
+                    ,where: {
+                        keywords: keywords.val()
+                    }
+                });
+            }
+            ,add: function() {
+                layer.open({
+                    type: 2,
+                    title: '添加健康师级别',
+                    maxmin: false,
+                    shadeClose: true, //点击遮罩关闭层
+                    area : ['500px' , '330px'],
+                    btn: ['确认', '关闭'],
+                    content: "{:U('Masseurcategory/add')}",
+                    btnclass: ['btn btn-primary', 'btn btn-danger'],
+                    yes: function(index, layero){
+                    var iframeWindow = window['layui-layer-iframe'+ index]
+                        ,submitID = 'LAY-user-front-submit'
+                        ,submit = layero.find('iframe').contents().find('#'+ submitID);
+
+                        submit.click();
+                   }
+                });
+            }
+            ,tabChange: function (id) {
+                    //切换到指定Tab项
+                    element.tabChange('demo', id); //切换到：用户管理
+
+           }
+            ,getCheckData: function(){ //获取选中数据
+                var checkStatus = table.checkStatus('data-table-operate')
+                    ,data = checkStatus.data;
+                layer.alert(JSON.stringify(data));
+            }
+            ,getCheckLength: function(){ //获取选中数目
+                var checkStatus = table.checkStatus('data-table-operate')
+                    ,data = checkStatus.data;
+                layer.msg('选中了：'+ data.length + ' 个');
+            }
+            ,isAll: function(){ //验证是否全选
+                var checkStatus = table.checkStatus('data-table-operate');
+                layer.msg(checkStatus.isAll ? '全选': '未全选')
+            }
+        };
+
+        $('.data-table-reload-btn .layui-btn').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+
+
+    });
+    function Refresh()
+    {
+        layui.table.reload('data-table-operate');
+    }
+</script>
+</body>
+</html>

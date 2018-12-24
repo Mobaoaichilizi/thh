@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>添加预约</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <link rel="stylesheet" href="__STATIC__/layuiadmin/layui/css/layui.css" media="all">
+</head>
+<body>
+<div>
+<div class="layui-card-body" >
+    <form class="layui-form" lay-filter="component-form-element" id="commentForm">
+      <input type="hidden"  name="chain_id" value="{$chain_id}">
+      <input type="hidden"  name="shop_id" value="{$shop_id}">
+      <div class="layui-row layui-col-space10 layui-form-item">
+          <div class="layui-col-md6">
+              <label class="layui-form-label">手机：</label>
+              <div class="layui-input-block">
+                  <input type="text" name="phone" id="phone" lay-verify="required" placeholder="请输入手机" autocomplete="off" class="layui-input" value="{$member.member_tel}">
+                  
+                  <a onClick="select_member();" style="color:#1E9FFF;  cursor:pointer;position: absolute;top: 8px;right: 5px;">选择会员 ></a>
+                
+              </div>
+          </div>
+          <div class="layui-col-md6">
+              <label class="layui-form-label">姓名：</label>
+              <div class="layui-input-block">
+                  <input type="text" name="name" id="name" lay-verify="required" placeholder="请输入姓名" autocomplete="off" class="layui-input" value="{$member.member_name}">
+              </div>
+          </div>
+
+          <div class="layui-col-md6">
+              <label class="layui-form-label">男：</label>
+              <div class="layui-input-block">
+                  <input type="number" name="male_num" id="male_num" placeholder="男客人数" class="layui-input" value="0" min="0"> 
+              </div>
+          </div>
+          <div class="layui-col-md6">
+              <label class="layui-form-label">女：</label>
+              <div class="layui-input-block">
+                  <input type="number" name="female_num" id="female_num" placeholder="女客人数" class="layui-input" value="0" min="0"> 
+              </div>
+          </div>
+
+          
+          
+
+          <!-- <div class="layui-col-md6">
+              <label class="layui-form-label">日期：</label>
+              <div class="layui-input-block">
+                  <input type="text" name="reservation_date" id="reservation_date"  lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input" value="">
+              </div>
+          </div> -->
+          <div class="layui-col-md6">
+              <label class="layui-form-label">时间：</label>
+              <div class="layui-input-block">
+                  <input type="text" name="reservation_time" id="reservation_time"  lay-verify="required" placeholder="请选择时间" autocomplete="off" class="layui-input">
+              </div>
+          </div>
+          <div class="layui-col-md6">
+              <label class="layui-form-label">包间：</label>
+              <div class="layui-input-block">
+                <select id="room_id" name="room_id" class="layui-input">
+                  <option value="0">-</option>
+                  <volist name="room_list" id="room">
+                    <option value="{$room.id}">{$room.room_name}</option>
+                  </volist>
+                </select>
+              </div>
+          </div>
+          <div class="layui-col-md6">
+              <label class="layui-form-label">技师：</label>
+              
+              <div class="layui-input-block">
+                <select id="masseur_id" name="masseur_id" class="layui-input">
+                 <!--  <option value="0">-</option>
+                  <volist name="masseur_list" id="masseur">
+                    <option value="{$masseur.id}">{$masseur.masseur_sn}-{$masseur.masseur_name}</option>
+                  </volist> -->
+                </select>
+              </div>
+          </div>
+          <div class="layui-col-md6">
+              <label class="layui-form-label">项目：</label>
+              <div class="layui-input-block">
+                <select id="project_id" name="project_id" class="layui-input">
+                  <option value="0">-</option>
+                  <volist name="project_list" id="project">
+                    <option value="{$project.id}">{$project.item_name}-￥{$project.item_price}/{$project.item_duration}分钟</option>
+                  </volist>
+                </select>
+              </div>
+          </div>
+
+           <div class="layui-col-md6">
+              <label class="layui-form-label">锁定技师时间：</label>
+              <div class="layui-input-block">
+                  <input type="checkbox" name="is_lock" lay-skin="switch" value="1" lay-text="开|关" lay-filter="test-table-stateDemo">
+              </div>
+          </div>
+         
+
+        
+         
+      </div>
+
+        <div class="layui-form-item layui-hide">
+            <input type="button" lay-submit lay-filter="LAY-user-front-submit" id="LAY-user-front-submit" value="确认">
+        </div>
+    </form>
+  </div>
+</div>
+
+ <script src="__JS__/jquery/jQuery-2.2.0.min.js"></script>
+ <script src="__JS__/framework-ui.js"></script>
+  <script src="__STATIC__/layuiadmin/layui/layui.js"></script> 
+<script>
+    layui.use( ['form','laydate'], function(){
+       form = layui.form;
+        var $ = layui.$;
+        var laydate = layui.laydate;
+        form.render(null, 'component-form-element');
+        // laydate.render({
+        //     elem: '#reservation_date'
+        // });
+         laydate.render({
+          elem: '#reservation_time'
+          ,type: 'datetime'
+          // ,format: 'H点m分'
+          ,done: function(value, date){
+            // layer.alert('你选择的日期是：' + value + '<br>获得的对象是' + JSON.stringify(date));
+            $.submitgetForm({
+              url: "{:U('Appointment/select_masseur')}",
+              param: {'value':value},
+              success: function (res) {
+                var optionstring = "";
+                $.each(res.data, function(i,item){
+                 optionstring += "<option value=\"" + item.masseur_id + "\" >" + item.masseur_sn + '-' + item.masseur_name + "</option>";
+                });
+                $("#masseur_id").html(optionstring);
+                form.render('select'); //这个很重要
+              }
+            });
+            return false;
+          }
+        });
+        
+        form.on('submit(LAY-user-front-submit)', function(data){
+          $.submitForm({
+          url: "{:U('Appointment/add')}",
+          param: $("#commentForm").serialize(),
+          success: function () {
+            // $.currentWindow().Refresh();
+            var index = parent.layer.getFrameIndex(window.name);
+            window.parent.location.reload();
+            parent.layer.close(index);
+          }
+        }) 
+  
+            return false;
+        });
+
+        var element = layui.element;
+        var $ = layui.$,active = {
+          choose: function() {
+            $.modalOpen({
+              id: "Form4",
+              title: "选择会员",
+              url: "{:U('Appointment/select_member')}",
+              width: "1100px",
+              height: "770px",
+              callBack: function (index, layero) {
+                 var iframeWindow = window['layui-layer'+ index]
+                ,submitID = 'LAY-user-front-submit'
+                ,submit = layero.find('iframe').contents().find('#'+ submitID);
+                //监听提交
+                  iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
+                    var field = data.field; //获取提交的字段
+                    console.log(field);
+                    $.submitForm({
+                      url: "{:U('Appointment/post_select_member')}",
+                      param: field,
+                      success: function (data) {
+                        $('#name').html(data.data.member_name);
+                        $('#phone').html(data.data.member_tel);
+                        // $("#project_product_list").append(bt('productlist', data));
+                         top.layer.close(index); //关闭弹层
+                      }
+                    })
+                   
+                  });
+                submit.trigger('click');
+                //top.layer.close(index);
+              }
+            });
+          }
+
+
+        }
+         $('.data-table-reload-btn .layui-btn').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+ 
+    });
+    //选择会员
+function select_member(){
+  $.modalOpen({
+      id: "Form4",
+      title: "选择会员",
+      url: "{:U('Appointment/select_member')}",
+      width: "1100px",
+      height: "770px",
+      callBack: function (index, layero) {
+         var iframeWindow = top.window['Form4']
+        ,submitID = 'LAY-user-front-submit'
+        ,submit = layero.find('iframe').contents().find('#'+ submitID);
+        //监听提交
+          iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
+            var field = data.field; //获取提交的字段
+            $.submitForm({
+              url: "{:U('Appointment/post_select_member')}",
+              param: field,
+              success: function (data) {
+                $('#name').val(data.data.member_name);
+                $('#phone').val(data.data.member_tel);
+                 top.layer.close(index); //关闭弹层
+              }
+            })
+           
+          });
+        submit.trigger('click');
+        //top.layer.close(index);
+      }
+  });
+}
+
+
+
+</script>
+
+</body>
+</html>
+

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>充值</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <link rel="stylesheet" href="__STATIC__/layuiadmin/layui/css/layui.css" media="all">
+  <style type="text/css">
+      .layui-form-label{
+        width: 126px;
+      }
+      .layui-input, .layui-textarea{
+        width: 82%;
+      }
+      .layui-form-select dl {
+        min-width: 82%;
+        margin-left: 45px;
+      }
+      .custom_charge div{
+        padding: 3px;
+      }
+  </style>
+</head>
+<body>
+<div>
+  <div class="layui-card-body">
+    <form class="layui-form" lay-filter="component-form-element" id="commentForm">
+        <input type="hidden"  name="member_id" value="{$info.id}">
+      <input type="hidden"  name="chain_id" value="{$info.chain_id}">
+      <input type="hidden"  name="shop_id" value="{$info.shop_id}">
+      <div class="layui-row layui-col-space10 layui-form-item">
+        <div class="layui-col-lg8">
+          <label class="layui-form-label">账户余额：</label>
+          <div class="layui-input-block">
+
+            <span style="font-size: 12px;color: #FF6600;height: 36px;line-height: 36px;">￥{$info.balance}</span>
+           <!--  <input type="text" name="balance" id="balance" value="{$info.balance}" lay-verify="required" placeholder="" autocomplete="off" disabled class="layui-input"> -->
+          </div>
+        </div>
+          <div class="layui-col-lg8">
+            <label class="layui-form-label">自定义金额充值：</label>
+            <div class="layui-input-block">
+
+              <input type="checkbox" name="is_custom" id="is_custom" lay-skin="switch" lay-text="开|关" value="1" lay-filter="test-table-stateDemo">
+            </div>
+          </div>
+          <div class="card_package">
+            <div class="layui-col-md6">
+              <label class="layui-form-label">会员卡套餐：</label>
+              <div class="layui-input-block">
+                <select id="package_id" name="package_id" class="layui-input">
+                    <option>----请选择会员卡套餐----</option>
+                    <volist name="card_list" id="card">
+                        <option value="{$card.id}">{$card.package_name}</option>
+                    </volist>
+                </select>
+
+              </div>
+            </div>
+            </div>
+            <div class="custom_charge" style="display: none;">
+                <div class="layui-col-lg8">
+                    <label class="layui-form-label">充值金额：</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="recharge_money" id="recharge_money" autocomplete="off" class="layui-input" placeholder="请输入充值金额">
+                    </div>
+                  </div>
+                  <div class="layui-col-lg8">
+                    <label class="layui-form-label">赠送金额：</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="send_money" id="send_money" autocomplete="off" class="layui-input" placeholder="请输入赠送金额">
+                    </div>
+                  </div>
+
+                  <div class="layui-col-lg8">
+                    <label class="layui-form-label">售卡提成：</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="sellcard_reward" id="sellcard_reward" autocomplete="off" class="layui-input" placeholder="请输入售卡提成">
+                    </div>
+                  </div>
+            </div>
+            <div class="layui-col-lg8">
+              <label class="layui-form-label">选择售卡技师：</label>
+              <div class="layui-input-block">
+                <select id="sellcard_masseur" name="sellcard_masseur" class="layui-input">
+                    <option value="0">----请选择售卡技师----</option>
+                    <volist name="masseur_list" id="masseur">
+                        <option value="{$masseur.id}">{$masseur.masseur_name}</option>
+                    </volist>
+                </select>
+              </div>
+            </div>
+        
+
+            <div class="layui-col-md6">
+              <label class="layui-form-label">备注：</label>
+              <div class="layui-input-block">
+              <input type="text" name="remark" id="remark" autocomplete="off" class="layui-input">
+              </div>
+            </div>
+
+         <div class="layui-col-md6">
+            <label class="layui-form-label">支付方式：</label>
+            <div class="layui-input-block">
+              <volist name="pay_list" id="pay">
+                <input type="radio" name="pay_way" value="{$pay.id}" title="{$pay.title}" <if condition="$key eq 0">checked</if>>
+              </volist>
+
+               <!--  <input type="radio" name="pay_way" value="1" title="现金" checked>
+
+                <input type="radio" name="pay_way" value="2" title="银行卡">
+
+                <input type="radio" name="pay_way" value="3" title="支付宝">
+
+                <input type="radio" name="pay_way" value="4" title="微信"> -->
+               
+            </div>
+          </div>
+
+        
+      </div>
+
+      <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="LAY-user-front-submit" id="LAY-user-front-submit" value="确认">
+      </div>
+    </form>
+  </div>
+</div>
+
+ <script src="__JS__/jquery/jQuery-2.2.0.min.js"></script>
+ <script src="__JS__/framework-ui.js"></script>
+  <script src="__STATIC__/layuiadmin/layui/layui.js"></script> 
+<script>
+
+    layui.use( ['form','laydate'], function(){
+       form = layui.form;
+        var $ = layui.$;
+        var laydate = layui.laydate;
+        form.render(null, 'component-form-element');
+        laydate.render({
+            elem: '#birthday'
+        });
+        //监听状态操作
+        form.on('switch(test-table-stateDemo)', function(obj){
+            
+            if(obj.elem.checked==true)
+            {
+                $('.card_package').css('display','none');
+                $('.custom_charge').css('display','block');
+            }
+            else
+            {
+                $('.card_package').css('display','block');
+                $('.custom_charge').css('display','none');
+            }
+        });
+        
+        //监听提交
+        form.on('submit(LAY-user-front-submit)', function(data){
+          $.submitForm({
+              url: "{:U('Member/charge')}",
+              param: $("#commentForm").serialize(),
+              success: function () {
+
+                // window.location.reload();
+                top.Form2.Refresh();
+
+              }
+            }) 
+
+            return false;
+        });
+    });
+</script>
+</body>
+</html>
+

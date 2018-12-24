@@ -1,0 +1,201 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<title>朋友圈集赞</title>
+<link rel="stylesheet" type="text/css" href="__CSS__/public.css" />
+<script src="__JS__/jquery.min.js"></script>
+<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+</head>
+<body>
+<div class="top01">
+    <div class="tx"><img src="{$userinfo.head_img}"></div>
+    <div class="nr">
+        <ul>
+            <dd class="z01 wjg"><span class="bt">{$userinfo.nickname}</span><span>
+            <php>if($userinfo['sex']==1){</php>
+            <img src="__IMG__/tb01.png">
+            <php>}else if($userinfo['sex']==2){</php>
+            <img src="__IMG__/tb02.png">
+            <php>}</php>
+            </span></dd>
+        </ul>
+    </div>
+</div>
+
+<div class="clear"></div>
+<div class="rowbox02">
+	<div class="wenda01">
+      
+        <div class="bt">他正在集赞的技能</div>
+
+        <div class="jizanbox01">
+        <volist name="cardlist" id="vo">
+            <span class="jizan001">
+                <a href="JavaScript:;" onClick="praise({$vo.id},'{$openid}');"><span class="bk002">{$vo.card_name}</span><span class="bktop002" style="display:none;">{$vo.number}</span><span class="bktop002 tubiao">
+                <php>if($vo['number']==0){</php>
+                <img src="__IMG__/qb05_1.png">
+                <php>}else if($vo['number']==1){</php>
+                 <img src="__IMG__/qb05_2.png">
+                <php>}else if($vo['number']==2){</php>
+                 <img src="__IMG__/qb05_3.png">
+                <php>}else if($vo['number']==3){</php>
+                 <img src="__IMG__/qb05_4.png">
+                <php>}else if($vo['number']==4){</php>
+                 <img src="__IMG__/qb05_5.png">
+                <php>}else{</php>
+                 <img src="__IMG__/qb05.png">
+                <php>}</php>
+                </span></a>
+            </span>
+           </volist>
+       
+        </div>
+        
+        
+         <div class="bt" style="margin-top:20px;">别人给我添加的技能标签</div>
+
+        <div class="jizanbox01">
+        <volist name="iscardlist" id="vo">
+            <span class="jizan001">
+                <a href="JavaScript:;" onClick="praise({$vo.id},'{$openid}');"><span class="bk002">{$vo.card_name}</span><span class="bktop002" style="display:none;">{$vo.number}</span><span class="bktop002 tubiao"><img src="__IMG__/qb05.png"></span></a>
+            </span>
+           </volist>
+       
+        </div>
+        
+        
+                <div class="wzfb001">快给他添加一个标签吧</div>
+        <div class="tanchuang01" id="btn1"><img src="__IMG__/qb04.png"></div>
+        
+        
+        <div id="popup">
+    <div class="title"><p><img src="__IMG__/icon_01.png"></p><span>关闭 x</span></div>
+    <div class="cont">
+    <form name="message" id="messaget" action="{:U('index/docard')}" method="post">
+    <input type="hidden" name="openid" value="{$openid}">
+    	<div class="biaodan">
+            <div><span><b>*</b>标签名称：</span><input name="card_name" type="text"></div>
+            <div class="but03"><a href="JavaScript:;" id="post_tj">确认提交</a></div>
+        </div>
+        </form>
+    </div>
+</div>
+<div id="mask_shadow"></div>
+
+<script src="__JS__/popup.js"></script>
+
+<script>$(function () {  
+$('#popup').popup({ifDrag: true, dragLimit: true});});
+</script>
+        
+    </div>
+</div>
+
+<div class="m40"></div>
+<DIV class="quicksub"><a href="{:U('Index/index')}">认识自己</a></DIV>
+
+<script language="javascript">
+ wx.config({
+    debug: false,
+    appId: "{$signPackage.appId}",
+    timestamp: '{$signPackage.timestamp}',
+    nonceStr: '{$signPackage.nonceStr}',
+    signature: '{$signPackage.signature}',
+    jsApiList: [
+      // 所有要调用的 API 都要加到这个列表中
+	  'onMenuShareTimeline',
+      'onMenuShareAppMessage'
+    ]
+});
+wx.ready(function () {
+    // 在这里调用 API
+	  wx.onMenuShareTimeline({
+          title: '他的名片',
+		  desc: '他的名片', // 分享描述
+          link: '{$link}',
+          imgUrl: '',
+          trigger: function (res) {
+            // 不要尝试在trigger中使用ajax异步请求修改本次分享的内容，因为客户端分享操作是一个同步操作，这时候使用ajax的回包会还没有返回
+             //alert('用户点击分享到朋友圈');
+          },
+          success: function (res) {
+          },
+          cancel: function (res) {
+          },
+          fail: function (res) {
+            alert(JSON.stringify(res));
+          }
+        });
+		wx.onMenuShareAppMessage({
+			title: '他的名片', // 分享标题
+			desc: '他的名片', // 分享描述
+			link: '{$link}', // 分享链接
+			imgUrl: '', // 分享图标
+			type: '', // 分享类型,music、video或link，不填默认为link
+			dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+			success: function () { 
+				// 用户确认分享后执行的回调函数
+			},
+			cancel: function () { 
+				// 用户取消分享后执行的回调函数
+			}
+		});
+  });
+  wx.error(function(res){
+    // config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
+  });
+
+function praise(id,openid)
+{
+	$.ajax({
+		url: "{:U('index/doshare')}",    //请求的url地址
+		dataType: "json",   //返回格式为json
+		async: true, //请求是否异步，默认为异步，这也是ajax重要特性
+		data: {'id':id,'openid':openid},    //参数值
+		type: "post",   //请求方式
+		success: function(data) {
+			if(data.status=='1')
+			{
+				alert(data.info);
+				window.location.href = data.url+'&'+ Math.random();
+			}else
+			{
+				alert(data.info);
+			}
+		},
+		error: function() {
+			alert('参数错误！');
+		}
+	});
+}
+
+$('#post_tj').click(function(){	
+	$.ajax({
+		url: "{:U('index/docard')}",    //请求的url地址
+		dataType: "json",   //返回格式为json
+		async: true, //请求是否异步，默认为异步，这也是ajax重要特性
+		data: $("#messaget").serialize(),    //参数值
+		type: "post",   //请求方式
+		success: function(data) {
+			if(data.status=='1')
+			{
+				alert(data.info);
+				window.location.href = data.url+'&'+ Math.random();
+			}else
+			{
+				alert(data.info);
+			}
+		},
+		error: function() {
+			alert('参数错误！');
+		}
+	});
+});
+</script>
+</body>
+</html>
+

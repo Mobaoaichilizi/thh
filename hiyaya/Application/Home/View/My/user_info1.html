@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>个人信息</title>
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <link rel="stylesheet" type="text/css" href="__CSS__/aui.css" />
+    <link rel="stylesheet" type="text/css" href="__CSS__/aui-base.css" />
+    <link rel="stylesheet" type="text/css" href="__CSS__/style.css" />
+</head>
+<body>
+  <header class="aui-bar aui-bar-nav header">
+    <a class="aui-btn aui-pull-left" href="JavaScript:history.go(-1)">
+      <span class="aui-iconfont aui-icon-left"></span>
+    </a>
+    <div class="aui-title">会员信息</div>
+    <span class="icon_more"><a href="{:U('My/user_edit',array('i' => I('get.i')))}">编辑</a></span>
+  </header>
+  <div class="aui-content">
+      <div class="pad075">
+        <ul class="aui-list aui-form-list marb075">
+          <li class="aui-list-item">
+              <div class="aui-list-item-inner fs7">
+                  <div class="aui-list-item-label">手机号：</div>
+                  <div class="aui-list-item-input">{$member_info.member_tel}</div>
+              </div>
+          </li>
+        </ul>
+        <ul class="aui-list aui-form-list">
+          <li class="aui-list-item">
+              <div class="aui-list-item-inner aui-list-item-arrow fs7">
+                  <div class="aui-list-item-label">姓　名：</div>
+                  <div class="aui-list-item-input">{$member_info.member_name}</div>
+              </div>
+          </li>
+          <li class="aui-list-item">
+              <div class="aui-list-item-inner aui-list-item-arrow fs7">
+                  <div class="aui-list-item-label">性　别：</div>
+                  <div class="aui-list-item-input">{$member_info.sex}</div>
+              </div>
+          </li>
+          <li class="aui-list-item">
+              <div class="aui-list-item-inner aui-list-item-arrow fs7">
+                  <div class="aui-list-item-label">生　日：</div>
+                  <div class="aui-list-item-input">{$member_info.birthday}</div>
+              </div>
+          </li>
+        </ul>
+      </div>
+  </div>
+</body>
+</html>

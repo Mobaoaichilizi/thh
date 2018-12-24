@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<title>为我点赞的好友</title>
+<link rel="stylesheet" type="text/css" href="__CSS__/public.css" />
+<script src="__JS__/jquery.min.js"></script>
+</head>
+<body>
+<div class="rowbox01" style="display:none;">
+	<div class="ssbox01">
+    <form name="message" id="messaget" action="{:U('Mentor/friends')}" method="post">
+        <dd class="nr"><input placeholder="请输入关键词" name="keywords" type="text"></dd>
+        <dd class="ss"><input class="img" type="image" src="__IMG__/ss01.png" style="border:0px;"></dd>
+        </form>
+    </div>
+</div>
+
+<div class="clear"></div>
+<div class="toptit01">
+    <dd class="bt"><img src="__IMG__/qb08.jpg">为我点赞的好友</dd>
+    <div class="line01"></div>
+</div>
+<div class="rowbox03">
+	<volist name="list" id="vo">       
+	<div class="jinenglist01">
+        <div class="tx"><img src="{$vo.head_img}"></div>
+        <div class="nr">
+        	<div class="sm">
+                <dd class="wz"><p class="bt">{$vo.nickname}</p><p>喜欢自由自在的感觉，亲近大自然的感觉</p></dd>
+            </div>
+            <div>
+            	<volist name="vo['lable']" id="vott">    
+                  
+                 <span <php>if($vott['score'] < 60){</php> class="bk" <php>}else if($vott['score'] < 70 && $vott['score'] >= 60){</php> class="bk se02" <php>}else if($vott['score'] < 80 && $vott['score'] >= 70){</php> class="bk se03" <php>}else if($vott['score'] < 90 && $vott['score'] >= 80){</php> class="bk se04" <php>}else if($vott['score'] <= 100 && $vott['score'] >= 90){</php> class="bk se05" <php>}</php>><a href="{:U('Index/view',array('id'=>$vott['id'],'openid'=>$vott['openid']))}">{$vott.card_name} {$vott.score}分</a></span>
+               </volist>
+                
+            </div>
+        </div>
+    </div>
+    <div class="line03"></div>
+  </volist>
+
+
+</div>
+ 
+<!-- 底部悬浮 -->
+<div class="m40"></div>
+<DIV class="quicksub"><a href="{:U('Mentor/problem')}">我提问的问题</a></DIV>
+<!-- /底部悬浮 -->
+</body>
+</html>
+

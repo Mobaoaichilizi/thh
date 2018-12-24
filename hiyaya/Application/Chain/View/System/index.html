@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>选项卡组件</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <link rel="stylesheet" href="__STATIC__/layuiadmin/layui/css/layui.css" media="all">
+  <link rel="stylesheet" href="__STATIC__/layuiadmin/style/admin.css" media="all">
+  <style>
+.layui-form-label{
+width:120px;
+}
+.layui-input-block{
+margin-left: 150px;
+}
+</style>
+</head>
+<body>
+  <div class="layui-fluid" id="component-tabs">
+    <div class="layui-row">
+      <div class="layui-col-md12">
+        <div class="layui-card">
+          <div class="layui-card-header">基本信息</div>
+          <div class="layui-card-body">
+          <form class="layui-form" lay-filter="component-form-element">
+            <div class="layui-tab">
+              <ul class="layui-tab-title">
+                <li class="layui-this">基本设置</li>
+                <li>公众号设置</li>
+                
+              </ul>
+          
+       		
+              <div class="layui-tab-content">
+                <div class="layui-tab-item layui-show">
+              		
+                    
+                    <div class="layui-card-body">
+       
+       				
+                    <input type="hidden" name="id" id="id" value="{$result.id}">
+                <div class="layui-form-item">
+                  <label class="layui-form-label">品牌名称：</label>
+                  <div class="layui-input-block">
+                    <input type="text" name="name" lay-verify="required" placeholder="" value="{$result.name}" autocomplete="off" class="layui-input">
+                  </div>
+                </div>
+                
+                <div class="layui-form-item">
+                  <label class="layui-form-label">品牌介绍：</label>
+                  <div class="layui-input-block">
+                    
+                     <textarea name="description" class="layui-textarea">{$result.description}</textarea>
+                  </div>
+                </div>
+                
+                 <div class="layui-form-item">
+                  <label class="layui-form-label">品牌LOGO：</label>
+                  <div class="layui-input-block">
+                  			<input type="hidden" name="shoplogo" id="shoplogo" value="{$result.shoplogo}">
+                    	  <div class="layui-upload">
+                          <button type="button" class="layui-btn" id="test-upload-normal">上传图片</button>
+                          
+                          <div class="layui-upload-list">
+                            <img class="layui-upload-img" id="test-upload-normal-img" width="200" src="{$result.shoplogo}">
+                            <p id="test-upload-demoText"></p>
+                          </div>
+                          
+                        </div> 
+                  </div>
+                </div>
+                
+            
+              
+                    
+       
+        </div>
+       				
+       
+                </div>
+                <div class="layui-tab-item">
+                
+               <div class="layui-form-item">
+                <label class="layui-form-label">公众号名称：</label>
+                <div class="layui-input-block">
+                                                   
+                                                     <input type="text" name="wx_name" id="wx_name" value="{$result.wx_name}" placeholder="请输入公众号名称" autocomplete="off" class="layui-input">
+                                                    
+                </div>
+              </div>
+              
+               <div class="layui-form-item">
+                <label class="layui-form-label">公众号原始ID：</label>
+                <div class="layui-input-block">
+                                                   
+                                                     <input type="text" name="wx_id" id="wx_id" value="{$result.wx_id}" placeholder="请输入公众号原始ID" autocomplete="off" class="layui-input">
+                                                    
+                </div>
+              </div>
+              
+               <div class="layui-form-item">
+                <label class="layui-form-label">微信号：</label>
+                <div class="layui-input-block">
+                                                   
+                                                     <input type="text" name="wx_code" id="wx_code" value="{$result.wx_code}" placeholder="请输入微信号" autocomplete="off" class="layui-input">
+                                                    
+                </div>
+              </div>
+              
+               <div class="layui-form-item">
+                <label class="layui-form-label">AppID：</label>
+                <div class="layui-input-block">
+                                                   
+                                                     <input type="text" name="wx_appid" id="wx_appid" value="{$result.wx_appid}" placeholder="请输入AppID" autocomplete="off" class="layui-input">
+                                                    
+                </div>
+              </div>
+              
+               <div class="layui-form-item">
+                <label class="layui-form-label">AppSecret：</label>
+                <div class="layui-input-block">
+                                                   
+                                                     <input type="text" name="wx_appsecret" id="wx_appsecret" value="{$result.wx_appsecret}" placeholder="请输入AppSecret" autocomplete="off" class="layui-input">
+                                                    
+                </div>
+              </div>
+              
+               <div class="layui-form-item">
+                <label class="layui-form-label">公众号邮箱：</label>
+                <div class="layui-input-block">
+                                                   
+                                                     <input type="text" name="wx_email" id="wx_email" value="{$result.wx_email}" placeholder="请输入公众号邮箱" autocomplete="off" class="layui-input">
+                                                    
+                </div>
+              </div>
+                
+                
+                
+                </div>
+                
+                
+                
+                <div class="layui-tab-item">
+                
+               <div class="layui-form-item">
+                <label class="layui-form-label">用户名：</label>
+                <div class="layui-input-block">
+                                                   
+                                                     <input type="text" name="sms_username" id="sms_username" value="{$result.sms_username}" placeholder="请输入短信用户名" autocomplete="off" class="layui-input">
+                                                    
+                </div>
+              </div>
+              
+               <div class="layui-form-item">
+                <label class="layui-form-label">密码：</label>
+                <div class="layui-input-block">
+                                                   
+                                                     <input type="text" name="sms_password" id="sms_password" value="{$result.sms_password}" placeholder="请输入短信密码" autocomplete="off" class="layui-input">
+                                                    
+                </div>
+              </div>
+              
+      
+      
+          
+              
+               
+                
+                
+                
+                </div>
+                
+               
+              </div>
+             
+    
+            </div>
+           <div class="layui-form-item">
+              <div class="layui-input-block">
+                <button class="layui-btn" lay-submit="" lay-filter="LAY-user-front-submit" id="LAY-user-front-submit">确认保存</button>
+              </div>
+            </div>
+             </form>
+          
+          
+          
+          
+          
+         
+          </div>
+        </div>
+        
+        
+     </div>
+    
+  </div>
+
+  </div>
+ <script src="__JS__/jquery/jQuery-2.2.0.min.js"></script>
+ <script src="__JS__/framework-ui.js"></script>
+  <script src="__STATIC__/layuiadmin/layui/layui.js"></script> 
+  <script>
+  layui.config({
+    base: '__STATIC__/layuiadmin/' //静态资源所在路径
+  }).extend({
+    index: 'lib/index' //主入口模块
+  }).use(['index', 'form', 'upload'], function(){
+  		var $ = layui.$
+		,form = layui.form
+		,upload = layui.upload;
+	  //普通图片上传
+    var uploadInst = upload.render({
+      elem: '#test-upload-normal'
+      ,url: "{:U('File/uploadPicture')}"
+      ,before: function(obj){
+        //预读本地文件示例，不支持ie8
+        obj.preview(function(index, file, result){
+          $('#test-upload-normal-img').attr('src', result); //图片链接（base64）
+        });
+      }
+      ,done: function(res){
+        //如果上传失败
+		if(res.status==1)
+		{
+			$('#shoplogo').val(res.data.path);
+		}else
+		{
+			return layer.msg('上传失败');
+		}
+        //上传成功
+      }
+      ,error: function(){
+        //演示失败状态，并实现重传
+        var demoText = $('#test-upload-demoText');
+        demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-mini demo-reload">重试</a>');
+        demoText.find('.demo-reload').on('click', function(){
+          uploadInst.upload();
+        });
+      }
+    });
+
+	 form.on('submit(component-form-element)', function(data){
+	  $.submitForm({
+            url: "{:U('System/dopost')}",
+            param: $(".layui-form").serialize(),
+            success: function () {
+                location.reload();
+            }
+			
+  	}); 
+	return false;   
+});
+});
+  </script>
+</body>
+</html>

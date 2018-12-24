@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>充值</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <link rel="stylesheet" href="__STATIC__/layuiadmin/layui/css/layui.css" media="all">
+  <style type="text/css">
+      .layui-form-label{
+        width: 126px;
+      }
+      .layui-input, .layui-textarea{
+        width: 82%;
+      }
+      .layui-form-select dl {
+        min-width: 82%;
+        margin-left: 45px;
+      }
+      .custom_charge div{
+        padding: 3px 0;
+      }
+  </style>
+</head>
+<body>
+<div>
+  <div class="layui-card-body">
+    <form class="layui-form" lay-filter="component-form-element" id="commentForm1">
+        <input type="hidden"  name="member_id" value="{$info.member_id}">
+      <input type="hidden"  name="chain_id" value="{$info.chain_id}">
+      <input type="hidden"  name="shop_id" value="{$info.shop_id}">
+        <input type="hidden"  name="numcard" value="{$info.id}">
+      <div class="layui-row layui-col-space10 layui-form-item">
+        <div style="padding: 5 15px;text-align: center;/*background-color: #EEF9FE;*/color:#f00;border-radius: 100px;">注：次数扣除用于让剩余次数与实际情况一致，此操作计入业绩</div>
+        <div class="layui-col-md6">
+          <label class="layui-form-label">次卡项目：</label>
+          <div class="layui-input-block">
+            <select id="project_id" name="project_id" class="layui-input"  style="width: 84%">
+                <volist name="project" id="card">
+                  <if condition="$info.project_id eq $card.id ">
+                    <option value="{$card.id}"  selected>{$card.item_name}</option>
+                  </if>
+                </volist>
+            </select>
+
+          </div>
+        </div> 
+        <div class="layui-col-lg8">
+          <label class="layui-form-label">剩余次数：</label>
+          <div class="layui-input-block">
+              <input type="text" name="card_num" id="card_num" autocomplete="off" class="layui-input" value="{$info.card_num}" readonly>
+          </div>
+        </div>
+        <div class="layui-col-lg8">
+          <label class="layui-form-label">扣除次数：</label>
+          <div class="layui-input-block">
+              <input type="text" name="deduct_num" id="deduct_num" autocomplete="off" class="layui-input" lay-verify="number" placeholder="请输入扣除次数">
+          </div>
+        </div>
+        
+        <div class="layui-col-md6">
+          <label class="layui-form-label">备注：</label>
+          <div class="layui-input-block">
+          <input type="text" name="numcard_remark" id="numcard_remark" autocomplete="off" class="layui-input">
+          </div>
+        </div>
+        
+      </div>
+
+      <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="LAY-user-front-submit" id="LAY-user-front-submit" value="确认">
+      </div>
+    </form>
+  </div>
+</div>
+
+ <script src="__JS__/jquery/jQuery-2.2.0.min.js"></script>
+ <script src="__JS__/framework-ui.js"></script>
+  <script src="__STATIC__/layuiadmin/layui/layui.js"></script> 
+<script>
+    layui.use( ['form','laydate'], function(){
+       form = layui.form;
+        var $ = layui.$;
+        var laydate = layui.laydate;
+        
+
+
+        form.render(null, 'component-form-element');
+        laydate.render({
+            elem: '#birthday'
+        });
+       
+        //监听提交
+        form.on('submit(LAY-user-front-submit)', function(data){
+          $.submitForm({
+              url: "{:U('Member/consume')}",
+              param: $("#commentForm1").serialize(),
+              success: function () {
+
+                // window.location.reload();
+                top.Form2.Refresh();
+
+              }
+            }) 
+
+            return false;
+        });
+        
+    });
+
+
+</script>
+</body>
+</html>
+

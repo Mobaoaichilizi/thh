@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Index</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <link rel="stylesheet" href="__STATIC__/layuiadmin/layui/css/layui.css" media="all">
+  <link rel="stylesheet" href="__STATIC__/layuiadmin/style/admin.css" media="all">
+</head>
+<body>
+  
+  <div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+      <div class="layui-col-md12">
+        <div class="layui-card">
+          <div class="layui-card-header">分组管理</div>
+          <div class="layui-card-body">
+          
+            <div class="data-table-reload-btn" style="margin-bottom: 10px;">      
+              
+              <div class="layui-form" >
+      <button class="layui-btn layuiadmin-btn-role" data-type="add">开始排班</button>
+              
+              搜索：
+              <div class="layui-inline">
+                <input class="layui-input" name="order_sn" id="project-table-demoReload" placeholder="健康师昵称"  autocomplete="off">
+              </div>
+            
+            
+             <div class="layui-inline">
+             <label class="layui-form-label">排班时间：</label>
+                  <div class="layui-input-inline">
+                    <input type="text" class="layui-input" id="test-laydate-start" name="start_time"  placeholder="开始日期">
+                  </div>
+                
+                  <div class="layui-input-inline">
+                    <input type="text" class="layui-input" id="test-laydate-end" name="end_time"   placeholder="结束日期">
+                  </div>
+                </div>
+            
+              
+              <button class="layui-btn" data-type="reload">搜索</button>
+            </div>
+
+              
+            </div>
+            
+            
+            
+            
+            
+            <table class="layui-hide" id="data-table-reload" lay-filter="user"></table> 
+             <script type="text/html" id="data-table-operate-barDemo">
+				 {{#  if(d.start_time_str > d.now_time){ }}
+				 <a lay-event="edit" class="layui-btn layui-btn-normal layui-btn-xs"><i class="layui-icon layui-icon-edit"></i>修改班次</a>
+				 {{#  } }} 
+				 
+                <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">删除排班</a>
+              </script>
+          
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+ <script src="__JS__/jquery/jQuery-2.2.0.min.js"></script>
+ <script src="__JS__/framework-ui.js"></script>
+  <script src="__STATIC__/layuiadmin/layui/layui.js"></script> 
+  <script>
+  layui.config({
+    base: '__STATIC__/layuiadmin/' //静态资源所在路径
+  }).extend({
+    index: 'lib/index' //主入口模块
+  }).use(['index', 'table','laydate'], function(){
+    var table = layui.table;
+	 var table = layui.table;
+	var laydate = layui.laydate;
+	
+	//开始日期
+    var insStart = laydate.render({
+      elem: '#test-laydate-start'
+      ,done: function(value, date){
+        //更新结束日期的最小日期
+        insEnd.config.min = lay.extend({}, date, {
+          month: date.month - 1
+        });
+        
+        //自动弹出结束日期的选择器
+       insEnd.config.elem[0].focus();
+      }
+    });
+    
+    //结束日期
+    var insEnd = laydate.render({
+      elem: '#test-laydate-end'
+      ,done: function(value, date){
+        //更新开始日期的最大日期
+        insStart.config.max = lay.extend({}, date, {
+          month: date.month - 1
+        });
+      }
+    });
+  
+    //方法级渲染
+    table.render({
+      elem: '#data-table-reload'
+      ,url: "{:U('Scheduling/get_index')}"
+	  ,layout: ['limit', 'count', 'prev', 'page', 'next', 'skip'] //自定义分页布局
+      ,cols: [[
+         {field:'id', title: 'ID', width:80, sort: true, fixed: true}
+        ,{field:'start_time', title: '开始时间',minWidth:80}
+        ,{field:'end_time', title: '结束时间',minWidth:80}
+		,{field:'status_name', title: '班次',width:100}
+        ,{field:'nick_name', title: '健康师昵称',width:100}
+		,{field:'masseur_name', title: '健康师',width:100}
+		,{width:208, align:'center',title: '操作', field: 'right', toolbar:  '#data-table-operate-barDemo'}
+      ]]
+      ,page: true
+    });
+	
+	
+	 //监听工具条
+    table.on('tool(user)', function(obj){
+      var data = obj.data;
+      if(obj.event === 'del'){
+	  	$.deleteForm({
+             url: "{:U('Scheduling/delScheduling')}",
+            param: { id: data.id},
+            success: function () {
+               Refresh();
+            }
+      	});
+      } else if(obj.event === 'edit'){
+        	var linkurl="{:U('Scheduling/editScheduling',array('id'=>'nidval'))}";
+			linkurl=linkurl.replace('nidval', data.id),
+			$.modalOpen({
+				id: "Form",
+				title: "修改排班",
+				url: linkurl,
+				width: "650px",
+				height: "560px",
+				callBack: function (index, layero) {
+					 var iframeWindow = window['layui-layer'+ index]
+					,submitID = 'LAY-user-front-submit'
+					,submit = layero.find('iframe').contents().find('#'+ submitID);
+					submit.click();
+            	}
+			});
+      }
+    });
+    
+	  var $ = layui.$, active = {
+      reload: function(){
+        table.reload('data-table-reload', {
+          page: {
+            curr: 1
+          }
+          ,where: {
+              nick_name: $('#project-table-demoReload').val(),
+			  start_time: $('#test-laydate-start').val(),
+			  end_time: $('#test-laydate-end').val(),
+          }
+        });
+      },add: function(){
+	   	$.modalOpen({
+            id: "Form",
+            title: "排班",
+            url: "{:U('Scheduling/addScheduling')}",
+            width: "650px",
+            height: "750px",
+            callBack: function (index, layero) {
+				 var iframeWindow = window['layui-layer'+ index]
+				,submitID = 'LAY-user-front-submit'
+				,submit = layero.find('iframe').contents().find('#'+ submitID);
+				submit.click();
+            }
+        });
+	  }
+    };
+    
+    $('.data-table-reload-btn .layui-btn').on('click', function(){
+      var type = $(this).data('type');
+      active[type] ? active[type].call(this) : '';
+    });  
+});
+function Refresh()
+{
+	layui.table.reload('data-table-reload');
+}
+  </script>
+</body>
+</html>

@@ -1,0 +1,111 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>编辑个人信息</title>
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <link rel="stylesheet" type="text/css" href="__CSS__/aui.css" />
+    <link rel="stylesheet" type="text/css" href="__CSS__/aui-base.css" />
+    <link rel="stylesheet" type="text/css" href="__CSS__/style.css" />
+     <link rel="stylesheet" type="text/css" href="__CSS__/mui.picker.min.css" />
+</head>
+<body>
+  <header class="aui-bar aui-bar-nav header">
+    <a class="aui-btn aui-pull-left" href="JavaScript:history.go(-1)">
+      <span class="aui-iconfont aui-icon-left"></span>
+    </a>
+    <div class="aui-title">修改信息</div>
+  </header>
+  <div class="aui-content">
+   <form class="cmsform" id="commentForm" name="message" action="{:U('My/post_useredit')}" method="post">
+    <input type="hidden" name="i" id="i" value="{$i}">
+      <div class="pad075">
+        <ul class="aui-list aui-form-list">
+          <li class="aui-list-item">
+              <div class="aui-list-item-inner fs7">
+                  <div class="aui-list-item-label">姓　名：</div>
+                  <div class="aui-list-item-input">
+                    <input type="text" class="fs7" name="member_name" value="{$member_info.member_name}" placeholder="请输入姓名">
+                  </div>
+              </div>
+          </li>
+          <li class="aui-list-item">
+              <div class="aui-list-item-inner fs7">
+                  <div class="aui-list-item-label">性　别：</div>
+                  <div class="aui-list-item-input">
+                    <label class="marr05 fs7"><input class="aui-radio" type="radio" name="sex" <php>if($member_info['sex']=='男'){</php> checked <php>}</php> value="男" > 男</label>
+                    <label class="fs7"><input class="aui-radio" type="radio" name="sex" <php>if($member_info['sex']=='女'){</php> checked <php>}</php> value="女"> 女</label>
+                  </div>
+              </div>
+          </li>
+          <li class="aui-list-item">
+              <div class="aui-list-item-inner fs7">
+                  <div class="aui-list-item-label">生　日：</div>
+                  <div class="aui-list-item-input">
+                    <input type="text" class="fs7" name="birthday" id="birthday"  value="{$member_info.birthday}" data-options='{"type":"date","beginYear":1949,"endYear":2010}' onClick="dtpicker(this)" readonly>
+                  </div>
+              </div>
+          </li>
+        </ul>
+
+        <div class="aui-action mart075">
+          <input type="button" class="aui-btn aui-btn-warning aui-btn-block" name="submit" id="a_post" value="保存" />
+        </div>
+      </div>
+      </form>
+      
+  </div>
+ <script type="text/javascript" src="__JS__/jquery-2.2.3.min.js"></script>
+  <script type="text/javascript" src="__JS__/mui.min.js"></script>
+  <script type="text/javascript" src="__JS__/mui.picker.min.js"></script>
+  <script type="text/javascript">
+      function dtpicker(obj) {
+            mui.init();
+            var value;
+            var _self = $(obj);
+            if(_self.picker) {
+              _self.picker.show(function (rs) {
+                $(obj).val(rs.text);
+                _self.picker.dispose();
+                _self.picker = null;
+              });
+            } else {
+              var optionsJson = $(obj).attr('data-options') || '{}';
+              var options = JSON.parse(optionsJson);
+              var id = $(obj).attr('id');
+              _self.picker = new mui.DtPicker(options);
+              _self.picker.show(function (rs) {
+                $(obj).val(rs.text);
+                _self.picker.dispose();
+                _self.picker = null;
+              });
+            }
+      }
+  </script>
+   <script language="javascript">
+$('#a_post').click(function(){
+	$.ajax({
+		url: "{:U('My/post_useredit',array('i' => I('get.i')))}",    //请求的url地址
+		dataType: "json",   //返回格式为json
+		async: true, //请求是否异步，默认为异步，这也是ajax重要特性
+		data: $("#commentForm").serialize(),    //参数值
+		type: "post",   //请求方式
+		success: function(data) {
+			if(data.status=='1')
+			{
+				alert(data.info);
+				window.location.href = data.url+'&'+ Math.random();
+			}else
+			{
+				alert(data.info);
+			}
+		},
+		error: function() {
+			alert('参数错误！');
+		}
+	});
+});
+</script>
+</body>
+</html>

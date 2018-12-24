@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Index</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <link rel="stylesheet" href="__STATIC__/layuiadmin/layui/css/layui.css" media="all">
+  <link rel="stylesheet" href="__STATIC__/layuiadmin/style/admin.css" media="all">
+   <style>
+  .layui-table-cell{
+  height:auto;
+  }
+  </style>
+</head>
+<body>
+  <div class="layui-fluid" id="component-tabs">
+    <div class="layui-row layui-col-space15">
+      <div class="layui-col-md12">
+      
+      
+      	
+            <div class="layui-card">
+              <div class="layui-card-header">更换健康师</div>
+              <div class="layui-card-body">
+              
+             		
+                     <div class="project-table-reload-btn" style="margin-bottom: 10px;">
+                      <div class="layui-inline">
+                        <input class="layui-input"  id="project-table-demoReload" placeholder="请输入健康师名称"  autocomplete="off">
+                      </div>
+                      <button class="layui-btn" data-type="reload">搜索</button>
+                      </div>
+                      
+                      <form class="layui-form" action="" lay-filter="component-form-group" id="commentForm">
+                      <input type="hidden" name="project_id" value="{$project_id}">
+                      <table class="layui-hide" id="project-table-reload" lay-filter="project"></table> 
+                       <script type="text/html" id="test-table-operate-barDemo">
+             			 <input type="radio" name="masseur_id" value="{{ d.masseur_id }}">
+           			  </script>
+                       <script type="text/html" id="status_number">
+						 {{#  if(d.status == 1){ }}
+							<span class="layui-btn">早班</span>
+						  {{#  } else if(d.status==2) { }}
+							<span class="layui-btn layui-btn-normal">中班</span>
+						  {{#  } else if(d.status==3) { }}
+							<span class="layui-btn layui-btn-warm">晚班</span>
+							{{#  } else if(d.status==4) { }}
+							<span class="layui-btn layui-btn-danger">休假</span>
+							{{#  } else if(d.status==5) { }}
+							<span class="layui-btn layui-btn-disabled">请假</span>
+						  {{#  } }}
+           			  </script>
+                       <div class="layui-form-item layui-hide">
+      <input type="button" lay-submit lay-filter="LAY-user-front-submit" id="LAY-user-front-submit" value="确认">
+    </div>
+                     </form>
+                
+              </div>
+            </div>
+      
+          
+          
+          
+          
+        </div>
+      </div>
+</div>
+</div>
+<script src="__JS__/jquery/jQuery-2.2.0.min.js"></script>
+<script src="__JS__/framework-ui.js"></script>
+<script src="__STATIC__/layuiadmin/layui/layui.js"></script> 
+ <script>
+ layui.config({
+    base: '__STATIC__/layuiadmin/' //静态资源所在路径
+  }).extend({
+    index: 'lib/index' //主入口模块
+  }).use(['index', 'form', 'table'], function(){
+    var $ = layui.$
+    ,form = layui.form
+	,element = layui.element
+	,table = layui.table
+	
+
+	
+	 table.render({
+      elem: '#project-table-reload'
+      ,url: "{:U('Order/get_update_master')}"
+	  ,layout: ['limit', 'count', 'prev', 'page', 'next', 'skip'] //自定义分页布局
+	  ,page: true
+      ,cols: [[
+	  	 {field:'masseur_id',width:150,title: '选择', align:'center',toolbar: '#test-table-operate-barDemo'}
+        ,{field:'masseur_sn', title: '工号'}
+		,{field:'nick_name', title: '昵称'}
+        ,{field:'sex', title: '性别'}
+        ,{field:'status', title: '班次', toolbar: '#status_number', width:150}
+        ,{field:'masseur_level', title: '等级'}
+      ]]
+    });
+	
+	
+	var $ = layui.$, project = {
+      reload: function(){
+        var projectReload = $('#project-table-demoReload');
+        //执行重载
+        table.reload('project-table-reload', {
+          where: {
+              name: projectReload.val()
+          }
+        });
+      }
+    };
+    
+    $('.project-table-reload-btn .layui-btn').on('click', function(){
+      var type = $(this).data('type');
+      project[type] ? project[type].call(this) : '';
+    }); 
+	
+	
+	form.on('submit(LAY-user-front-submit)', function(data){
+		var  frameindex= parent.layer.getFrameIndex(window.frameElement.id);
+	  	$.submitForm({
+		url: "{:U('Order/post_update_master')}",
+		param: $("#commentForm").serialize(),
+		success: function () {
+			top.layer.close(frameindex);
+			top.Form.Refresh();
+		}
+	}); 
+	return false;  
+	});	
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,158 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<title>朋友圈集赞</title>
+<link rel="stylesheet" type="text/css" href="__CSS__/public.css" />
+<script src="__JS__/jquery.min.js"></script>
+</head>
+<body>
+<div class="top01">
+    <div class="tx"><img src="{$userinfo.head_img}"></div>
+    <div class="nr">
+        <ul>
+            <dd class="z01 wjg"><span class="bt">{$userinfo.nickname}</span><span>
+            <php>if($userinfo['sex']==1){</php>
+            <img src="__IMG__/tb01.png">
+            <php>}else if($userinfo['sex']==2){</php>
+            <img src="__IMG__/tb02.png">
+            <php>}</php>
+            </span></dd>
+        </ul>
+        <ul><span>设计的本身，亦是产品的自身定位。</span></ul>
+    </div>
+</div>
+
+<div class="clear"></div>
+<div class="rowbox02">
+	<div class="wenda01">
+        <div class="bt">已获得的徽章</div>
+        <div>
+            <dl class="cxsr01">
+                <dd><a href="{:U('Index/view',array('id'=>$badge['id'],'openid'=>$openid))}">{$badge.card_name}</a></dd>
+                <dd>　|　</dd>
+                <dd>收入（5.00）</dd>
+            </dl>
+            
+            
+             <volist name="badgelist" id="vo">
+            	<span <php>if($vo['score'] <= 60){</php> class="bk" <php>}else if($vo['score'] <= 70 && $vo['score'] > 60){</php> class="bk se02" <php>}else if($vo['score'] <= 80 && $vo['score'] > 70){</php> class="bk se03" <php>}else if($vo['score'] <= 90 && $vo['score'] > 80){</php> class="bk se04" <php>}else if($vo['score'] <= 100 && $vo['score'] > 90){</php> class="bk se05" <php>}</php>><a href="{:U('Index/view',array('id'=>$vo['id'],'openid'=>$openid))}">{$vo.card_name} {$vo.score}分</a></span>
+            </volist>
+        </div>
+        <div class="line01"></div>
+        <div class="bt">他正在集赞的技能</div>
+
+        <div class="jizanbox01">
+        <volist name="cardlist" id="vo">
+            <span class="jizan001">
+                <a href="JavaScript:;" onClick="praise({$vo.id},'{$openid}');"><span class="bk002">{$vo.card_name}</span><span class="bktop002">{$vo.number}</span><span class="bktop002 tubiao"><img src="__IMG__/qb05.png"></span></a>
+            </span>
+           </volist>
+       
+        </div>
+        <div class="wzfb001">快为他添加一个标签吧</div>
+        <div class="tanchuang01" id="btn1"><a href="#"><img src="__IMG__/qb04.jpg"></a></div>
+    </div>
+</div>
+<div id="mcover" onclick="weChat()">
+<img src="__IMG__/guide.png" />
+ </div>
+<style>
+ #mcover {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 20000;
+ }
+ #mcover img {
+    position: fixed;
+    right: 18px;
+    top: 5px;
+    width: 260px!important;
+    height: 289px!important;
+    z-index: 20001;
+ }
+ .text {
+    margin: 15px 0;
+    font-size: 14px;
+    word-wrap: break-word;
+    color: #727272;
+ }
+ #mess_share {
+    margin: 15px 0;
+    display: block;
+ }
+ #share_1 {
+    float: left;
+    width: 49%;
+    display: block;
+ }
+ #share_2 {
+    float: right;
+    width: 49%;
+    display: block;
+ }
+ .clr {
+    display: block;
+    clear: both;
+    height: 0;
+    overflow: hidden;
+ }
+ .button2 {
+    font-size: 16px;
+    padding: 8px 0;
+    border: 1px solid #adadab;
+    color: #000000;
+    background-color: #e8e8e8;
+    background-image: linear-gradient(to top, #dbdbdb, #f4f4f4);
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.45), inset 0 1px 1px #efefef;
+    text-shadow: 0.5px 0.5px 1px #fff;
+    text-align: center;
+    border-radius: 3px;
+    width: 100%;
+ }
+ #mess_share img {
+    width: 22px!important;
+    height: 22px!important;
+    vertical-align: top;
+    border: 0;
+ }
+</style>
+
+<script language="javascript">
+function weChat(){
+$("#mcover").css("display","none");  // 点击弹出层，弹出层消失
+}
+function praise(id,openid)
+{
+	$.ajax({
+		url: "{:U('index/doshare')}",    //请求的url地址
+		dataType: "json",   //返回格式为json
+		async: true, //请求是否异步，默认为异步，这也是ajax重要特性
+		data: {'id':id,'openid':openid},    //参数值
+		type: "post",   //请求方式
+		success: function(data) {
+			if(data.status=='1')
+			{
+				alert(data.info);
+				window.location.href = data.url+'&'+ Math.random();
+			}else
+			{
+				alert(data.info);
+			}
+		},
+		error: function() {
+			alert('参数错误！');
+		}
+	});
+}
+</script>
+</body>
+</html>
+

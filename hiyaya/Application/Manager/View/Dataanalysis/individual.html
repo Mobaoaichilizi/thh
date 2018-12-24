@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>散客分析</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <link rel="stylesheet" href="__STATIC__/layuiadmin/layui/css/layui.css" media="all">
+  <link rel="stylesheet" href="__STATIC__/layuiadmin/style/admin.css" media="all">
+</head>
+<body>
+  
+  <div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+      <div class="layui-col-md12">
+        <div class="layui-card">
+          <div class="layui-card-header">散客分析</div>
+         
+         	
+         <div class="layui-col-sm3 layui-col-md2">
+        <div class="layui-card">
+          <div class="layui-card-header">
+            散客数
+          </div>
+          <div class="layui-card-body layuiadmin-card-list">
+            <p class="layuiadmin-big-font">{$member_count}</p>
+          </div>
+        </div>
+      </div>
+      
+      
+       <div class="layui-col-sm3 layui-col-md2">
+        <div class="layui-card">
+          <div class="layui-card-header">
+            散客消费金额
+          </div>
+          <div class="layui-card-body layuiadmin-card-list">
+            <p class="layuiadmin-big-font">￥{$member_balance}</p>
+          </div>
+        </div>
+      </div>
+      
+       <!-- <div class="layui-col-sm6 layui-col-md3">
+        <div class="layui-card">
+          <div class="layui-card-header">
+            优惠余额
+          </div>
+          <div class="layui-card-body layuiadmin-card-list">
+            <p class="layuiadmin-big-font">￥{$preferential}</p>
+          </div>
+        </div>
+      </div> -->
+      
+  
+       <div class="layui-col-sm3 layui-col-md2">
+        <div class="layui-card">
+          <div class="layui-card-header">
+            散客人均消费金额
+          </div>
+          <div class="layui-card-body layuiadmin-card-list">
+            <p class="layuiadmin-big-font">￥{$average_consumption}</p>
+          </div>
+        </div>
+      </div>
+      <div class="layui-col-sm3 layui-col-md2">
+        <div class="layui-card">
+          <div class="layui-card-header">
+            轮钟数
+          </div>
+          <div class="layui-card-body layuiadmin-card-list">
+            <p class="layuiadmin-big-font">{$loop_clock_total}</p>
+          </div>
+        </div>
+      </div>
+      <div class="layui-col-sm3 layui-col-md2">
+        <div class="layui-card">
+          <div class="layui-card-header">
+            点钟数
+          </div>
+          <div class="layui-card-body layuiadmin-card-list">
+            <p class="layuiadmin-big-font">{$point_clock_total}</p>
+          </div>
+        </div>
+      </div>
+      <div class="layui-col-sm3 layui-col-md2">
+        <div class="layui-card">
+          <div class="layui-card-header">
+            加钟数
+          </div>
+          <div class="layui-card-body layuiadmin-card-list">
+            <p class="layuiadmin-big-font">{$add_clock_total}</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="layui-col-md12">
+           <div class="layui-card">
+            <div class="layui-card-body layui-form">
+            
+            <form name="fm" id="fm" action="{:U('Dataanalysis/individual')}" method="post">
+          <div class="layui-form-item">
+
+            <div class="layui-inline">
+                  <div class="layui-input-inline">
+                    <input type="text" class="layui-input" id="test-laydate-start" name="start_time" value="{$start_time}" placeholder="开始日期">
+                  </div>
+                  <div class="layui-form-mid">
+                    -
+                  </div>
+                  <div class="layui-input-inline">
+                    <input type="text" class="layui-input" id="test-laydate-end" name="end_time" value="{$end_time}"  placeholder="结束日期">
+                  </div>
+                </div>
+                  <button class="layui-btn" data-type="reload">搜 索</button>
+                  <a onclick="exportguest()"  class="layui-btn">导出</a>
+			</div>
+            </form>
+            
+            
+			
+          
+       
+            </div>
+              </div>
+           </div>
+      
+       <div class="layui-col-md12">
+           <div class="layui-card">
+            <div class="layui-card-body">
+           
+           		<div id="Canvas1" style="height:500px;"></div>
+            </div>
+              </div>
+           </div>
+              
+              <div class="layui-col-md12">
+              <div class="layui-card">
+              <div class="layui-table-body" style="margin-left:10px; margin-right:10px">
+            <table class="layui-table tablesorter">
+              <thead>
+                <tr>
+                  <th><div class="layui-table-cell" style="width:80px; text-align:center;">日期</div></th>
+                  <th><div class="layui-table-cell">订单实收金额</div></th>
+                  <th><div class="layui-table-cell">订单数</div></th>
+                  <th><div class="layui-table-cell">新增散客</div></th>
+                  <th><div class="layui-table-cell">轮钟数</div></th>
+                  <th><div class="layui-table-cell">点钟数</div></th>
+                  <th><div class="layui-table-cell">加钟数</div></th>
+                  <th><div class="layui-table-cell">项目数量</div></th>
+                  <!-- <th><div class="layui-table-cell">消费金额</div></th> -->
+                  <th><div class="layui-table-cell">优惠</div></th>
+                  <!-- <th><div class="layui-table-cell">税费</div></th> -->
+                </tr> 
+              </thead>
+              <tbody>            
+                <tr>
+                  <td>合计</td>
+                  <td >{$member_balance}</td>
+                  <td >{$order_total}</td>
+                  <td >{$member_data_count}</td>
+                  <td >{$loop_clock_total}</td>
+                  <td >{$point_clock_total}</td>
+                  <td >{$add_clock_total}</td>
+                  <td >{$project_total}</td>
+                  <td >{$preferential}</td>
+                
+                </tr>
+                
+                <volist name="redata_array" id="vo">
+                 <tr>
+                  <td>{$vo}</td>
+                  <td >{$consumption_money_array[$key]}</td>
+                  <td >{$order_num[$key]}</td>
+                  <td >{$member_data_array[$key]}</td>
+                  <td >{$loop_clock_num[$key]}</td>
+                  <td >{$point_clock_num[$key]}</td>
+                  <td >{$add_clock_num[$key]}</td>
+                  <td >{$project_num[$key]}</td>
+                  <td >{$preferential_money_array[$key]}</td>
+                  <!-- <td >{$deadlinecard_array_prepaid[$key]}</td> -->
+                </tr>
+               </volist>
+              </tbody>
+            </table>
+          </div>
+          </div>
+</div>
+              
+              
+           
+        </div>
+        </div>
+      </div>
+    </div>
+  
+ <script src="__JS__/jquery/jQuery-2.2.0.min.js"></script>
+ <script src="__JS__/jquery/jquery-latest.js"></script>
+ <script src="__JS__/jquery/jquery.tablesorter.js"></script>
+ <script src="__JS__/charts/echarts.min.js"></script>
+ <script src="__JS__/framework-ui.js"></script>
+  <script src="__STATIC__/layuiadmin/layui/layui.js"></script> 
+  <script language="javascript">
+    $(document).ready(function(){ 
+      //第一列不进行排序(索引从0开始) 
+      $.tablesorter.defaults.headers = {0: {sorter: false}}; 
+      $(".tablesorter").tablesorter(); 
+  }); 
+
+  layui.config({
+    base: '__STATIC__/layuiadmin/' //静态资源所在路径
+  }).extend({
+    index: 'lib/index' //主入口模块
+  }).use(['index', 'laydate'], function(){
+  	var $ = layui.$;
+		var laydate = layui.laydate;
+    
+    //示例代码
+    
+    //开始日期
+    var insStart = laydate.render({
+      elem: '#test-laydate-start'
+      ,done: function(value, date){
+        //更新结束日期的最小日期
+        insEnd.config.min = lay.extend({}, date, {
+          month: date.month - 1
+        });
+        
+        //自动弹出结束日期的选择器
+       insEnd.config.elem[0].focus();
+      }
+    });
+    
+    //结束日期
+    var insEnd = laydate.render({
+      elem: '#test-laydate-end'
+      ,done: function(value, date){
+        //更新开始日期的最大日期
+        insStart.config.max = lay.extend({}, date, {
+          month: date.month - 1
+        });
+      }
+    });
+
+});
+  </script>
+<script language="javascript">
+  var startdate = $('#test-laydate-start');
+  var enddate = $('#test-laydate-end');
+  function exportguest(){
+    var linkurl="{:U('dataanalysis/exportguest',array('start_time'=>'startdatev','end_time'=>'enddatev'))}";
+    linkurl=linkurl.replace('startdatev', startdate.val()),
+    linkurl=linkurl.replace('enddatev', enddate.val()),
+    window.location.href=linkurl;
+  }
+
+var dom = document.getElementById("Canvas1");
+var myChart = echarts.init(dom);
+var app = {};
+option = null;
+option = {
+    tooltip: {
+        trigger: 'axis'
+    },
+    legend: {
+        data:['新增散客','消费金额']
+    },
+    grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true
+    },
+    xAxis: {
+        type: 'category',
+        boundaryGap: false,
+        data: {$redata_time}
+    },
+    yAxis: {
+        type: 'value'
+    },
+    series: [
+        {
+            name:'新增散客',
+            type:'line',
+            //stack: '总量',
+            data:{$member_data}
+        },
+        {
+            name:'消费金额',
+            type:'line',
+            //stack: '总量',
+            data:{$consumption_money}
+        }
+    ]
+};
+if (option && typeof option === "object") {
+    myChart.setOption(option, true);
+}
+  </script>
+</body>
+</html>

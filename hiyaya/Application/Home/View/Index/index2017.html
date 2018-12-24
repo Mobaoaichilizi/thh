@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" /><meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+<meta content="yes" name="apple-mobile-web-app-capable" />
+<meta content="black" name="apple-mobile-web-app-status-bar-style" />
+<meta name="format-detection" content="telephone=no"/>
+<title>产品中心</title>
+<script src="__JS__/jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+</head>
+<body>
+{$signPackage.appId}
+<a href="JavaScript:;" id="uploadImage">上传图片</a>
+<img src="" id="img" name="img" width="80%" class="preview" />
+<script>  
+ wx.config({
+    debug: true,
+    appId: "{$signPackage.appId}",
+    timestamp: {$signPackage.timestamp},
+    nonceStr: '{$signPackage.nonceStr}',
+    signature: '{$signPackage.signature}',
+    jsApiList: [
+    // 所有要调用的 API 都要加到这个列表中
+    'chooseImage',
+    'previewImage',
+    'uploadImage',
+    'downloadImage'
+    ]
+});
+  wx.ready(function () {
+// 5.1 拍照、本地选图
+      var images = {
+        localId: [],
+        serverId: []
+  };
+  $("#uploadImage").click(function() {  
+        var that = $(this);  
+		images.localId = [];
+        wx.chooseImage({  
+			count: 1, // 默认9
+            success: function(res) {  
+                images.localId = res.localIds;// 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片  
+                if (images.localId.length == 0) {  
+                    alert('请先使用 chooseImage 接口选择图片');  
+                    return;  
+                }  
+                if (images.localId.length > 1) {  
+                    alert('目前仅支持单张图片上传,请重新上传');  
+                    return;  
+                }  
+				function upload() {  
+                    wx.uploadImage({  
+                        localId: images.localId[0],  
+                        success: function(res) {  
+                    		var media_id = res.serverId; /*返回图片的服务器端ID,serverId 即 media_id*/                            
+							wxImgCallback(media_id);
+                        },  
+                        fail: function(res) {  
+                            alert(JSON.stringify(res));  
+                        }  
+                    });  
+                }  
+                upload();  
+            }  
+        });  
+    });  
+});  
+function wxImgCallback(serverId)
+{
+	$.ajax({
+		url: "{:U('Home/Imgupload/upload')}",    //请求的url地址
+		dataType: "json",   //返回格式为json
+		async: true, //请求是否异步，默认为异步，这也是ajax重要特性
+		data: {"serverid":serverId},    //参数值
+		type: "post",   //请求方式
+		success: function(data) {
+			if(data.code=='1')
+			{
+				alert(data.info);
+				$('#img').attr('src',data.info);  
+			}else
+			{
+				alert(data.message);
+			}
+		},
+		error: function() {
+			alert('参数错误22！');
+			}
+		});
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Index</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <link rel="stylesheet" href="__STATIC__/layuiadmin/layui/css/layui.css" media="all">
+  <link rel="stylesheet" href="__STATIC__/layuiadmin/style/admin.css" media="all">
+   
+</head>
+<body>
+  
+  <div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+      <div class="layui-col-md12">
+        <div class="layui-card">
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="__CSS__/index926.css">
+<DIV class="layui-card-body">
+  <div class="menu___3mERK">
+    <a class="item___1y2ni" lay-href="{:U('member/index')}"><div><i class="anticon anticon-handlecard"></i></div><span>办卡</span></a>
+   <a class="item___1y2ni" lay-href="{:U('member/index')}"><div><i class="anticon anticon-memberquery"></i></div><span>会员查询</span></a>
+    <a class="item___1y2ni" lay-href="{:U('Scheduling/index')}"><div><i class="anticon anticon-reservationtable"></i></div><span>时间表</span></a>
+   <a class="item___1y2ni" lay-href="{:U('Scheduling/index')}"><div><i class="anticon anticon-workforcemanage"></i></div><span>排班管理</span></a>
+
+  </div>
+
+  <div style="background-color: rgb(247, 247, 247); height: 10px;"></div>
+  <div class="ant-spin-nested-loading">
+
+    <div class="ant-spin-container">
+
+    <div class="wrap___Y1ZCi">
+      <div><span>当前空闲健康师(位)</span><b>女{$sex_women_count}/男{$sex_men_count}</b></div>
+      <div><span>包间数量</span><b>空{$free_room_count}/总{$room_count}</b></div>
+      <div><span>待收银包间</span><b>{$nopay_count}</b></div>
+    </div>
+
+    </div>
+
+  </div>
+  <div style="background-color: rgb(247, 247, 247); height: 10px;"></div>
+</DIV>
+
+          <div class="layui-card-header">空净包间（{$free_room_count}）</div>
+          <div class="layui-card-body">
+
+              <div class="clearfix">
+              
+              <volist name="free_room_list" id="vo">
+                <div class="roomWrap___ItXYO" onClick="add_room_order({$vo.id})">
+                  <div class="room___1MqOr se1">
+                    <div class="menu___1oj7q ant-dropdown-trigger" style="margin-right:6px;">{$vo.bed_total_count}人间</div>
+                    <div class="name___35onF">{$vo.room_name}</div>
+                    <div class="num___3KotO">{$vo.cate_name}</div>
+                  </div>
+                </div>
+              </volist>
+              
+              
+              </div>    
+
+          </div>
+
+
+          <div class="layui-card-header">占用包间（{$lock_room_count}）</div>
+          <div class="layui-card-body">
+
+              <div class="clearfix">
+              
+              
+                <volist name="lock_room_list" id="vo">
+                <div class="roomWrap___ItXYO" onClick="show_order({$vo['order_info']['id']})">
+                  <div class="room___1MqOr se2">
+                    <div class="menu___1oj7q ant-dropdown-trigger" style="margin-right:6px;">{$vo.bed_total_count}人间</div>
+                    <div class="name___35onF">{$vo.room_name}</div>
+                    <div class="avatar___2cR77 clearfix">
+                    <volist name="vo['project_info']" id="vtt">
+                    <div class="ell">{$vtt.nickname}</div>
+					</volist>                    
+                    </div>
+                  </div>
+                  <div class="roomInfo___3OvTi">
+                  <php>if($vo['order_info']['status']==1){</php>
+                    	<div>待收{$vo['nopay_money']}元</div> 
+                   <php>}else if($vo['order_info']['status']==2){</php>
+                   		<div>已收{$vo['order_info']['pay_amount']}元</div> 
+                   <php>}</php>
+                   
+                   <php>if($vo['up_count'] > 0){</php>
+                    	<div class="ell" title="待上钟">待上钟</div>
+                   <php>}else if($vo['down_count'] > 0){</php>
+                   		<div class="ell" title="待下钟">待下钟</div>
+                   <php>}else{</php>
+                   		<div class="ell" title="服务完成">服务完成</div>
+                   <php>}</php>
+                    
+                  </div>
+                </div>
+                </volist>
+                
+                
+              </div>
+                    
+          </div>
+
+
+          <div class="layui-card-header">待扫包间（{$sweep_room_count}）</div>
+          <div class="layui-card-body">
+
+              <div class="clearfix">
+              
+              <volist name="sweep_room_list" id="vo">
+                <div class="roomWrap___ItXYO">
+                  <div class="room___1MqOr se3">
+                    <div class="menu___1oj7q ant-dropdown-trigger" style="margin-right:6px;">{$vo.bed_total_count}人间</div>
+                    <div class="name___35onF">{$vo.room_name}</div>
+                    <div class="num___3KotO">{$vo.cate_name}</div>
+                  </div>
+                </div>
+              </volist>
+                
+              
+             
+              </div>
+                    
+          </div>
+
+
+
+          <div class="layui-card-header">维修包间（{$maintenance_room_count}）</div>
+          <div class="layui-card-body">
+
+              <div class="clearfix">
+              
+               <volist name="maintenance_room_list" id="vo">
+                <div class="roomWrap___ItXYO">
+                  <div class="room___1MqOr se4">
+                    <div class="menu___1oj7q ant-dropdown-trigger" style="margin-right:6px;">{$vo.bed_total_count}人间</div>
+                    <div class="name___35onF">{$vo.room_name}</div>
+                    <div class="num___3KotO">{$vo.cate_name}</div>
+                  </div>
+                </div>
+              </volist>
+
+              </div>
+                    
+          </div>
+
+
+<style type="text/css">
+  .techTop___2PDW8 { padding-left:0 !important; margin-left:-1px;}
+  .con-six { font-size:20px; margin-left:-1px; margin-top:-2px;}.anticon-six1 { color:#d4237a;}.anticon-six2 { color:#769aff;}
+  .con-six span { font-size:13px; margin-left:6px; margin-top:-2px;}
+  .fse01 {}
+  .fse02 { border-color:#e14b96 !important; color:#e14b96;}
+  .fse03 { border-color:#8fc320 !important; color:#8fc320;}
+  .fse04 { border-color:#a6a6a6 !important; color:#a6a6a6;}
+  .fse2 { background:#0ae; color:#FFF;}
+  .fse3 { background:#3dc6b6; border-color:#3dc6b6 !important; color:#FFF;}
+  .fse4 { background:#a6a6a6; border-color:#a6a6a6 !important; color:#FFF;}
+  .fse5 { background:#8fc320; border-color:#8fc320 !important; color:#FFF;}
+</style>
+          <div class="layui-card-header">全部排钟表</div>
+          <div class="layui-card-body">
+
+            <div class="clearfix">
+            
+            <volist name="round_clock" id="vo">
+              <div class="fl" style="cursor: pointer;">
+                <div class="techItem___1GH4W small___2iHQl blue___yBe23">
+                  <div class="con-six">
+                  <php>if($vo['masseur_sex']=='男'){</php>
+                  <i class="anticon anticon-six2"></i>
+                   <php>}else if($vo['masseur_sex']=='女'){</php>
+                   <i class="anticon anticon-six1"></i>
+                    <php>}</php>
+                  <span>{$vo.nick_name}</span></div>
+                  <div class="techTop___2PDW8">
+                    
+                     <php>if($vo['status']==1){</php>
+                    <div class="shift___1m5np fse01 fl">早</div>
+                    <php>}else if($vo['status']==2){</php>
+                    <div class="shift___1m5np fse02 fl">中</div>
+                    <php>}else if($vo['status']==3){</php>
+                    <div class="shift___1m5np fse03 fl">晚</div>
+                    <php>}else if($vo['status']==4){</php>
+                    <div class="shift___1m5np fse04 fl">休</div>
+                    <php>}else if($vo['status']==5){</php>
+                    <div class="shift___1m5np fse05 fl">请</div>
+                    <php>}</php>
+                    
+                     <php>if($vo['is_lock']==0){</php>
+                    <div class="shift___1m5np fse2">锁</div>
+                    <php>}else if($vo['is_lock']==1){</php>
+                    <div class="shift___1m5np fse4">空</div>
+                    <php>}</php>
+                    
+                  </div>
+                  
+                   <php>if($vo['is_lock']==1){</php>
+                     <div class="techCenter___3Nz74">空闲</div>
+                    <php>}else{</php>
+                     <div class="techCenter___3Nz74">{$vo.project_title}</div>
+                    <php>}</php>
+                  
+                 
+                  
+                  
+                  <div class="techBottom___1pEOq" title=""></div>
+                  <div class="clockNum___2QKwr"><p class="fl" span="12">轮次:{$vo.wheel_count}</p><p class="fr" span="12">点钟: {$vo.point_count}</p></div>
+                </div>
+              </div>
+              </volist>   
+        
+            </div>           
+                    
+          </div>
+          <div style="clear:both;"></div>
+
+
+
+
+
+
+
+
+
+
+
+
+          <div class="layui-card-header">空闲锁牌</div>
+          
+          
+          <div class="layui-card-body">
+
+              <div class="clearfix">
+              
+              <volist name="free_lockcard_list" id="vo">
+                <div class="roomWrap___ItXYO" onClick="add_order({$vo.id})">
+                  <div class="room___1MqOr se1">
+            
+                    <div class="name___35onF">{$vo.card_number}</div>
+              
+                  </div>
+                </div>
+              </volist>
+              
+              
+              </div>    
+
+          </div>
+          
+          
+        
+          
+
+          
+          
+        </div>
+      </div>
+      </div>
+    </div>
+  </div>
+  
+<script src="__JS__/jquery/jQuery-2.2.0.min.js"></script>
+<script src="__JS__/framework-ui.js"></script>
+<script src="__STATIC__/layuiadmin/layui/layui.js"></script> 
+<script>
+  layui.config({
+    base: '__STATIC__/layuiadmin/' //静态资源所在路径
+  }).extend({
+    index: 'lib/index' //主入口模块
+  }).use(['index', 'console']);
+  </script>
+
+<script language="javascript">
+
+function add_order(cid)
+{
+	var linkurl="{:U('Order/add_order',array('id'=>'nidval'))}";
+		linkurl=linkurl.replace('nidval', cid),
+        $.modalOpen({
+            id: "Form",
+            title: "开单",
+            url: linkurl,
+            width: "1100px",
+            height: "770px",
+            callBack: function (index, layero) {
+				 var iframeWindow = window['layui-layer'+ index]
+				,submitID = 'LAY-orders-front-submit'
+				,submit = layero.find('iframe').contents().find('#'+ submitID);
+				submit.click();
+				//top.layer.close(index);
+            }
+        });
+}
+function add_room_order(cid)
+{
+	var linkurl="{:U('Order/add_room_order',array('id'=>'nidval'))}";
+		linkurl=linkurl.replace('nidval', cid),
+        $.modalOpen({
+            id: "Form",
+            title: "开单",
+            url: linkurl,
+            width: "1100px",
+            height: "770px",
+            callBack: function (index, layero) {
+				 var iframeWindow = window['layui-layer'+ index]
+				,submitID = 'LAY-orders-front-submit'
+				,submit = layero.find('iframe').contents().find('#'+ submitID);
+				submit.click();
+				//top.layer.close(index);
+            }
+        });
+}
+function show_order(orderid)
+{
+	var linkurl="{:U('Order/show_order',array('id'=>'nidval'))}";
+		linkurl=linkurl.replace('nidval', orderid),
+        $.modalOpen({
+            id: "Form",
+            title: "订单详情",
+            url: linkurl,
+            width: "1100px",
+            height: "770px",
+			btn: ['去付款', '关闭'],
+            callBack: function (index, layero) {
+				 var iframeWindow = window['layui-layer'+ index]
+				,submitID = 'LAY-orders-front-submit'
+				,submit = layero.find('iframe').contents().find('#'+ submitID);
+				submit.click();
+				//top.layer.close(index);
+            }
+        });
+}
+
+function Refresh()
+{
+	self.location.reload();
+}
+</script>
+</body>
+</html>

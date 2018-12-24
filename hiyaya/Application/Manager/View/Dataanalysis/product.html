@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>商品统计</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <link rel="stylesheet" href="__STATIC__/layuiadmin/layui/css/layui.css" media="all">
+  <link rel="stylesheet" href="__STATIC__/layuiadmin/style/admin.css" media="all">
+</head>
+<body>
+
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">商品统计</div>
+                <div class="layui-tab layui-tab-brief" lay-filter="component-tabs-brief">
+                    <ul class="layui-tab-title">
+                        <li class="layui-this">汇总</li>
+                        <li>明细</li>
+                    </ul>
+                    <!---***-->
+                    <div class="layui-tab-content">
+                        <!--***-->
+                        <div class="layui-tab-item layui-show">
+
+                            <div class="data-table-reload-btn" style="margin-bottom: 10px;">
+                                <div class="layui-inline">
+                                    <input type="text" class="layui-input" id="startdate" name="startdate" value="" placeholder="开始日期">
+                                </div>
+                                <div class="layui-inline">
+                                    -
+                                </div>
+                                <div class="layui-inline">
+                                    <input type="text" class="layui-input" id="enddate" name="enddate" value=""  placeholder="结束日期">
+                                </div>
+                                <button class="layui-btn" data-type="reload">搜 索</button>
+                                <button class="layui-btn" data-type="exportproduct">导出</button>
+                            </div>
+
+                            <table class="layui-hide"  id="data-table-totalRow" lay-filter="data-table-totalRow"></table>
+
+                        </div>
+                        <!---***-->
+                        <div class="layui-tab-item" >
+                            <div class="data-table-reload-btn1" style="margin-bottom: 10px;">
+                                <div class="layui-inline">
+                                    <input type="text" class="layui-input" id="startdate1" name="startdate1" value="" placeholder="开始日期">
+                                </div>
+                                <div class="layui-inline">
+                                    -
+                                </div>
+                                <div class="layui-inline">
+                                    <input type="text" class="layui-input" id="enddate1" name="enddate1" value=""  placeholder="结束日期">
+                                </div>
+                                <button class="layui-btn" data-type="reload1">搜 索</button>
+                                <button class="layui-btn" data-type="exportproductdetail">导出</button>
+                            </div>
+                            <table class="layui-hide"  id="data-table-totalRow1" lay-filter="data-table-totalRow1"></table>
+                        </div>
+                        <!---***-->
+                    </div>
+                    <!---***-->
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<script src="__STATIC__/layuiadmin/layui/layui.js"></script>
+<script language="javascript">
+    layui.config({
+        base: '__STATIC__/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'table','admin','laydate'], function(){
+        var table = layui.table;
+        var $ = layui.$;
+        var  form = layui.form,laydate = layui.laydate,admin = layui.admin,element = layui.element,router = layui.router();
+
+
+        //示例代码
+        table.render({
+            elem: '#data-table-totalRow'
+            ,url:'{:U("dataanalysis/productjson")}'
+            ,totalRow: true
+            ,cols: [[
+                {type: 'checkbox', fixed: 'left'}
+                ,{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true, totalRowText: '合计'}
+                ,{field:'category_name', title:'商品类型', width:150, }
+                ,{field:'product_name', title:'商品名称', minWidth:150, sort: true}
+                ,{field:'ordernum', title:'消费次数', width:80,  sort: true, totalRow: true}
+                ,{field:'total_price', title:'金额（原价）', width:130, sort: true, totalRow: true}
+                ,{field:'pay_money', title:'优惠', width:100,  sort: true, totalRow: true}
+                ,{field:'fee', title:'税费', width:100, edit: 'text', sort: true, totalRow: true}
+
+            ]]
+            ,page: true
+        });
+        table.render({
+            elem: '#data-table-totalRow1'
+            ,url:'{:U("dataanalysis/productdetailjson")}'
+            ,totalRow: true
+            ,cols: [[
+                {type: 'checkbox', fixed: 'left'}
+                ,{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true, totalRowText: '合计'}
+                ,{field:'createtime', title:'开单时间', width:150, }
+                ,{field:'pay_time', title:'记账日期', width:150, sort: true}
+                ,{field:'product_name', title:'商品名称', minWidth:120,  sort: true}
+                ,{field:'total_price', title:'商品金额（原价）', width:150, sort: true, totalRow: true}
+                ,{field:'pay_money', title:'优惠', width:100,  sort: true, totalRow: true}
+                ,{field:'fee', title:'税费', width:100, edit: 'text', sort: true, totalRow: true}
+                ,{field:'masseur_name', title:'服务健康师', width:100,  sort: true}
+                ,{field:'product_reward', title:'服务提成', width:100, sort: true, totalRow: true}
+                ,{field:'payuser', title:'收银人员', width:100,  sort: true}
+
+            ]]
+            ,page: true
+        });
+        var startdate = $('#startdate');
+        var enddate = $('#enddate');
+        var startdate1 = $('#startdate1');
+        var enddate1 = $('#enddate1');
+        var $ = layui.$, active = {
+            reload: function(){
+                //执行重载
+                table.reload('data-table-totalRow', {
+                    page: {
+                        curr: 1 //重新从第 1 页开始
+                    }
+                    ,where: {
+                        startdate: startdate.val(),
+                        enddate: enddate.val()
+
+                    }
+                });
+            },
+            exportproduct:function () {
+                    var linkurl="{:U('dataanalysis/exportproduct',array('startdate'=>'startdatev','enddate'=>'enddatev'))}";
+                    linkurl=linkurl.replace('startdatev', startdate.val()),
+                    linkurl=linkurl.replace('enddatev', enddate.val()),
+                    window.location.href=linkurl;
+            },
+            reload1: function(){
+                //执行重载
+                table.reload('data-table-totalRow1', {
+                    page: {
+                        curr: 1 //重新从第 1 页开始
+                    }
+                    ,where: {
+                        startdate: startdate1.val(),
+                        enddate: enddate1.val()
+
+                    }
+                });
+            },
+            exportproductdetail:function () {
+                    var linkurl="{:U('dataanalysis/exportproductdetail',array('startdate'=>'startdatev','enddate'=>'enddatev'))}";
+                    linkurl=linkurl.replace('startdatev', startdate1.val()),
+                    linkurl=linkurl.replace('enddatev', enddate1.val()),
+                    window.location.href=linkurl;
+            }
+        };
+        //日期选择器
+        laydate.render({
+            elem: '#startdate'
+        });
+        laydate.render({
+            elem: '#enddate'
+        });
+        laydate.render({
+            elem: '#startdate1'
+        });
+        laydate.render({
+            elem: '#enddate1'
+        });
+
+        form.render(null, 'component-form-group');
+        element.render();
+        element.on('tab(component-tabs-brief)', function(obj){
+            //layer.msg(obj.index + '：' + this.innerHTML);
+        });
+
+        $('.data-table-reload-btn .layui-btn').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+        $('.data-table-reload-btn1 .layui-btn').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+    });
+
+</script>
+</body>
+</html>

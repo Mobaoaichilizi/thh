@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<title>绑定账号</title>
+<link href="__CSS__/public.css" rel="stylesheet" type="text/css" />
+<script src="__JS__/jquery-1.10.1.min.js"></script>
+</head>
+
+<body style="background: url(__IMG__/dl_bg_01.jpg);background-size:cover;">
+<div class="login">
+	<div class="welcome"><img src="__IMG__/tx.jpg" /></div>
+	<div class="login-form">
+    <form name="message" id="messaget" action="{:U('Login/binding')}" method="post">
+		<div class="login-inp"><label><span class="mem-name"></span></label><input type="text" name="username" placeholder="登录"></div>
+		<div class="login-inp"><label><span class="pass"></span></label><input type="password" placeholder="密码" name="password" style="color:#fff;	"></div>
+		<div class="login-inp1"><a href="JavaScript:;" id="a_post">确认绑定</a></div>
+        </form>
+	</div>
+</div>
+<script language="javascript">	
+$('#a_post').click(function(){
+	$.ajax({
+		url: "{:U('Login/binding')}",    //请求的url地址
+		dataType: "json",   //返回格式为json
+		async: true, //请求是否异步，默认为异步，这也是ajax重要特性
+		data: $("#messaget").serialize(),    //参数值
+		type: "post",   //请求方式
+		success: function(data) {
+			if(data.status=='1')
+			{
+				alert(data.info);
+				window.location.href = data.url+'&'+ Math.random();
+			}else
+			{
+				alert(data.info);
+			}
+		},
+		error: function() {
+			alert('参数错误！');
+		}
+	});
+});
+</script>  
+</body>
+</html>

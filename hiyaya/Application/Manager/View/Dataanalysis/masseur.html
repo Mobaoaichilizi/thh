@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>健康师分析</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <link rel="stylesheet" href="__STATIC__/layuiadmin/layui/css/layui.css" media="all">
+  <link rel="stylesheet" href="__STATIC__/layuiadmin/style/admin.css" media="all">
+</head>
+<body>
+  
+  <div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+      <div class="layui-col-md12">
+        <div class="layui-card">
+          <div class="layui-card-header">健康师分析</div>
+      
+      <div class="layui-col-md12">
+           <div class="layui-card">
+            <div class="layui-card-body layui-form">
+            
+            <form name="fm" id="fm" action="{:U('Dataanalysis/masseur')}" method="post">
+          <div class="layui-form-item">
+
+            <div class="layui-inline">
+                  <div class="layui-input-inline">
+                    <input type="text" class="layui-input" id="test-laydate-start" name="start_time" value="{$start_time}" placeholder="开始日期">
+                  </div>
+                  <div class="layui-form-mid">
+                    -
+                  </div>
+                  <div class="layui-input-inline">
+                    <input type="text" class="layui-input" id="test-laydate-end" name="end_time" value="{$end_time}"  placeholder="结束日期">
+                  </div>
+                </div>
+                  <button class="layui-btn" data-type="reload">搜 索</button>
+                  <a onclick="exportmasseur()"  class="layui-btn">导出</a>
+			</div>
+            </form>
+            
+			
+          
+       
+            </div>
+              </div>
+           </div>
+      
+       
+              
+              <div class="layui-col-md12">
+              <div class="layui-card">
+              <div class="layui-table-body" style="margin-left:10px; margin-right:10px">
+            <table class="layui-table tablesorter" id="table">
+              <thead class="fixed_thead">
+                <tr>
+                  <th><div class="layui-table-cell" style="width:120px; text-align:center;">健康师昵称</div></th>
+                  <th><div class="layui-table-cell">总钟数</div></th>
+                  <th><div class="layui-table-cell">项目原价(元)</div></th>
+                  <th><div class="layui-table-cell">产品原价(元)</div></th>
+                  <th><div class="layui-table-cell">实收金额(元)</div></th>
+                  <th><div class="layui-table-cell">会员卡售卡/充值金额(元)</div></th>
+                  <th><div class="layui-table-cell">次卡售卡/充值金额(元)</div></th>
+                  <th><div class="layui-table-cell">期限卡售卡/充值金额(元)</div></th>
+                  <th><div class="layui-table-cell">疗程卡售卡/充值金额(元)</div></th>
+                  <th><div class="layui-table-cell">项目提成(元)</div></th>
+                  <th><div class="layui-table-cell">商品提成(元)</div></th>
+                  <th><div class="layui-table-cell">会员卡提成(元)</div></th>
+                  <th><div class="layui-table-cell">次卡提成(元)</div></th>
+                  <th><div class="layui-table-cell">期限卡提成(元)</div></th>
+                  <th><div class="layui-table-cell">疗程卡提成(元)</div></th>
+                  <th><div class="layui-table-cell">推荐提成(元)</div></th>
+                  <th><div class="layui-table-cell">奖励提成(元)</div></th>
+                  <th><div class="layui-table-cell">总提成(元)</div></th>
+                  <th><div class="layui-table-cell">轮钟数</div></th>
+                  <th><div class="layui-table-cell">点钟数</div></th>
+                  <th><div class="layui-table-cell">加钟数</div></th>
+                </tr> 
+              </thead>
+              <tbody>            
+                <tr>
+                  <td>合计</td>
+                  <td >{$all_data_count}</td>
+                  <td >{$project_price_data_count}</td>
+                  <td >{$product_price_data_count}</td>
+                  <td >{$real_price_data_count}</td>
+                  <td >{$card_data_count}</td>
+                  <td >{$numcard_data_count}</td>
+                  <td >{$deadlinecard_data_count}</td>
+                  <td >{$coursecard_data_count}</td>
+                  <td >{$project_reward_data_count}</td>
+                  <td >{$product_reward_data_count}</td>
+                  <td >{$card_reward_data_count}</td>
+                  <td >{$numcard_reward_data_count}</td>
+                  <td >{$deadlinecard_reward_data_count}</td>
+                  <td >{$coursecard_reward_data_count}</td>
+                  <td >{$recommend_reward_data_count}</td>
+                  <td >{$prize_reward_data_count}</td>
+                  <td >{$all_reward_data_count}</td>
+                  <td >{$wheel_data_count}</td>
+                  <td >{$point_data_count}</td>
+                  <td >{$add_data_count}</td>
+                </tr>
+                
+                <volist name="masseur_list" id="vo">
+                 <tr class="data">
+                  <td>{$vo['masseur_name']}</td>
+                  <td >{$all_data[$key]}</td>
+                  <td >{$project_price_data[$key]}</td>
+                  <td >{$product_price_data[$key]}</td>
+                  <td >{$real_price_data[$key]}</td>
+                  <td >{$card_data[$key]}</td>
+                  <td >{$numcard_data[$key]}</td>
+                  <td >{$deadlinecard_data[$key]}</td>
+                  <td >{$coursecard_data[$key]}</td>
+                  <td >{$project_reward_data[$key]}</td>
+                  <td >{$product_reward_data[$key]}</td>
+                  <td >{$card_reward_data[$key]}</td>
+                  <td >{$numcard_reward_data[$key]}</td>
+                  <td >{$deadlinecard_reward_data[$key]}</td>
+                  <td >{$coursecard_reward_data[$key]}</td>
+                  <td >{$recommend_reward_data[$key]}</td>
+                  <td >{$prize_reward_data[$key]}</td>
+                  <td >{$all_reward_data[$key]}</td>
+                  <td >{$wheel_data[$key]}</td>
+                  <td >{$point_data[$key]}</td>
+                  <td >{$add_data[$key]}</td>
+                </tr>
+               </volist>
+              </tbody>
+            </table>
+          </div>
+          </div>
+        </div> 
+        </div>
+        </div>
+      </div>
+    </div>
+   
+  
+  <script src="__JS__/jquery/jQuery-2.2.0.min.js"></script>
+  <script src="__JS__/jquery/jquery-latest.js"></script>
+  <script src="__JS__/jquery/jquery.tablesorter.js"></script>
+  <script src="__JS__/charts/echarts.min.js"></script>
+  <script src="__JS__/framework-ui.js"></script>
+  <script src="__STATIC__/layuiadmin/layui/layui.js"></script> 
+  <script type="text/javascript">
+    var thead_top = $('.fixed_thead').offset().top;
+    var thead = $('.fixed_thead');
+    $(window).scroll(function() {
+      var sctop = $(this).scrollTop();
+      if(sctop > 60){
+        var ty = sctop - thead_top;
+        thead.css({'transform':'translateY('+ ty +'px)'});
+      } else{
+        thead.css({'transform':'translateY(0px)'});
+      }
+    })
+  </script>
+  <script language="javascript">
+    $(document).ready(function(){ 
+  //第一列不进行排序(索引从0开始) 
+    $.tablesorter.defaults.headers = {0: {sorter: false}}; 
+    $(".tablesorter").tablesorter(); 
+  }); 
+
+
+  layui.config({
+    base: '__STATIC__/layuiadmin/' //静态资源所在路径
+  }).extend({
+    index: 'lib/index' //主入口模块
+  }).use(['index', 'laydate'], function(){
+  		
+		var laydate = layui.laydate;
+    
+    //示例代码
+    
+    //开始日期
+    var insStart = laydate.render({
+      elem: '#test-laydate-start'
+      ,done: function(value, date){
+        //更新结束日期的最小日期
+        insEnd.config.min = lay.extend({}, date, {
+          month: date.month - 1
+        });
+        
+        //自动弹出结束日期的选择器
+       insEnd.config.elem[0].focus();
+      }
+    });
+    
+    //结束日期
+    var insEnd = laydate.render({
+      elem: '#test-laydate-end'
+      ,done: function(value, date){
+        //更新开始日期的最大日期
+        insStart.config.max = lay.extend({}, date, {
+          month: date.month - 1
+        });
+      }
+    });
+
+  
+});
+  </script>
+<script language="javascript">
+
+var startdate = $('#test-laydate-start');
+var enddate = $('#test-laydate-end');
+function exportmasseur(){
+  var linkurl="{:U('Dataanalysis/exportmasseur',array('start_time'=>'startdatev','end_time'=>'enddatev'))}";
+  linkurl=linkurl.replace('startdatev', startdate.val()),
+  linkurl=linkurl.replace('enddatev', enddate.val()),
+  window.location.href=linkurl;
+}
+
+
+  </script>
+</body>
+</html>

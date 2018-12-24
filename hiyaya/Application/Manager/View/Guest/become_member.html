@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>添加会员</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <link rel="stylesheet" href="__STATIC__/layuiadmin/layui/css/layui.css" media="all">
+</head>
+<body>
+<div>
+  <div class="layui-card-body">
+    <form class="layui-form" lay-filter="component-form-element">
+      <input type="hidden"  name="act" value="update">
+        <input type="hidden"  name="id" value="{$info.id}">
+      <input type="hidden"  name="chain_id" value="{$info.chain_id}">
+      <input type="hidden"  name="shop_id" value="{$info.shop_id}">
+      <div class="layui-row layui-col-space10 layui-form-item">
+
+          <div class="layui-col-lg8">
+            <label class="layui-form-label">散客名称：</label>
+            <div class="layui-input-block">
+              <input type="text" name="member_name" id="member_name" value="{$info.member_name}" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+            </div>
+          </div>
+
+
+        <div class="layui-col-lg8">
+          <label class="layui-form-label">手机号码：</label>
+          <div class="layui-input-block">
+            <input type="text" name="member_tel" id="member_tel" value="{$info.member_tel}" lay-verify="phone" placeholder="" autocomplete="off" class="layui-input">
+          </div>
+        </div>
+        <div class="layui-col-lg8">
+          <label class="layui-form-label">单选框</label>
+          <div class="layui-input-block">
+            <input type="radio" name="sex" value="男" title="男" <if condition="$info.sex eq '男'">checked   </if> >
+
+            <input type="radio" name="sex" value="女" title="女"   <if condition="$info.sex eq '女'">checked</if>>
+
+
+          </div>
+        </div>
+        <div class="layui-col-md6">
+          <label class="layui-form-label">开启折扣：</label>
+          <div class="layui-input-block">
+          <input type="checkbox" name="is_msg" lay-skin="switch" value="1" lay-text="开|关" lay-filter="test-table-stateDemo">
+          </div>
+        </div>
+        <div class="card_package" style="display: none;">
+              <div class="layui-col-md6">
+                <label class="layui-form-label">折扣：</label>
+                <div class="layui-input-block">
+                  <input type="text" name="discount" id="discount" placeholder="请输入折扣数字" autocomplete="off" class="layui-input">
+                </div>
+              </div>
+          </div>
+
+
+      </div>
+
+      <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="LAY-user-front-submit" id="LAY-user-front-submit" value="确认">
+      </div>
+    </form>
+  </div>
+</div>
+
+
+<script src="__STATIC__/layuiadmin/layui/layui.js"></script>
+<script>
+
+    layui.use( ['form','laydate'], function(){
+       form = layui.form;
+        var $ = layui.$;
+        var laydate = layui.laydate;
+        form.render(null, 'component-form-element');
+        laydate.render({
+            elem: '#birthday'
+        });
+        //监听状态操作
+        form.on('switch(test-table-stateDemo)', function(obj){
+            
+            if(obj.elem.checked==true)
+            {
+                $('.card_package').css('display','block');
+                
+            }
+            else
+            {
+                $('.card_package').css('display','none');
+            }
+        })
+        form.on('submit(LAY-user-front-submit)', function(data) {
+                $.ajax({
+                type: "post",
+                url: "{:U('Guest/become_member')}",
+                data: $(".layui-form").serialize(),
+                success: function (res) {
+
+                    if (res == "success") {
+                        layer.msg('保存成功！');//保存成功提示
+                        //关闭弹窗
+                        window.parent.location.reload();
+                        var index = parent.layer.getFrameIndex(window.name);
+                        parent.layer.close(index);
+                    }
+                    if (res == "error") {
+                        layer.msg('保存异常!');
+                    }
+
+                }
+    })
+
+            return false;
+        });
+    });
+</script>
+</body>
+</html>
+

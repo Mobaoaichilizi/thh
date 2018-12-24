@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>选项卡组件</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <link rel="stylesheet" href="__STATIC__/layuiadmin/layui/css/layui.css" media="all">
+  <link rel="stylesheet" href="__STATIC__/layuiadmin/style/admin.css" media="all">
+  <link rel="stylesheet" href="__CSS__/print.css" media="all">
+  <script language="javascript" src="__JS__/LodopFuncs.js"></script>
+
+</head>
+<body>
+  <div class="layui-fluid" id="component-tabs">
+    <div class="layui-row">
+      <div class="layui-col-md12">
+        <div class="layui-card">
+          <div class="layui-card-header">打印设置</div>
+          <div class="layui-card-body">
+    
+            <div class="layui-tab">
+              <ul class="layui-tab-title">
+                <li class="layui-this">收银小票</li>
+                <li>会员卡充值小票</li>
+              </ul>
+          
+       		
+              <div class="layui-tab-content">
+                <div class="layui-tab-item layui-show">
+              		<div class="fl">
+                    	<div id="cashier_print">
+                    	<div class="print_card">
+                        	<div class="print_prePrint">
+                            	<div class="print_title">
+                                	<div class="print_name">{$shop_info.shop_name}</div>
+                                    <div class="print_desc">消费单</div>
+                                </div>
+                                <div class="print_footer">
+                                	<div class="print_tel">电话：{$shop_info.mobile}</div>
+                                    <div class="print_address">地址：{$shop_info.address}</div>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                     </div>
+                       
+                        <div class="print_setting">
+                        	<button class="layui-btn" onClick="prn_cashier();">打印预览</button>
+                        </div>
+       				
+       
+                </div>
+                <div class="layui-tab-item">
+                
+                
+                
+                
+                
+                </div>
+                
+              </div>
+             
+    
+            </div>
+ 
+          </div>
+        </div>
+        
+        
+     </div>
+    
+  </div>
+
+  </div>
+ <script src="__JS__/jquery/jQuery-2.2.0.min.js"></script>
+ <script src="__JS__/framework-ui.js"></script>
+  <script src="__STATIC__/layuiadmin/layui/layui.js"></script> 
+  <script>
+    layui.config({
+    base: '__STATIC__/layuiadmin/' //静态资源所在路径
+  }).extend({
+    index: 'lib/index' //主入口模块
+  }).use(['index', 'form'], function(){
+  		var $ = layui.$
+		,form = layui.form;
+});
+ var LODOP; //声明为全局变量 
+	function prn_cashier() {	
+		CreateOneFormPage();
+		LODOP.ADD_PRINT_SETUP_BKIMG("<img border='0' src='http://shop.51dade.com/Public/Manager/images/collect58_v2.png'>");
+		LODOP.SET_SHOW_MODE("PREVIEW_IN_BROWSE",1);
+		LODOP.SET_SHOW_MODE("HIDE_PAPER_BOARD",1);
+		LODOP.SET_SHOW_MODE("BKIMG_IN_PREVIEW",1);
+		LODOP.PRINT_SETUP();	
+	};
+	function CreateOneFormPage(){
+		LODOP=getLodop(); 
+		LODOP.PRINT_INITA(10,10,"100%","100%","");
+		LODOP.ADD_PRINT_TEXT(23,13,"100%",25,"{$shop_info['shop_name']}");
+		LODOP.SET_PRINT_STYLEA(0,"Alignment",2);
+		LODOP.SET_PRINT_STYLEA(0,"Bold",1);
+		LODOP.ADD_PRINT_TEXT(53,11,"100%",25,"消费单");
+		LODOP.ADD_PRINT_TEXT(557,35,"100%",25,"电话：{$shop_info['mobile']}");
+		LODOP.ADD_PRINT_TEXT(557,37,"100%",50,"地址：{$shop_info['address']}");	
+
+		
+	};
+  </script>
+</body>
+</html>

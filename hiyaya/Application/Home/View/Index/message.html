@@ -1,0 +1,78 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<title>他的徽章</title>
+<link rel="stylesheet" type="text/css" href="__CSS__/public.css" />
+<script src="__JS__/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="__JS__/lrtk.js"></script>
+</head>
+<body style="max-width:380px; margin:0 auto;">
+
+<div class="rowbox02">
+	<div class="wuxing">
+        <dd class="wz">总体评价：</dd>
+        <dd class="nr">
+<!--代码开始-->
+<div id="xzw_starSys">
+	<div id="xzw_starBox">
+		<ul class="star" id="star">
+			<li><a href="javascript:void(0)" title="1" class="one-star">1</a></li>
+			<li><a href="javascript:void(0)" title="2" class="two-stars">2</a></li>
+			<li><a href="javascript:void(0)" title="3" class="three-stars">3</a></li>
+			<li><a href="javascript:void(0)" title="4" class="four-stars">4</a></li>
+			<li><a href="javascript:void(0)" title="5" class="five-stars">5</a></li>
+            
+		</ul>
+		<div class="current-rating" id="showb"></div>
+	</div>
+	<!--评价文字-->
+	<div class="description"></div>
+</div>
+<!--代码结束-->
+        
+        
+        </dd>
+    </div>
+    
+     <form name="message" id="messaget" action="{:U('Index/domessage')}" method="post">
+     		<input type="hidden" name="myview_id" value="{$myview_id}">
+            <input type="hidden" name="card_id" value="{$card_id}">
+            <input type="hidden" name="openid" value="{$openid}">
+    <input type="hidden" name="stars" id="stars" value="0">
+	<div class="guandiannr01"><textarea placeholder="点评一下亮点和不足吧（写够15字，才是好同志~）" name="content" cols="" rows=""></textarea></div>
+    
+    </form>
+    <div class="but001"><a href="JavaScript:;" id="a_post">发布评论</a></div>
+</div>
+<script language="javascript">	
+$('#a_post').click(function(){	
+	$.ajax({
+		url: "{:U('index/domessage')}",    //请求的url地址
+		dataType: "json",   //返回格式为json
+		async: true, //请求是否异步，默认为异步，这也是ajax重要特性
+		data: $("#messaget").serialize(),    //参数值
+		type: "post",   //请求方式
+		success: function(data) {
+			if(data.status=='1')
+			{
+				alert(data.info);
+				window.location.href = data.url+'&'+ Math.random();
+			}else
+			{
+				alert(data.info);
+			}
+		},
+		error: function() {
+			alert('参数错误！');
+		}
+	});
+});
+				</script>  
+
+</body>
+</html>
+

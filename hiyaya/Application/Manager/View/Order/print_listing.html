@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>打印</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <link rel="stylesheet" href="__STATIC__/layuiadmin/layui/css/layui.css" media="all">
+  <link rel="stylesheet" href="__STATIC__/layuiadmin/style/admin.css" media="all">
+  <link rel="stylesheet" href="__CSS__/print_listingtt.css" media="all">
+  <script language="javascript" src="__JS__/LodopFuncs.js"></script>
+
+</head>
+<body>
+  <div class="layui-fluid" id="component-tabs">
+    <div class="layui-row">
+      <div class="layui-col-md12">
+        <div class="layui-card">
+          <div class="layui-card-header">打印设置</div>
+          <div class="layui-card-body">
+    
+          <div class="layui-tab-content">
+                <div class="layui-tab-item layui-show">
+              	
+                    	<div id="cashier_print">
+                    		
+                            
+                            <div class="receiptbox">
+		<div class="receiptcon">
+			<h1 style="font-weight:bold;">{$shop_info.shop_name}</h1>
+            <h1 style="font-size:12px;">消费单</h1>
+			<div><h2>包间名：{$room_info.room_name}</h2></div>
+			
+              <php>
+              $project_total_price=0;
+              </php>
+            <php>if($result_project){</php>
+            <div class="conbox1">
+				<dl class="con01">
+					<dd class="wzl">项目名</dd>
+					<dd>优惠方式</dd>
+					<dd class="wzr">金额</dd>
+				</dl>
+			</div>
+			<div class="conbox1">
+            <volist name="result_project" id="vo">
+				<dl class="con01 se0">
+					<dd class="wzl">{$vo.title}<span class="displayIB scaleFont">({$vo.nick_name})</span></dd>
+					<dd><php>if($vo['card_type']==0){</php>
+                            无优惠
+                        <php>}else if($vo['card_type']==1){</php>
+                            会员卡打折
+                        <php>}else if($vo['card_type']==2){</php>
+                            次卡抵扣
+                        <php>}else if($vo['card_type']==3){</php>
+                            期限卡抵扣
+                        <php>}else if($vo['card_type']==4){</php>
+                            疗程卡抵扣
+                        <php>}</php>
+                     </dd>
+					<dd class="wzr">{$vo.total_price}</dd>
+				</dl>
+                <php>
+                $project_total_price+=$vo['total_price'];
+                </php>
+            </volist>   
+                
+				
+			</div>
+            
+            <php>}</php>
+             <php>
+              $product_total_price=0;
+              </php>
+            <php>if($result_product){</php>
+            <div class="conbox1">
+				<dl class="con01">
+					<dd class="wzl">产品名称</dd>
+					<dd>优惠方式</dd>
+					<dd class="wzr">金额</dd>
+				</dl>
+			</div>
+            <div class="conbox1">
+            <volist name="result_product" id="vo">
+				<dl class="con01 se0">
+					<dd class="wzl">{$vo.title}</dd>
+					<dd><php>if($vo['card_type']==0){</php>
+                            无优惠
+                        <php>}else if($vo['card_type']==1){</php>
+                            会员卡打折
+                        <php>}else if($vo['card_type']==2){</php>
+                            次卡抵扣
+                        <php>}else if($vo['card_type']==3){</php>
+                            期限卡抵扣
+                        <php>}else if($vo['card_type']==4){</php>
+                            疗程卡抵扣
+                        <php>}</php>
+                     </dd>
+					<dd class="wzr">{$vo.total_price}</dd>
+				</dl>
+                 <php>
+                $product_total_price+=$vo['total_price'];
+                </php>
+            </volist>   
+                
+				
+			</div>
+            <php>}</php>
+            
+            
+            
+			<div>
+				<dl class="con02 se0">
+					<dd><em>订单原价：</em><i><php>echo sprintf("%.2f",$project_total_price+$product_total_price);</php></i></dd>
+                    <php>if(($hykzk_sum-$hykzk_pay_sum)+($product_hykzk_sum-$product_hykzk_pay_sum)!=0){</php>
+					<dd>会员卡打折：-{$hykzk_sum-$hykzk_pay_sum+$product_hykzk_sum-$product_hykzk_pay_sum}</dd>
+                     <php>}</php>
+                      <php>if($ckzk_sum!=0){</php>
+					<dd>次卡抵扣：-{$ckzk_sum}</dd>
+                    <php>}</php>
+                     <php>if($qxkzk_sum!=0){</php>
+					<dd>期限卡抵扣：-{$qxkzk_sum}</dd>
+                    <php>}</php>
+                    <php>if($lckzk_sum!=0){</php>
+					<dd>期限卡抵扣：-{$lckzk_sum}</dd>
+                    <php>}</php>
+                     <php>if($order_info['preferential_amount']!=0){</php>
+					<dd>抹零：-{$order_info['preferential_amount']}</dd>
+                    <php>}</php>
+                    
+                    
+				</dl>
+				<dl class="con02 se0">
+					<dd><em>实收：</em><b>{$order_info.pay_amount}</b></dd>
+                    <volist name="order_pay_list" id="vo">
+					<dd>{:get_pay_typename($vo['pay_typeid'])}：{$vo.pay_money}</dd>
+					</volist>
+				</dl>
+			</div>
+            
+             <php>if($member_info){</php>
+			<div>
+				<dl>
+					<p>会员编号：{$member_info.member_no}</p>
+					<p>会员姓名：{$member_info.member_name}</p>
+					<p>会员卡余额：{$member_info.balance}<php>if($member_info['is_msg']==1){</php>（{$member_info.discount}折卡）<php>}</php></p>
+					<php>if($member_info['numcard']){</php>
+                    <p>次卡剩余：
+                    <volist name="member_info['numcard']" id="vo">
+                    {:get_project_name($vo['project_id'])}*{$vo.card_num}次 &nbsp;
+                    </volist>
+                   </p>
+                    <php>}</php>
+                    <php>if($member_info['coursecardproject']){</php>
+					<p>疗程卡剩余：
+                    <volist name="member_info['coursecardproject']" id="vo">
+                    {:get_project_name($vo['project_id'])}*{$vo.card_num}次 &nbsp;
+                    </volist>
+                    </p>
+                    <php>}</php>
+                    <php>if($member_info['deadlinecard']){</php>
+					<p>期限卡剩余：
+                    <volist name="member_info['deadlinecard']" id="vo">
+                    {:get_project_name($vo['project_id'])}*<php>echo intval(($vo['end_time']-$vo['start_time'])/(24*3600));</php>天 &nbsp;
+                    </volist>
+                    </p>
+                     <php>}</php>
+				</dl>
+			</div>
+            <php>}</php>
+            
+            
+			<div style="padding-bottom:30px;">
+				<dl>
+					<p>订单编号：{$order_info.order_sn}</p>
+					<p>下单时间：{$order_info['createtime']|date='Y-m-d H:i:s',###}</p>
+					<p>打印时间：<php>echo date("Y-m-d H:i:s");</php></p>
+                    <p>下 单 员：{$shop_user.name}</p>
+					<p>收 银 员：{$user_info_login.name}</p>
+					<p>顾客签名：</p>
+				</dl>
+			</div>
+
+
+			
+		</div>
+		<div class="receiptfot">
+			<p>电话：{$shop_info.mobile}</p>
+			<p>地址：{$shop_info.address}</p>
+		</div>
+	</div>
+                            
+                            
+                        </div>
+                    
+                       
+                        <div class="print_setting" style="text-align:center;">
+                        	<button class="layui-btn" onClick="prn_cashier();">打印预览</button>
+                        </div>
+       				
+       
+                </div>
+                
+                
+              </div>
+ 
+          </div>
+        </div>
+        
+        
+     </div>
+    
+  </div>
+
+  </div>
+ <script src="__JS__/jquery/jQuery-2.2.0.min.js"></script>
+ <script src="__JS__/framework-ui.js"></script>
+  <script src="__STATIC__/layuiadmin/layui/layui.js"></script> 
+  <script>
+    layui.config({
+    base: '__STATIC__/layuiadmin/' //静态资源所在路径
+  }).extend({
+    index: 'lib/index' //主入口模块
+  }).use(['index', 'form'], function(){
+  		var $ = layui.$
+		,form = layui.form;
+});
+ 	var LODOP; //声明为全局变量 
+	function prn_cashier() {	
+		CreateOneFormPage();
+		
+		LODOP.PREVIEW();	
+	};
+	function CreateOneFormPage(){
+		LODOP=getLodop();
+		LODOP.PRINT_INIT("");
+		var strBodyStyle = "<link type='text/css' rel='stylesheet' href='http://s.haiyaya.vip/Public/Manager/css/print_listingtt.css' />";
+		var strFormHtml = strBodyStyle +  document.getElementById("cashier_print").innerHTML;
+		LODOP.SET_SHOW_MODE("PREVIEW_IN_BROWSE",1);
+		LODOP.SET_SHOW_MODE("HIDE_PAPER_BOARD",1);
+		LODOP.SET_SHOW_MODE("BKIMG_IN_PREVIEW",1);
+		LODOP.ADD_PRINT_HTM(0,10,"100%","100%",strFormHtml);
+		
+	};
+  </script>
+</body>
+</html>

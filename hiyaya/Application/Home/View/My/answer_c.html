@@ -1,0 +1,46 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<title>答疑解惑</title>
+<link rel="stylesheet" type="text/css" href="__CSS__/public.css" />
+<script src="__JS__/jquery.min.js"></script>
+</head>
+<body>
+<div class="top01">
+    <div class="tx"><img src="{$userinfo.head_img}"></div>
+    <div class="nr">
+        <ul>
+            <dd class="z01"><span class="bt">{$userinfo.nickname}</span><span><php>if($userinfo['sex']==1){</php>
+            <img src="__IMG__/tb01.png">
+            <php>}else if($userinfo['sex']==2){</php>
+            <img src="__IMG__/tb02.png">
+            <php>}</php></span></dd>
+            <dd class="z02">我已向Ta支付<em class="jg">2.00</em>元</dd>
+        </ul>
+    </div>
+</div>
+
+<div class="clear"></div>
+<div class="rowbox02">
+<form name="message" id="messaget" action="{:U('Mylable/doproblem')}" method="post">
+<input type="hidden" name="id" value="{$result.id}">
+	<div class="wenda01">
+        <dd class="bt">我的问题：</dd>
+        <dd class="nr">{$result.content}</dd>
+        <dd class="bt">Ta的回答：</dd>
+        <dd class="nr">{$result.r_content}</dd>
+    </div>
+    </form>
+</div>
+
+<!-- 底部悬浮 -->
+<div class="m40"></div>
+
+<!-- /底部悬浮 -->
+</body>
+</html>
+

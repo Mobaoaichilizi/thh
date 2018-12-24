@@ -1,0 +1,117 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>嗨丫丫服务评价</title>
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <link rel="stylesheet" type="text/css" href="__CSS__/aui.css" />
+    <link rel="stylesheet" type="text/css" href="__CSS__/aui-base.css" />
+    <link rel="stylesheet" type="text/css" href="__CSS__/style.css" />
+</head>
+<body>
+  <header class="aui-bar aui-bar-nav header">
+ 
+    <div class="aui-title">服务评价</div>
+  </header>
+
+  <div class="aui-content">
+    <section class="pad10e">
+      <form name="form_evaluation" id="form_evaluation">
+      <input type="hidden" name="order_id" value="{$order_info.id}">
+      <input type="hidden" name="masseur_id" value="{$masseur_info.id}">
+      <input type="hidden" name="project_order_id" value="{$project_order_info.id}">
+      	<div class="user_box padt075 padb075">
+      		<div class="user_avator">
+            <php>if($masseur_info['cover']!=''){</php>
+            <img src="{$masseur_info['cover']}" />
+            <php>}else{</php>
+            <img src="__IMG__/head_img02.png" />
+            <php>}</php>
+            </div>
+      		<div class="nick_name">{$masseur_info['nick_name']}</div>
+      		<div class="project_line">
+      			<div class="project_name">
+      				<span>{$project_order_info['title']}</span>
+      			</div>
+      		</div>
+      	</div>
+      	<div class="goods-comm">
+			<div class="goods-comm-stars">
+				<div id="rate-comm-1" class="rate-comm"></div>
+			</div>
+		</div>
+        <div class="fs75 c_999">请选择标签</div>
+        <div class="tagbox">
+        	<volist name="evalabel_list" id="vo">
+        
+        	<div <php>if($vo['id']==24){</php> class="tagItem ovd hide" <php>}else{</php> class="tagItem ovd hide" <php>}</php>>
+            	<volist name="vo['evalabel_info']" id="vtt">
+        		<div class="tag" tid="{$vtt.id}">{$vtt.label_name}</div>
+	        	</volist>
+        	</div>
+            </volist>
+        	
+        </div>
+        <div class="padt075">
+            <textarea name="content" class="input_area" placeholder="我还有话要说..."></textarea>
+        </div>
+        <div class="padt075 padb075">
+            <input type="button" id="post_view" class="aui-btn aui-btn-primary aui-btn-block" value="提交评价" />
+        </div>
+        <input type="hidden" name="score" id="score" value="0">
+        <input type="hidden" name="lable_list" id="lable_list" value="">
+        
+      </form>
+    </section>
+  </div>
+
+  <script type="text/javascript" src="__JS__/api.js"></script>
+  <script type="text/javascript" src="__JS__/jquery-2.2.3.min.js"></script>
+  <script type="text/javascript" src="__JS__/comment.js"></script>
+  <script type="text/javascript">
+      apiready = function() {
+          api.parseTapmode();
+		  
+      }
+	  var arr_list=[];
+      $('.tagItem .tag').click(function() {
+      	 if($(this).hasClass('active')) {
+		 	var lable_list=$('#lable_list').val();
+			arr_list=lable_list.split(",");
+			arr_list.splice($.inArray($(this).attr('tid'),arr_list),1);
+			$('#lable_list').val(arr_list.join(","));
+      	 	$(this).removeClass('active');
+      	 } else {
+			arr_list.push($(this).attr('tid'));
+			$('#lable_list').val(arr_list.join(","));
+      	 	$(this).addClass('active');
+      	 }
+      })
+	  $("#post_view").click(function(){
+
+		$.ajax({
+			url: "{:U('Evaluate/do_evaluation')}",    //请求的url地址
+			dataType: "json",   //返回格式为json
+			async: false, //请求是否异步，默认为异步，这也是ajax重要特性
+			data: $("#form_evaluation").serialize(),    //参数值
+			type: "post",   //请求方式
+			success: function(data) {
+				if(data.status=='1')
+				{
+					alert(data.info);
+					window.location.reload();
+				}else
+				{
+					alert(data.info);
+				}
+			},
+			error: function() {
+				alert('参数错误！');
+			}
+		});
+	});
+	  
+  </script>
+</body>
+</html>

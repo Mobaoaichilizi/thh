@@ -1,0 +1,73 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>会员中心</title>
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <link rel="stylesheet" type="text/css" href="__CSS__/aui.css" />
+    <link rel="stylesheet" type="text/css" href="__CSS__/aui-base.css" />
+    <link rel="stylesheet" type="text/css" href="__CSS__/style.css" />
+</head>
+<body>
+  <header class="aui-bar aui-bar-nav header">
+   
+    <div class="aui-title">会员中心</div>
+   
+  </header>
+  <div class="aui-content">
+      <div class="pad075">
+        <div class="card_list marb075">
+          <div class="card_item bg_d7b371 c_fff">
+            <div class="card_top">{$shop_info.shop_name}</div>
+            <div class="card_content">
+              <div class="card_img"><img src="__IMG__/card.jpg" /></div>
+              <dl class="card_dl fs7">
+                <dd>余额：¥<span class="bold fs8 padl02">{$member_info.balance}</span></dd>
+                <dd>NO：{$member_info.member_no}</dd>
+                <dd>卡有效期：永久有效</dd>
+              </dl>
+            </div>
+            <div class="card_bottom">{$shop_info.address}<span class="left"></span><span class="right"></span></div>
+          </div>
+        </div>
+        <div class="marb075 flex_between txc bg_fff padt075 padb075">
+          <dl class="flex1 ubr">
+          	<a href="{:U('My/card_list',array('i' => I('get.i')))}">
+            <dt class="fs75 c_232323 padb02">会员卡</dt>
+            <dd class="c_3dc6b6 fs7">{$total_count+1}张</dd>
+           	</a>
+          </dl>
+          <dl class="flex1 ubr">
+            <dt class="fs75 c_232323 padb02">积分</dt>
+            <dd class="c_3dc6b6 fs7">0</dd>
+          </dl>
+          <dl class="flex1">
+            <dt class="fs75 c_232323 padb02">优惠券</dt>
+            <dd class="c_3dc6b6 fs7">0张</dd>
+          </dl>
+        </div>
+        <ul class="aui-list aui-list-in">
+        <a href="{:U('My/record',array('i' => I('get.i')))}">
+          <li class="aui-list-item">
+              <div class="aui-list-item-label-icon">
+                  <i class="icon_record"></i>
+              </div>
+              <div class="aui-list-item-inner aui-list-item-arrow">
+                  <div class="aui-list-item-title">消费记录</div>
+              </div>
+          </li></a>
+          <a href="{:U('My/user_info',array('i' => I('get.i')))}">
+          <li class="aui-list-item">
+              <div class="aui-list-item-label-icon">
+                  <i class="icon_info"></i>
+              </div>
+              <div class="aui-list-item-inner aui-list-item-arrow">
+                  <div class="aui-list-item-title">会员信息</div>
+              </div>
+          </li></a>
+      </ul>
+      </div>
+  </div>
+</body>
+</html>

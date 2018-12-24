@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Index</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <link rel="stylesheet" href="__STATIC__/layuiadmin/layui/css/layui.css" media="all">
+  <link rel="stylesheet" href="__STATIC__/layuiadmin/style/admin.css" media="all">
+  <style>
+  .layui-table-cell{
+  height:auto;
+  }
+  </style>
+</head>
+<body>
+  <div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+      <div class="layui-col-md12">
+      		<div class="layui-card">
+                      <div class="layui-card-body">
+            	
+                
+                
+      			<div class="project-table-reload-btn" style="margin-bottom: 10px;">
+                  <div class="layui-inline">
+                    <input class="layui-input"  id="project-table-demoReload" placeholder="健康师名称"  autocomplete="off">
+                  </div>
+                  <button class="layui-btn" data-type="reload">搜索</button>
+                  </div>
+                  <div class="layui-form">
+                 
+                  <volist name="masseur_level" id="vo">
+                  	<input type="radio" name="is_level" value="{$vo.id}" <php>if($key==0){</php>checked<php>}</php> title="{$vo.category_name}" lay-filter="level_select">
+                    </volist>
+                  </div>
+                  <hr>
+                  
+                   <div class="layui-form">
+                 
+                 
+                  	<input type="radio" name="is_sex" value="男" title="男" lay-filter="sex_select" >
+                    <input type="radio" name="is_sex" value="女" title="女" lay-filter="sex_select" checked>
+                    
+                  </div>
+                  <hr>
+                  
+                   <div class="layui-form" >服务项目：{$shop_project_info.item_name} ￥{$shop_project_info.item_price}/{$shop_project_info.item_duration}分钟  
+                  <hr> 
+                 
+</div>
+			
+            <form class="layui-form" action="" lay-filter="component-form-group" id="commentForm">
+              <input type="radio" name="types" value="1" title="轮钟" checked lay-filter="types_select">
+               <input type="radio" name="types" value="2" title="点钟" lay-filter="types_select">
+               <input type="radio" name="types" value="4" title="抽钟"  lay-filter="types_select" >
+               <input type="radio" name="types" value="5" title="加班"  lay-filter="types_select" >
+               <input type="hidden" name="project_id" value="{$shop_project_info.id}">
+               <input type="hidden" name="project_name" value="{$shop_project_info.item_name}">
+                <input type="hidden" name="project_price" value="{$shop_project_info.item_price}">
+                 <input type="hidden" name="project_duration" value="{$shop_project_info.item_duration}">
+                 <hr> 
+                  <table class="layui-hide" id="project-table-reload" lay-filter="project"></table> 
+                       <script type="text/html" id="test-table-operate-barDemo">
+						 <input type="checkbox" name="masseur_id[]" {{#  if(d.is_types == 1){ }} checked {{#  } }} lay-skin="primary" value="{{ d.masseur_id }}">
+           			  </script>
+                       <script type="text/html" id="status_number">
+						 {{#  if(d.status == 1){ }}
+							<span class="layui-btn">早班</span>
+						  {{#  } else if(d.status==2) { }}
+							<span class="layui-btn layui-btn-normal">中班</span>
+						  {{#  } else if(d.status==3) { }}
+							<span class="layui-btn layui-btn-warm">晚班</span>
+							{{#  } else if(d.status==9) { }}
+							<span class="layui-btn layui-btn-danger">加班</span>
+							{{#  } else if(d.status==5) { }}
+							<span class="layui-btn layui-btn-disabled">请假</span>
+						  {{#  } }}
+           			  </script>
+          <div class="layui-form-item layui-hide">
+      <input type="button" lay-submit lay-filter="LAY-user-front-submit" id="LAY-user-front-submit" value="确认">
+    </div>
+</form>
+            </div>
+        </div>
+      </div>
+      
+</div>
+</div>
+ <script src="__JS__/jquery/jQuery-2.2.0.min.js"></script>
+ <script src="__JS__/framework-ui.js"></script>
+  <script src="__STATIC__/layuiadmin/layui/layui.js"></script> 
+ <script>
+ layui.config({
+    base: '__STATIC__/layuiadmin/' //静态资源所在路径
+  }).extend({
+    index: 'lib/index' //主入口模块
+  }).use(['index', 'form', 'table'], function(){
+    var $ = layui.$
+    ,form = layui.form
+	,table = layui.table
+	
+	
+	table.render({
+      elem: '#project-table-reload'
+      ,url: "{:U('Order/get_order_addmasseur',array('project_id' => $shop_project_info['id']))}"
+	  ,page: false
+      ,cols: [[
+        {field:'masseur_id', title: '选择', toolbar: '#test-table-operate-barDemo', width:100}
+        ,{field:'masseur_sn', title: '工号', width:150}
+        ,{field:'sex', title: '性别', width:150}
+		,{field:'nick_name', title: '昵称', width:150}
+        ,{field:'status', title: '班次', toolbar: '#status_number', width:150}
+		,{field:'masseur_level', title: '等级'}
+      ]]
+    });
+	
+	
+	
+	
+	
+	var $ = layui.$, project = {
+      reload: function(){
+        var projectReload = $('#project-table-demoReload');
+        //执行重载
+        table.reload('project-table-reload', {
+          where: {
+              name: projectReload.val()
+          }
+        });
+      }
+    };
+	
+	form.on('radio(level_select)', function(data){
+		table.reload('project-table-reload', {
+          where: {
+              is_level: data.value 
+          }
+        });
+	});
+	
+	form.on('radio(types_select)', function(data){
+		table.reload('project-table-reload', {
+          where: {
+              is_types: data.value 
+          }
+        });
+	});
+	form.on('radio(sex_select)', function(data){
+		table.reload('project-table-reload', {
+          where: {
+              is_sex: data.value 
+          }
+        });
+	});
+    
+    $('.project-table-reload-btn .layui-btn').on('click', function(){
+      var type = $(this).data('type');
+      project[type] ? project[type].call(this) : '';
+    }); 
+	
+});
+</script>
+</body>
+</html>

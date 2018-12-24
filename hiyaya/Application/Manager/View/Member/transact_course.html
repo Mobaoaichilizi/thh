@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>充值</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <link rel="stylesheet" href="__STATIC__/layuiadmin/layui/css/layui.css" media="all">
+  <style type="text/css">
+     .layui-form-label{
+        width: 126px;
+      }
+      .layui-input-block{
+      	width: calc(100% - 180px);
+      	display: inline-block;
+      	margin-left: 0;
+      }
+  
+      .custom_charge div{
+        padding: 3px 0;
+      }
+     
+     .leftcourse_project{
+        width: 55%;
+        float: left;
+        margin-top: -6px;
+     }
+     .rightcourse_project{
+       width: 12%;
+       float: left; 
+       margin-left: 6px;
+     }
+     .additem{
+        position: relative;
+        top: 7px;
+        right: -4px;
+        background-color: #009688;
+        border-radius: 100px;
+        padding: 0px;
+        width: 25px;
+        height: 25px;
+        line-height: 21px;
+        border: 1px solid #fff;
+        color: #fff;
+     }
+    
+     .delitem{
+        position: relative;
+        top: 7px;
+        right: 0px;
+        background-color: #009688;
+        border-radius: 100px;
+        padding: 0px;
+        width: 25px;
+        height: 25px;
+        line-height: 21px;
+        border: 1px solid #fff;
+        color: #fff;
+     }
+     .demo{
+        width: 74%;
+        margin-left: 155px;
+     }
+  </style>
+</head>
+<body>
+<div>
+  <div class="layui-card-body">
+    <form class="layui-form" lay-filter="component-form-element" id="commentForm">
+    
+        <input type="hidden"  name="member_id" value="{$info.id}">
+      <input type="hidden"  name="chain_id" value="{$info.chain_id}">
+      <input type="hidden"  name="shop_id" value="{$info.shop_id}">
+      <div class="layui-row layui-col-space10 layui-form-item">
+        
+          <div class="layui-col-lg8">
+            <label class="layui-form-label">自定义疗程充值：</label>
+            <div class="layui-input-block">
+              <input type="checkbox" name="is_custom" lay-skin="switch" lay-text="开|关" value="1" lay-filter="test-table-stateDemo">
+            </div>
+          </div>
+          <div class="card_package">
+            <div class="layui-col-md6">
+              <label class="layui-form-label">疗程卡套餐：</label>
+              <div class="layui-input-block">
+                <select id="liaocheng_id" name="liaocheng_id" class="layui-input">
+                    <option value="0">----请选择疗程卡套餐----</option>
+                    <volist name="course_list" id="card">
+                        <option value="{$card.id}">{$card.package_name}</option>
+                    </volist>
+                </select>
+
+              </div>
+            </div>
+            <div style="clear: both;"></div>
+            </div>
+            <div class="custom_charge" style="display: none;">
+              <div class="layui-col-md6 project-all">
+                <label class="layui-form-label">项目：</label>
+                <div id="project">
+                  <div name="demo" class="demo">
+  	                <div class="leftcourse_project">
+  	                  <select name="project_id[]" class="layui-input">
+  	                      <option value="">----请选择项目----</option>
+  	                      <volist name="card_list" id="card">
+  	                          <option value="{$card.id}">{$card.item_name}</option>
+  	                      </volist>
+  	                  </select>
+  	                </div>
+  	                <div class="rightcourse_project">
+  	                  <input type="text" name="card_num[]"  autocomplete="off" class="layui-input"  placeholder="次数">
+  	                </div>
+                    <button class="additem"><i class="layui-icon">&#xe654;</i></button>
+                    <button class="delitem"><i class="layui-icon">&#xe640;</i></button>
+                    <div style="clear: both;"></div>
+                  </div>
+                </div>
+                
+                
+               
+              </div> 
+               <div class="layui-col-lg8">
+                    <label class="layui-form-label">办卡价格：</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="card_money" id="card_money" autocomplete="off" class="layui-input" placeholder="请输入办卡价格">
+                    </div>
+                </div>
+                <div class="layui-col-lg8">
+                    <label class="layui-form-label">简介：</label>
+                    <div class="layui-input-block">
+                      <textarea type="text" name="description" id="description" autocomplete="off" class="layui-textarea">
+                       
+                      </textarea>
+                    </div>
+                  </div>
+                  <div class="layui-col-lg8">
+                    <label class="layui-form-label">售卡提成：</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="sellcard_reward" id="sellcard_reward" autocomplete="off" class="layui-input" placeholder="请输入售卡提成">
+                    </div>
+                  </div>
+              
+            </div>
+
+            <div style="clear: both;"></div>
+                 
+
+                  
+            <div class="layui-col-lg8">
+              <label class="layui-form-label">选择售卡技师：</label>
+              <div class="layui-input-block">
+                <select id="sellcard_masseur" name="sellcard_masseur" class="layui-input">
+                    <option value="0">----请选择售卡技师----</option>
+                    <volist name="masseur_list" id="masseur">
+                        <option value="{$masseur.id}">{$masseur.masseur_name}</option>
+                    </volist>
+                </select>
+              </div>
+            </div>
+        
+
+            <div class="layui-col-md6">
+              <label class="layui-form-label">备注：</label>
+              <div class="layui-input-block">
+              <input type="text" name="course_remark" id="course_remark" autocomplete="off" class="layui-input">
+              </div>
+            </div>
+            <div style="clear: both;"></div>
+         <div class="layui-col-md6">
+            <label class="layui-form-label">支付方式：</label>
+            <div class="layui-input-block">
+
+               <volist name="pay_list" id="pay">
+                <input type="radio" name="pay_way" value="{$pay.id}" title="{$pay.title}" <if condition="$key eq 0">checked</if>>
+              </volist>
+               
+            </div>
+          </div>
+
+        
+      </div>
+
+      <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="LAY-user-front-submit" id="LAY-user-front-submit" value="确认">
+      </div>
+    </form>
+  </div>
+</div>
+
+ <script src="__JS__/jquery/jQuery-2.2.0.min.js"></script>
+ <script src="__JS__/framework-ui.js"></script>
+  <script src="__STATIC__/layuiadmin/layui/layui.js"></script> 
+  
+<script>
+
+    layui.use( ['form','laydate'], function(){
+       form = layui.form;
+        var $ = layui.$;
+        var laydate = layui.laydate;
+        form.render(null, 'component-form-element');
+        laydate.render({
+            elem: '#birthday'
+        });
+        //监听状态操作
+        form.on('switch(test-table-stateDemo)', function(obj){
+            
+            if(obj.elem.checked==true)
+            {
+              $('.card_package').css('display','none');
+              $('.custom_charge').css('display','block');
+            }
+            else
+            {
+              $('.card_package').css('display','block');
+              $('.custom_charge').css('display','none');
+            }
+        })
+
+        var element = layui.element;
+        var $ = layui.$,active = {
+            reload: function(){
+                
+            }
+            ,add: function() {
+              layer.alert('内容');
+                $.modalOpen({
+                    id: "Form5",
+                    title: "添加会员",
+                    url: "{:U('Member/add')}",
+                    width: "500px",
+                    height: "600px",
+                    callBack: function (index, layero) {
+                         var iframeWindow = window['layui-layer'+ index]
+                        ,submitID = 'LAY-user-front-submit'
+                        ,submit = layero.find('iframe').contents().find('#'+ submitID);
+                        submit.click();
+                    }
+                });
+            }
+           
+        };
+
+        $('.data-table-reload-btn .layui-btn').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+         //监听提交
+        form.on('submit(LAY-user-front-submit)', function(data){
+          $.submitForm({
+              url: "{:U('Member/transact_course')}",
+              param: $("#commentForm").serialize(),
+              success: function () {
+
+                // window.location.reload();
+               top.Form2.Refresh();
+
+              }
+            }) 
+
+            return false;
+        });
+
+    });
+
+
+     
+
+      $(".additem").click(function () {
+
+
+          $(this).parents("[name='demo']").clone(true).appendTo($("#project"));
+          layui.form.render();
+          return false;
+      })
+      $(".delitem").click(function () {
+
+        $(this).parent().remove();
+        return false;
+    })
+</script>
+</body>
+</html>
+

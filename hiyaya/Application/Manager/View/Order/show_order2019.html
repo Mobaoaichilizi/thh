@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>刘国强</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <link rel="stylesheet" href="__STATIC__/layuiadmin/layui/css/layui.css" media="all">
+  <link rel="stylesheet" href="__STATIC__/layuiadmin/style/admin.css" media="all">
+  <style>
+  .layui-col-xs3 .layui-btn{
+  width:105px;
+  }
+  .yhh_money {
+    color: #ff7518;
+  }
+   dt{
+  line-height:36px;
+  
+  }
+  dl dt i{
+ 	margin: 10px 0;
+    float: left;
+    margin-right: 8px;
+    display: inline-block;
+    height: 16px;
+    width: 3px;
+    background-color: #0ae; 
+  }
+  dl dd{
+    padding-left: 11px;
+    font-size: 14px;
+    line-height: 32px;
+  }
+  .listItem {position:absolute; width:93px; z-index:9999; margin-left:10px; border:1px solid #e4e4e4; background-color:#ffffff;transition: all 0.5s ease-in-out;}
+  .listItem li{
+  text-align:center;
+  padding:2px 12px;
+  cursor:pointer;
+  font-size:12px; text-align:center; line-height:25px;color:#666; 
+  }
+  .listItem li:hover{
+  background-color:#F2F2F2;
+  }
+.dspn {display:none;}
+.ant-dropdown-link,.ant-dropdown-link:hover{
+font-size:14px;
+color:#1E9FFF;
+cursor:pointer;
+}
+.dropdown-more{
+    font-style: normal;
+}
+  </style>
+</head>
+<body>
+  <div class="layui-fluid" id="component-tabs">
+    <div class="layui-row layui-col-space15">
+      <div class="layui-col-md12">
+      
+      
+      		<div class="layui-card">
+              <div class="layui-card-header" style="height:80px;">订单编号：{$order_info.order_sn}  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <php>if($order_info['status']==-1){</php> 订单已取消 <php>}else{</php>预计结束时间：{$order_info['createtime']+60*$finish_time|date='Y-m-d H:i:s',###}<php>}</php>
+              <br />
+              开单时间：{$order_info['createtime']|date='Y-m-d H:i:s',###} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;服务开始时间：<php>if($up_start_time['up_time']==0){</php>服务未开始<php>}else{</php>{$up_start_time['up_time']|date='Y-m-d H:i:s',###}<php>}</php>
+              </div>
+              
+              <php>if($order_info['member_id']!=0){</php>
+                     <div class="layui-card-header" style="height:80px;">会员编号：{$member_info.member_no}  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 会员姓名：{$member_info.member_name }  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 会员生日：{$member_info.birthday} 
+                      <php>if($order_info['status']==1){</php>
+                       <a onClick="cancel_member({$order_info.id});" style="color:#1E9FFF; float:right; cursor:pointer;">取消选择 ></a>
+                       <php>}</php>
+                  <br />
+                  会员卡卡号：{$member_info.member_card}  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;会员卡余额：{$member_info.balance} 
+                  </div>
+               <php>}else{</php>
+               
+               <php>if($order_info['status']==1){</php>
+                <div class="layui-card-header"><a onClick="select_member({$order_info.id});" style="color:#1E9FFF;cursor:pointer;">选择会员 ></a> </div>
+                <php>}</php>
+                
+                <php>}</php>
+              
+              
+              <div class="layui-card-body" style="height:100px;">
+              
+                <div class="layui-col-sm6" >
+                	<div class="layui-col-xs3" style="margin-bottom:15px;">
+                    
+                        <php>if($order_info['status']==-1){</php>
+                            <button class="layui-btn layui-btn-disabled">加技师</button>
+                        <php>}else if($order_info['status']==1){</php>
+                            <button class="layui-btn layui-btn-normal" onClick="additional_project({$order_info.id},1)">加技师</button>
+                        <php>}else if($order_info['status']==2){</php>
+                            <button class="layui-btn layui-btn-disabled">加技师</button>
+                        <php>}</php>
+                    	
+                    </div>
+                    <div class="layui-col-xs3" style="margin-bottom:15px;">
+                    
+                    
+                        <php>if($order_info['status']==-1){</php>
+                            <button class="layui-btn layui-btn-disabled">加项目</button>
+                        <php>}else if($order_info['status']==1){</php>
+                            <button class="layui-btn layui-btn-normal" onClick="additional_project({$order_info.id},1)">加项目</button>
+                        <php>}else if($order_info['status']==2){</php>
+                            <button class="layui-btn layui-btn-disabled">加项目</button>
+                        <php>}</php>
+                    
+                    </div>
+                    <div class="layui-col-xs3" style="margin-bottom:15px;">
+                    
+                        <php>if($order_info['status']==-1){</php>
+                            <button class="layui-btn layui-btn-disabled">加产品</button>
+                        <php>}else if($order_info['status']==1){</php>
+                            <button class="layui-btn layui-btn-normal" onClick="additional_project({$order_info.id},2)">加产品</button>
+                        <php>}else if($order_info['status']==2){</php>
+                            <button class="layui-btn layui-btn-disabled">加产品</button>
+                        <php>}</php>
+ 
+                    </div>
+                    <div class="layui-col-xs3" style="margin-bottom:15px;">
+                    
+                    	<php>if($order_info['status']==-1){</php>
+                            <button class="layui-btn layui-btn-disabled">加推荐提成</button>
+                        <php>}else if($order_info['status']==1){</php>
+                            <button class="layui-btn layui-btn-normal" onClick="additional_project({$order_info.id},3)">加推荐提成</button>
+                        <php>}else if($order_info['status']==2){</php>
+                            <button class="layui-btn layui-btn-disabled">加推荐提成</button>
+                        <php>}</php>
+                        
+                    </div>
+                    <div class="layui-col-xs3" style="margin-bottom:15px;">
+                    	
+                        <php>if($order_info['status']==-1){</php>
+                            <button class="layui-btn layui-btn-disabled">全部上钟</button>
+                        <php>}else if($order_info['status']==1){</php>
+                        
+                        <php>if($up_count > 0){</php>
+                            <button class="layui-btn layui-btn-normal" onClick="all_up({$order_info.id})">全部上钟</button>
+                         <php>}else{</php> 
+                         	 <button class="layui-btn layui-btn-disabled">全部上钟</button>
+                         <php>}</php>
+                            
+                        <php>}else if($order_info['status']==2){</php>
+                            <php>if($up_count > 0){</php>
+                            <button class="layui-btn layui-btn-normal" onClick="all_up({$order_info.id})">全部上钟</button>
+                         <php>}else{</php> 
+                         	 <button class="layui-btn layui-btn-disabled">全部上钟</button>
+                         <php>}</php>
+                        <php>}</php>
+
+                    </div>
+                     <div class="layui-col-xs3" style="margin-bottom:15px;">
+                     	
+                        <php>if($order_info['status']==-1){</php>
+                            <button class="layui-btn layui-btn-disabled">全部下钟</button>
+                        <php>}else if($order_info['status']==1){</php>
+                        
+                        
+                        <php>if($down_count > 0 && $up_count==0){</php>
+                            <button class="layui-btn layui-btn-normal" onClick="all_down({$order_info.id})">全部下钟</button>
+                         <php>}else{</php> 
+                         	 <button class="layui-btn layui-btn-disabled">全部下钟</button>
+                         <php>}</php> 
+                            
+                            
+                        <php>}else if($order_info['status']==2){</php>
+                        	
+                           <php>if($down_count > 0 && $up_count==0){</php>
+                             <button class="layui-btn layui-btn-normal" onClick="all_down({$order_info.id})">全部下钟</button>
+                         <php>}else{</php> 
+                         	 <button class="layui-btn layui-btn-disabled">全部下钟</button>
+                         <php>}</php>
+                            
+                           
+                            
+                        <php>}</php>
+                     
+
+                    </div>
+                     <div class="layui-col-xs3" style="margin-bottom:15px;">
+                     	
+                        <php>if($order_info['status']==-1){</php>
+                            <button class="layui-btn layui-btn-disabled">换包间</button>
+                        <php>}else if($order_info['status']==1){</php>
+                        
+                        
+                            <button class="layui-btn layui-btn-normal" onClick="replace_room({$order_info.id});">换包间</button>
+                            
+                            
+                        <php>}else if($order_info['status']==2){</php>
+                        	
+                          <php>if($down_count==0){</php>
+                            <button class="layui-btn layui-btn-disabled">换包间</button>
+                           <php>}else{</php> 
+                         	 <button class="layui-btn layui-btn-normal" onClick="replace_room({$order_info.id});">换包间</button>
+                        <php>}</php>  
+                            
+                        <php>}</php>
+                        
+                    </div>
+                     <div class="layui-col-xs3" style="margin-bottom:15px;">
+                     		
+                        <php>if($order_info['status']==-1){</php>
+                        	<button class="layui-btn layui-btn-disabled">取消订单</button>
+                        <php>}else if($order_info['status']==1){</php>
+                        
+                        	<php>if($is_one_uptime > 0){</php>
+                         	 <button class="layui-btn layui-btn-disabled">取消订单</button>
+                             <php>}else{</php> 
+                              <button class="layui-btn layui-btn-normal" onClick="cancel_order({$order_info.id});">取消订单</button>
+                         	<php>}</php> 
+                            
+                        <php>}else if($order_info['status']==2){</php>
+                            <button class="layui-btn layui-btn-disabled">取消订单</button>
+                        <php>}</php>
+                        
+                    </div>
+                </div>
+                
+                 <div class="layui-col-sm6">
+                  <form class="layui-form" action="" lay-filter="component-form-group" id="commentForm">
+                 <textarea name="note" placeholder="请输入" class="layui-textarea"></textarea>
+                  <div class="layui-form-item layui-hide">
+                  <input type="button" lay-submit lay-filter="LAY-orders-front-submit" id="LAY-orders-front-submit" value="确认">
+                </div>
+                 </form>
+                </div>
+              </div>
+              
+               <div class="layui-card-body" style="display:table; width:96%;">
+               
+               <div class="layui-tab layui-tab-brief" lay-filter="component-tabs-brief">
+                          <ul class="layui-tab-title">
+                            <li class="layui-this">消费明细</li>
+                            <php>if($order_info['status']==2){</php>
+                            <li>支付明细</li>
+                            <php>}</php>
+                          </ul>
+                          <div class="layui-tab-content">
+                            <div class="layui-tab-item layui-show">
+                             	
+                             <div class="layui-col-sm12">
+                            <div class="layui-card">
+           					 		<table class="layui-table">
+                                      <thead>
+                                        <tr>
+                                          <th width="150" style="padding:0px; text-align:center;">健康师</th>
+                                          <th>项目</th>
+                                          <th>开始时间</th>
+                                          <th>结束时间</th>
+                                          <th>上钟类型</th>
+                                          <th>单价</th>
+                                          <th>数量</th>
+                                          <th>金额</th>
+                                          <th width="100">操作</th>
+                                        </tr> 
+                                      </thead>
+                                      <tbody>
+                                      <php>
+                                      $project_total_price=0;
+                                      </php>
+                                      <volist name="result_project" id="vo">
+                                      <tr>
+                                      		<td rowspan="{$vo.project_count}" align="center">
+                                            {$vo.nick_name}<br />
+                                            <a class="ant-dropdown-link" onClick="operation(this);">操作 <i class="dropdown-more">∨</i>
+                                          <ul class="listItem" style="display: none">
+                                          	<php>if($order_info['status']==1 || $order_info['status']==2){</php>
+                                            <php>if($vo['up_time']==0){</php>
+                                                <li onClick="one_up_clock({$vo.id})">上钟</li>
+                                            <php>
+                                            }
+                                            </php> 
+                                            <php>if($vo['down_time']==0 && $vo['up_time'] > 0){</php>
+                                                <li onClick="one_down_clock({$vo.id})">下钟</li>
+                                            <php>
+                                            }
+                                            </php> 
+                                            <php>
+                                             }
+                                             </php> 
+                                            <php>if($order_info['status']==1 && $vo['up_time']==0){</php>
+                                                <li onClick="update_master({$vo.id})">更换健康师</li>
+                                                <li onClick="del_project({$vo.id})">删除</li>
+                                            <php>
+                                             }
+                                            </php> 
+                                          </ul>
+                                      </a></td>
+                                      		<td>{$vo.title}<br />￥{$vo.unit_price}/{$vo.duration}分钟</td>
+                                            <td>
+                                            <php>if($vo['up_time']==0){</php>
+                                            -
+                                            <php>}else{</php>
+                                            {$vo['up_time']|date='Y-m-d H:i:s',###}
+                                            <php>}</php>
+                                            </td>
+                                            <td>
+                                            <php>if($vo['down_time']==0){</php>
+                                            -
+                                            <php>}else{</php>
+                                            {$vo['down_time']|date='Y-m-d H:i:s',###}
+                                            <php>}</php>
+                                            </td>
+                                            <td><php>if($vo['types']==1){</php>轮钟<php>}else if($vo['types']==2){</php>点钟<php>}else if($vo['types']==3){</php>加钟<php>}</php></td>
+                                            <td>￥{$vo.unit_price}</td>
+                                            <td>{$vo.number}</td>
+                                            <td>￥{$vo.total_price}</td>
+                                            <td align="center">
+                                      			<php>if($order_info['status']==1 && $vo['up_time']==0){</php>
+                                              <a class="layui-btn layui-btn-danger layui-btn-xs" onClick="del_project({$vo.id})"><i class="layui-icon layui-icon-delete"></i>删除</a>
+                                            <php>
+                                             }
+                                            </php> 
+                                           </td>  
+                                           
+                                            </tr>
+                                            <php>
+                                            $project_total_price+=$vo['total_price'];
+                                            </php>
+                                            <volist name="vo['project_list']" id="vott">
+                                            
+                                             <tr>
+                                      		<td>{$vott.title}<br />￥{$vott.unit_price}/{$vott.duration}分钟</td>
+                                            <td>
+                                            <php>if($vott['up_time']==0){</php>
+                                            -
+                                            <php>}else{</php>
+                                            {$vott['up_time']|date='Y-m-d H:i:s',###}
+                                            <php>}</php>
+                                            </td>
+                                            <td>
+                                            <php>if($vott['down_time']==0){</php>
+                                            -
+                                            <php>}else{</php>
+                                            {$vott['down_time']|date='Y-m-d H:i:s',###}
+                                            <php>}</php>
+                                            </td>
+                                            <td><php>if($vott['types']==1){</php>轮钟<php>}else if($vott['types']==2){</php>点钟<php>}else if($vott['types']==3){</php>加钟<php>}</php></td>
+                                            <td>￥{$vott.unit_price}</td>
+                                            <td>{$vott.number}</td>
+                                            <td>￥{$vott.total_price}</td>
+                                            <td align="center">
+                                         
+                                            <php>if($order_info['status']==1 && $vott['up_time']==0){</php>
+                                              <a class="layui-btn layui-btn-danger layui-btn-xs" onClick="del_project({$vott.id})"><i class="layui-icon layui-icon-delete"></i>删除</a>
+                                            <php>
+                                             }
+                                            </php> 
+                                     
+                                           </td>  
+                                           
+                                            </tr>
+                                            <php>
+                                            $project_total_price+=$vott['total_price'];
+                                            </php>
+                                            
+                                            </volist> 
+
+                                            </volist>
+                                      </tbody>
+                                    </table>
+                              </div>
+                               <div style="float:right;">项目小计：￥{$project_total_price}</div>
+                            </div>
+                        
+                           
+                            <div class="layui-col-sm6" style="padding-right:30px;">
+                           <div class="layui-card">
+                           			
+                                    <table class="layui-table">
+                                      <thead>
+                                        <tr>
+                                          <th>产品</th>
+                                          <th>健康师</th>
+                                          <th>单价</th>
+                                          <th>数量</th>
+                                          <th>金额</th>
+                                          <th>操作</th>
+                                        </tr> 
+                                      </thead>
+                                      <tbody>
+                                      <php>
+                                      $product_total_price=0;
+                                      </php>
+                                       <volist name="result_product" id="vo">
+                                      <tr>
+                                      		<td>{$vo.title}</td>
+                                            <td>{$vo.nick_name}</td>
+                                            <td>￥{$vo.unit_price}</td>
+                                            <td>{$vo.number}</td>
+                                            <td>￥{$vo.total_price}</td>
+                                            <td>
+                                            <php>if($order_info['status']==-1 || $order_info['status']==2){</php>
+                                            -
+                                            <php>
+                                     }else{
+                                      </php>
+                                      <a class="layui-btn layui-btn-danger layui-btn-xs" onClick="del_product({$vo.id})"><i class="layui-icon layui-icon-delete"></i>删除</a>
+                                       <php>
+                                     }
+                                      </php>
+                                            
+                                            
+                                            </td>
+                                            </tr>
+                                              <php>
+                                            $product_total_price+=$vo['total_price'];
+                                            </php>
+                                             </volist>
+                                      </tbody>
+                                    </table>
+           					  
+                               </div>
+                               <div style="float:right;">产品小计：￥{$product_total_price}</div>
+                            </div>
+                         
+                          
+                            <div class="layui-col-sm6" >
+                            <div class="layui-card">
+           					 	<table class="layui-table">
+                                      <thead>
+                                        <tr>
+                                          <th>推荐项目</th>
+
+                                          <th>推荐人员</th>
+                                          <th>数量</th>
+                                          <th>操作</th>
+                                        </tr> 
+                                      </thead>
+                                      <tbody>
+                                      <volist name="result_reward" id="vo">
+                                      <tr>
+                                      		<td>{$vo.title}</td>
+                                            <td>{$vo.nick_name}</td>
+                                            <td>{$vo.number}</td>
+                                            <td>
+                                            
+                                            <php>if($order_info['status']==-1 || $order_info['status']==2){</php>
+                                            -
+                                            <php>
+                                     }else{
+                                      </php>
+                                      <a class="layui-btn layui-btn-danger layui-btn-xs" onClick="del_reward({$vo.id})"><i class="layui-icon layui-icon-delete"></i>删除</a>
+                                       <php>
+                                     }
+                                      </php>
+                                            
+                                           </td>
+                                            </tr>
+                                              </volist>
+                                      </tbody>
+                                    </table>
+                            </div>
+      
+                          </div>
+                               
+                               
+                            </div>
+                             <php>if($order_info['status']==2){</php>
+                            <div class="layui-tab-item">
+                            
+                           		<div class="layui-col-sm12">
+                            <div class="layui-card">
+           					 		<table class="layui-table">
+                                      <thead>
+                                        <tr>
+                                          <th>项目/产品</th>
+                                          <th>单价</th>
+                                          <th>数量</th>
+                                          <th>优惠方式</th>
+                                          <th>金额</th>
+                                        </tr> 
+                                      </thead>
+                                      <tbody>
+                                      <volist name="result_project" id="vo">
+                                            <tr>
+                                            <td>{$vo.title}<br />￥{$vo.unit_price}/{$vo.duration}分钟</td>
+                                            <td>￥{$vo.unit_price}</td>
+                                            <td>{$vo.number}</td>
+                                            <td>
+                                            <php>if($vo['card_type']==0){</php>
+                                            	无优惠
+                                            <php>}else if($vo['card_type']==1){</php>
+                                            	会员卡打折
+                                            <php>}else if($vo['card_type']==2){</php>
+                                            	次卡抵扣
+                                            <php>}else if($vo['card_type']==3){</php>
+                                            	期限卡抵扣
+                                            <php>}else if($vo['card_type']==4){</php>
+                                            	疗程卡抵扣
+                                            <php>}</php>
+                                            </td>
+                                            <td>
+                                            <php>if($vo['card_type']==0){</php>
+                                            	<span class="yhh_money">￥{$vo.total_price}</span>
+                                            <php>}else{</php>
+                                            	<span class="yhh_money">￥{$vo.pay_money}</span>
+                                                <br />
+                                                <span style="text-decoration: line-through;">￥{$vo.total_price}</span>
+                                            <php>}</php> 
+                                            </td>
+                                            </tr>
+                                       </volist>
+                                        <volist name="result_product" id="vo">
+                                      <tr>
+                                      		<td>{$vo.title}</td>
+                                            <td>￥{$vo.unit_price}</td>
+                                            <td>{$vo.number}</td>
+                                            <td>
+                                            <php>if($vo['card_type']==0){</php>
+                                            	无优惠
+                                            <php>}else if($vo['card_type']==1){</php>
+                                            	会员卡打折
+                                            <php>}else if($vo['card_type']==2){</php>
+                                            	次卡抵扣
+                                            <php>}else if($vo['card_type']==3){</php>
+                                            	期限卡抵扣
+                                            <php>}else if($vo['card_type']==4){</php>
+                                            	疗程卡抵扣
+                                            <php>}</php>
+                                            </td>
+                                            <td>
+                                            <php>if($vo['card_type']==0){</php>
+                                            	<span class="yhh_money">￥{$vo.total_price}</span>
+                                            <php>}else{</php>
+                                            	<span class="yhh_money">￥{$vo.pay_money}</span>
+                                                <br />
+                                                <span style="text-decoration: line-through;">￥{$vo.total_price}</span>
+                                            <php>}</php> 
+                                            </td>
+                                            </tr>
+                                             
+                                             </volist>
+                                      </tbody>
+                                    </table>
+                              </div>
+                               <div style="float:right;">
+                               <dl>
+                                <dt>
+                                <i></i>
+                                <span>订单原价：</span><span>￥{$project_total_price+$product_total_price}</span>
+                                </dt>
+                                <php>if(($hykzk_sum-$hykzk_pay_sum)+($product_hykzk_sum-$product_hykzk_pay_sum)!=0){</php>
+                                   <dd>
+                                   <span>会员卡打折：</span>
+                                   <span>-￥{$hykzk_sum-$hykzk_pay_sum+$product_hykzk_sum-$product_hykzk_pay_sum}</span>
+                                   </dd> 
+                                 <php>}</php>  
+                                 <php>if($ckzk_sum!=0){</php>
+                                   <dd>
+                                   <span>次卡抵扣：</span>
+                                   <span>-￥ {$ckzk_sum}</span>
+                                   </dd>
+                                    <php>}</php>  
+                                    <php>if($qxkzk_sum!=0){</php>
+                                    <dd>
+                                   <span>期限卡抵扣：</span>
+                                   <span>-￥ {$qxkzk_sum}</span>
+                                   </dd>
+                                    <php>}</php>  
+                                    <php>if($lckzk_sum!=0){</php>
+                                    <dd>
+                                   <span>疗程卡抵扣：</span>
+                                   <span>-￥ {$lckzk_sum}</span>
+                                   </dd>
+                                   <php>}</php> 
+                                   <php>if($order_info['preferential_amount']!=0){</php>
+                                    <dd>
+                                   <span>整单优惠：</span>
+                                   <span>-￥ {$order_info['preferential_amount']}</span>
+                                   </dd>
+                                   <php>}</php>
+                                   <dt>
+                                <i></i>
+                                <span>应收：</span><span>￥{$project_total_price+$product_total_price-($hykzk_sum-$hykzk_pay_sum+$product_hykzk_sum-$product_hykzk_pay_sum)-$ckzk_sum-$qxkzk_sum-$lckzk_sum-$order_info['preferential_amount']}</span>
+                                </dt> 
+                              </dl>
+                               
+                               
+                               </div>
+                            </div>
+                            
+                            </div>
+                            <php>}</php>
+          
+                          </div>
+                        </div>
+               
+               
+               
+              			
+                          
+                          </div>
+             </div>
+          
+        </div>
+      </div>
+</div>
+</div>
+<script src="__JS__/jquery/jQuery-2.2.0.min.js"></script>
+<script src="__JS__/framework-ui.js"></script>
+<script src="__STATIC__/layuiadmin/layui/layui.js"></script> 
+<script>
+ layui.config({
+    base: '__STATIC__/layuiadmin/' //静态资源所在路径
+  }).extend({
+    index: 'lib/index' //主入口模块
+  }).use(['index', 'form', 'table'], function(){
+    var $ = layui.$
+    ,form = layui.form
+	,element = layui.element
+	,table = layui.table
+	
+	//去付款
+	form.on('submit(LAY-orders-front-submit)', function(data){
+		var linkurl="{:U('Order/go_pay',array('orderid'=>$order_info['id']))}";
+		$.modalOpen({
+			id: "Form5",
+			title: "付款",
+			url: linkurl,
+			width: "1100px",
+			height: "770px",
+			callBack: function (index, layero) {
+				 var submitID = 'LAY-pay-front-submit'
+				,submit = layero.find('iframe').contents().find('#'+ submitID);
+				submit.click();
+				//top.layer.close(index);
+			}
+		});
+	});	
+
+});
+</script>
+<script language="javascript">
+<php>if($order_info['status']==2 || $order_info['status']==-1){</php>
+$(".layui-layer-btn0", parent.document).hide();
+<php>}</php>
+//删除推荐提成
+function del_reward(id)
+{
+	$.deleteForm({
+		prompt: "您确认要删除推荐提成？",
+		url: "{:U('Order/del_reward')}",
+		param: { id: id},
+		success: function () {
+		   Refresh();
+		}
+	});
+}
+//删除产品
+function del_product(id)
+{
+	$.deleteForm({
+		prompt: "您确认要删除产品？",
+		url: "{:U('Order/del_product')}",
+		param: { id: id},
+		success: function () {
+		   Refresh();
+		}
+	});
+}
+//删除项目
+function del_project(id)
+{
+	$.deleteForm({
+		prompt: "您确认要删除项目？",
+		url: "{:U('Order/del_project')}",
+		param: { id: id},
+		success: function () {
+		   Refresh();
+		}
+	});
+}
+//取消订单
+function cancel_order(id)
+{
+	$.deleteForm({
+		prompt: "您确认要取消订单？",
+		url: "{:U('Order/cancel_order')}",
+		param: { id: id},
+		success: function () {
+		   Refresh();
+		   $.currentWindow().Refresh();
+		}
+	});
+}
+//全部上钟
+function all_up(id)
+{
+	$.deleteForm({
+		prompt: "您确认要全部上钟？",
+		url: "{:U('Order/all_up')}",
+		param: { id: id},
+		success: function () {
+		   Refresh();
+		}
+	});
+}
+//全部下钟
+function all_down(id)
+{
+	$.deleteForm({
+		prompt: "您确认要全部下钟？",
+		url: "{:U('Order/all_down')}",
+		param: { id: id},
+		success: function () {
+		   Refresh();
+		}
+	});
+}
+//单个上钟
+function one_up_clock(id)
+{
+	$.deleteForm({
+		prompt: "您确认要上钟？",
+		url: "{:U('Order/one_up_clock')}",
+		param: { id: id},
+		success: function () {
+		   Refresh();
+		}
+	});
+}
+//单个下钟
+function one_down_clock(id)
+{
+	$.deleteForm({
+		prompt: "您确认要下钟？",
+		url: "{:U('Order/one_down_clock')}",
+		param: { id: id},
+		success: function () {
+		   Refresh();
+		}
+	});
+}
+//追加技师项目产品提成
+function additional_project(cid,typeid)
+{
+	var linkurl="{:U('Order/additional_project',array('orderid'=>'nidval','typeid'=>'typeidval'))}";
+	linkurl=linkurl.replace('nidval', cid),
+	linkurl=linkurl.replace('typeidval', typeid),
+	$.modalOpen({
+		id: "Form4",
+		title: "追加信息",
+		url: linkurl,
+		width: "1100px",
+		height: "770px",
+		callBack: function (index, layero) {
+			 var iframeWindow = window['layui-layer'+ index]
+			,submitID = 'LAY-orders-front-submit'
+			,submit = layero.find('iframe').contents().find('#'+ submitID);
+			submit.click();
+			//top.layer.close(index);
+		}
+	});
+}
+//换包间
+function replace_room(cid)
+{
+	var linkurl="{:U('Order/replace_room',array('orderid'=>'nidval'))}";
+	linkurl=linkurl.replace('nidval', cid),
+	$.modalOpen({
+		id: "Form4",
+		title: "更换包间",
+		url: linkurl,
+		width: "600px",
+		height: "370px",
+		callBack: function (index, layero) {
+			 var iframeWindow = window['layui-layer'+ index]
+			,submitID = 'LAY-orders-front-submit'
+			,submit = layero.find('iframe').contents().find('#'+ submitID);
+			submit.click();
+			//top.layer.close(index);
+		}
+	});
+}
+//选择会员
+function select_member(cid)
+{
+	var linkurl="{:U('Order/select_member',array('orderid'=>'nidval'))}";
+	linkurl=linkurl.replace('nidval', cid),
+	$.modalOpen({
+		id: "Form4",
+		title: "选择会员",
+		url: linkurl,
+		width: "1100px",
+		height: "770px",
+		callBack: function (index, layero) {
+			 var iframeWindow = window['layui-layer'+ index]
+			,submitID = 'LAY-user-front-submit'
+			,submit = layero.find('iframe').contents().find('#'+ submitID);
+			submit.click();
+			//top.layer.close(index);
+		}
+	});
+}
+//换技师
+function update_master(cid)
+{
+	var linkurl="{:U('Order/update_master',array('projectid'=>'nidval'))}";
+	linkurl=linkurl.replace('nidval', cid),
+	$.modalOpen({
+		id: "Form4",
+		title: "更换健康师",
+		url: linkurl,
+		width: "1100px",
+		height: "770px",
+		callBack: function (index, layero) {
+			 var iframeWindow = window['layui-layer'+ index]
+			,submitID = 'LAY-user-front-submit'
+			,submit = layero.find('iframe').contents().find('#'+ submitID);
+			submit.click();
+			//top.layer.close(index);
+		}
+	});
+}
+//取消会员
+function cancel_member(id)
+{
+	$.deleteForm({
+		prompt: "您确认要取消会员吗？",
+		url: "{:U('Order/cancel_member')}",
+		param: { id: id},
+		success: function () {
+		   Refresh();
+		}
+	});
+}
+
+function Refresh()
+{
+	location.reload();
+}
+
+function operation(obj) {
+	$(obj).find(".listItem").toggle();
+}
+</script>
+</body>
+</html>

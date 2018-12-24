@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>预约列表</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <link rel="stylesheet" href="__STATIC__/layuiadmin/layui/css/layui.css" media="all">
+  <link rel="stylesheet" href="__STATIC__/layuiadmin/style/admin.css" media="all">
+</head>
+<body>
+<div class="layui-fluid data-table-reload-btn" >
+  <div class="layui-row layui-col-space15">
+    <div class="layui-col-md12">
+      <div class="layui-card">
+        <div class="layui-form layui-card-header layuiadmin-card-header-auto " style="padding:10px 0px;">
+          <div class="layui-form-item" >
+            <div class="layui-inline">
+              <label class="layui-form-label">客人姓名：</label>
+              <div class="layui-input-block">
+                <input class="layui-input" name="keywords" id="data-table-search" autocomplete="off">
+              </div>
+            </div>
+            <div class="layui-inline">
+              <label class="layui-form-label">手机号：</label>
+              <div class="layui-input-block">
+                <input class="layui-input" name="member_tel" id="data-member_tel-search" autocomplete="off">
+              </div>
+            </div>
+            <div class="layui-inline">
+              <label class="layui-form-label">预约状态:</label>
+              <div class="layui-input-block">
+                <select name="status"  id="status" lay-verify="required" lay-search>
+                  <option value="0">请选择预约状态</option>
+                  <option value="1">正常(已接受)</option>
+                  <option value="2">已开单</option>
+                  <option value="3">已取消</option>
+                </select>
+              </div>
+            </div>
+            <div class="layui-inline">
+              <button class="layui-btn" data-type="reload">搜 索</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="layui-card-body">
+          <div style="padding-bottom: 10px;">
+            <!-- <button class="layui-btn layuiadmin-btn-useradmin" data-type="batchdel">删除</button> -->
+            <button class="layui-btn layuiadmin-btn-useradmin" data-type="add">添加预约</button>
+          </div>
+              <table class="layui-hide" id="data-table-operate" lay-filter="data-table-operate"></table>
+              <script type="text/html" id="data-table-operate-barDemo">
+
+                <a class="layui-btn layui-btn-sm"  lay-event="order">开单</a>
+                <a class="layui-btn layui-btn-sm"  lay-event="edit">编辑</a>
+                <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">取消</a>
+              </script>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+  <script src="__JS__/jquery/jQuery-2.2.0.min.js"></script>
+  <script src="__JS__/framework-ui.js"></script>
+<script src="__STATIC__/layuiadmin/layui/layui.js"></script>
+<script>
+    layui.config({
+        base: '__STATIC__/layuiadmin/' //静态资源所在路径
+      }).extend({
+        index: 'lib/index' //主入口模块
+      }).use(['index', 'table'], function(){
+        var table = layui.table;
+        var $ = layui.$;
+  
+
+        table.render({
+            elem: '#data-table-operate'
+            ,url: "{:U('Appointment/info')}"
+            ,layout: ['limit', 'count', 'prev', 'page', 'next', 'skip'] //自定义分页布局
+            ,cols: [[
+                {field:'reservation_time', width:160, title: '预约服务时间', sort: true}
+                ,{field:'member', width:150, title: '客人信息', sort: true}
+                ,{field:'member_num', width:100, title: '客数'}
+                ,{field:'room', width:100, title: '包间'}
+                ,{field:'reservation_info', width:200, title: '预约信息',}
+                ,{field:'is_lock', width:100, title: '锁定健康师时间'}
+                ,{field:'order_money', width:100, title: '订单金额'}
+                ,{field:'createtime', width:180, title: '创建时间'}
+                ,{field:'status', width:100, title: '预约状态'}
+                ,{width:178, align:'center',title: '操作', align:'center', fixed: 'right', toolbar:  '#data-table-operate-barDemo'}
+            ]]
+            ,page: true
+        });
+
+
+        //查看详情
+        //监听表格复选框选择
+        table.on('checkbox(data-table-operate)', function(obj){
+            console.log(obj)
+        });
+        //监听工具条
+        table.on('tool(data-table-operate)', function(obj){
+
+            var data = obj.data;
+            if(obj.event === 'order'){
+                // layer.msg('ID：'+ data.id + ' 的查看操作');
+                var shopid=data.id;
+                var linkurl="{:U('Appointment/order',array('id'=>'idval'))}";
+                linkurl=linkurl.replace('idval', shopid),
+                layer.open({
+                    type: 2,
+                    title: '开单',
+                    maxmin: false,
+                    shadeClose: true, //点击遮罩关闭层
+                    area : ['550px' , '450px'],
+                    btn: ['确认', '关闭'],
+                    content:linkurl,
+                    btnclass: ['btn btn-primary', 'btn btn-danger'],
+                    yes: function(index, layero){
+                        var iframeWindow = window['layui-layer-iframe'+ index]
+                            ,submitID = 'LAY-user-front-submit'
+                            ,submit = layero.find('iframe').contents().find('#'+ submitID);
+
+                        submit.click();
+                    }
+                });
+
+            } else if(obj.event === 'del'){
+                layer.confirm('真的要取消预约吗？', function(index) {
+                    //obj.del();
+
+                    $.ajax({
+                        type: "post",
+                        url: "{:U('Appointment/close')}",
+                        data: {id:data.id},
+                        success: function (res)
+                        {
+                            if (res == "success")
+                            {
+                                layer.msg('取消成功！');//成功提示
+                                layer.close(index);   //关闭弹窗
+                                Refresh();
+                            }
+                            if (res == "error")
+                            {
+                                layer.msg('取消异常!');
+                            }
+                        }
+                    });
+
+                })
+
+
+            } else if(obj.event === 'edit'){
+                var shopid=data.id;
+                var linkurl="{:U('Appointment/edit',array('id'=>'idval'))}";
+                linkurl=linkurl.replace('idval', shopid),
+                layer.open({
+                    type: 2,
+                    title: '编辑预约信息',
+                    maxmin: false,
+                    shadeClose: true, //点击遮罩关闭层
+                    area : ['500px' , '490px'],
+                    btn: ['确认', '关闭'],
+                    content:linkurl,
+                    btnclass: ['btn btn-primary', 'btn btn-danger'],
+                    yes: function(index, layero){
+                        var iframeWindow = window['layui-layer-iframe'+ index]
+                            ,submitID = 'LAY-user-front-submit'
+                            ,submit = layero.find('iframe').contents().find('#'+ submitID);
+
+                        submit.click();
+                    }
+                });
+               // layer.alert('编辑行：<br>'+ JSON.stringify(data))
+            }
+        });
+
+        var element = layui.element;
+        var $ = layui.$,active = {
+            reload: function(){
+                var keywords= $('#data-table-search');
+                //执行重载
+                table.reload('data-table-operate', {
+                    page: {
+                        curr: 1 //重新从第 1 页开始
+                    }
+                    ,where: {
+                        keywords: keywords.val(),
+                        member_tel:$("#data-member_tel-search").val(),
+                        status:$("#status").val()
+                    }
+                });
+            }
+            ,add: function() {
+                layer.open({
+                    type: 2,
+                    title: '添加预约',
+                    maxmin: false,
+                    shadeClose: true, //点击遮罩关闭层
+                    area : ['1100px' , '450px'],
+                    btn: ['确认', '关闭'],
+                    content: "{:U('Appointment/add')}",
+                    btnclass: ['btn btn-primary', 'btn btn-danger'],
+                    yes: function(index, layero){
+                        var iframeWindow = window['layui-layer-iframe'+ index]
+                            ,submitID = 'LAY-user-front-submit'
+                            ,submit = layero.find('iframe').contents().find('#'+ submitID);
+
+                        submit.click();
+                    }
+                });
+            }
+            ,tabChange: function (id) {
+                    //切换到指定Tab项
+                    element.tabChange('demo', id); //切换到：用户管理
+
+           }
+            ,getCheckData: function(){ //获取选中数据
+                var checkStatus = table.checkStatus('data-table-operate')
+                    ,data = checkStatus.data;
+                layer.alert(JSON.stringify(data));
+            }
+            ,getCheckLength: function(){ //获取选中数目
+                var checkStatus = table.checkStatus('data-table-operate')
+                    ,data = checkStatus.data;
+                layer.msg('选中了：'+ data.length + ' 个');
+            }
+            ,isAll: function(){ //验证是否全选
+                var checkStatus = table.checkStatus('data-table-operate');
+                layer.msg(checkStatus.isAll ? '全选': '未全选')
+            }
+        };
+
+        $('.data-table-reload-btn .layui-btn').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+
+
+    });
+    function Refresh()
+    {
+        layui.table.reload('data-table-operate');
+    }
+</script>
+</body>
+</html>

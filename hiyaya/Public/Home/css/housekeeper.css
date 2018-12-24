@@ -1,0 +1,16 @@
+@charset "utf-8";
+/* CSS Document */
+
+* { padding:0; margin:0;}
+body { width:100%; margin:0 auto; background:url(../images/housekeeper.jpg) #02cbdd; background-size:100%; position:relative;}
+a { text-decoration:none; color:#333;}
+em,i { font-style:normal;}
+a:hover{ color:#ed6b20;}
+ul,li { list-style:none;}
+.clearfix{ clear:both;}
+.btn { width:100%; float:left; padding:0 20px; box-sizing:border-box; position:fixed; bottom:10px;}
+.btn dd { margin-bottom:5px;}
+.btn img { width:100%;}
+
+
+

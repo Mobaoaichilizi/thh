@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Index</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <link rel="stylesheet" href="__STATIC__/layuiadmin/layui/css/layui.css" media="all">
+  <link rel="stylesheet" href="__STATIC__/layuiadmin/style/admin.css" media="all">
+  <style>
+  .layui-col-xs3 .layui-btn{
+  width:105px;
+  }
+  dt{
+  line-height:36px;
+  
+  }
+  dl dt i{
+ 	margin: 10px 0;
+    float: left;
+    margin-right: 8px;
+    display: inline-block;
+    height: 16px;
+    width: 3px;
+    background-color: #0ae; 
+  }
+  dl dd{
+    padding-left: 11px;
+    font-size: 14px;
+    line-height: 32px;
+  }
+  .yhh_money{
+  color:#ff7518;
+  }
+  .pay_type{
+  float:left;
+  margin-right:10px;
+  }
+  #pay_detail dd{
+ 	clear:both;
+	height: 45px;
+    line-height: 40px;
+  }
+  #pay_detail dd span{
+	  float:left;
+	  width:150px;
+	  text-align:right;
+  }
+  #pay_detail input{
+  width:150px;
+  }
+  .msgs{display:inline-block;width:150px;color:#fff;font-size:12px;border:1px solid #0697DA;text-align:center;height:35px;line-height:35px;background:#0697DA;cursor:pointer;}
+.msgs1{background:#E6E6E6;color:#818080;border:1px solid #CCCCCC;}
+  </style>
+</head>
+<body>
+  <div class="layui-fluid" id="component-tabs">
+    <div class="layui-row layui-col-space15">
+      <div class="layui-col-md12">
+      
+      
+      		<div class="layui-card">
+              <div class="layui-card-header" style="height:80px;">订单编号：{$order_info.order_sn}  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <php>if($order_info['status']==-1){</php> 订单已取消 <php>}else{</php>预计结束时间：{$order_info['createtime']+60*$finish_time|date='Y-m-d H:i:s',###}<php>}</php>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 包间号：{$room_info['room_name']}
+              <br />
+               开单时间：{$order_info['createtime']|date='Y-m-d H:i:s',###} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;服务开始时间：<php>if($up_start_time['up_time']==0){</php>服务未开始<php>}else{</php>{$up_start_time['up_time']|date='Y-m-d H:i:s',###}<php>}</php>
+              </div>
+              
+              <php>if($order_info['member_id']!=0){</php>
+                     <div class="layui-card-header" style="height:80px;">会员编号：{$member_info.member_no}  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 会员姓名：{$member_info.member_name }  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 会员生日：{$member_info.birthday}   <a onClick="cancel_member({$order_info.id});" style="color:#1E9FFF; cursor:pointer;float:right;">取消选择 ></a>
+                  <br />
+                  会员卡卡号：{$member_info.member_card}  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;会员卡余额：{$member_info.balance} 
+                  </div>
+               <php>}else{</php>
+                <div class="layui-card-header"><a onClick="select_member({$order_info.id});" style="color:#1E9FFF;  cursor:pointer;">选择会员 ></a> </div>
+                <php>}</php>
+              
+              <div class="layui-card-header">消费明细</div>
+              <form class="layui-form" action="" lay-filter="component-form-group" id="commentForm_order">
+              <input type="hidden" name="order_id" value="{$order_info.id}">
+               <div class="layui-card-body" style="display:table;width:95%;">
+                           <div class="layui-col-sm12">
+                            <div class="layui-card">
+           					 		<table class="layui-table">
+                                      <thead>
+                                        <tr>
+                                          <th>项目/产品</th>
+                                          <th>技师</th>
+                                          <th>上钟类型</th>
+                                          <th>优惠选择</th>
+                                          <th>单价</th>
+                                          <th>折扣</th>
+                                          <th>数量</th>
+                                          <th>金额</th>
+                                        </tr> 
+                                      </thead>
+                                      <tbody>
+                                      <php>
+                                      $project_total_price=0;
+                                      </php>
+                                      <volist name="result_project" id="vo">
+                                      <tr>
+                                      		
+                                      		<td>{$vo.title}<br />￥{$vo.unit_price}/{$vo.duration}分钟</td>
+                                            <td>{$vo.masseur_name}</td>
+                                            <td><php>if($vo['types']==1){</php>轮钟<php>}else if($vo['types']==2){</php>点钟<php>}else if($vo['types']==3){</php>加钟<php>}else if($vo['types']==4){</php>抽钟<php>}else if($vo['types']==5){</php>加班<php>}</php></td>
+                                            <td>
+                                            <select name="room_id[]" lay-filter="roomlist">
+                                              <option value="0">无优惠</option>
+                                              <php>if($order_info['member_id']!=0 && $member_info['is_msg']==1 && $vo['is_discount']==1){</php>
+                                              <option value="1|{$member_info['id']}">会员打折卡</option>
+                                              <php>}</php>
+                                             <php>if($vo['numcard_info']){</php>
+                                              <option value="2|{$vo['numcard_info']['id']}">次卡抵扣</option>
+                                              <php>}</php>
+                                              <php>if($vo['deadlinecard_info']){</php>
+                                              <option value="3|{$vo['deadlinecard_info']['id']}">期限卡抵扣</option>
+                                              <php>}</php>
+                                              <php>if($vo['coursecard_info']){</php>
+                                              <option value="4|{$vo['coursecard_info']['id']}">疗程卡抵扣</option>
+                                              <php>}</php>
+                                            </select>
+                                            </td>
+                                            <td>￥{$vo.unit_price}</td>
+                                            <td><span class="zhekou">-</span></td>
+                                            <td>{$vo.number}</td>
+                                            <td>
+                                            <input type="hidden" name="pro_order_id[]" value="{$vo.id}">
+                                            <input type="hidden" name="pro_id[]" value="{$vo.project_id}">
+                                            <input type="hidden" name="pro_type[]" value="1">
+                                            <input type="hidden" name="types[]" class="is_types" value="0">
+                                            <input type="hidden" name="card_id[]" class="card_id" value="0">
+                                            <span class="is_show" style="display:none;"><span class="yhh_money"></span><br /></span>
+                                            <span>￥<span class="yhq_money">{$vo.total_price}</span></span></td>
+                                            </tr>
+                                            <php>
+                                            $project_total_price+=$vo['total_price'];
+                                            </php>
+                                            </volist>
+                                       
+                                        <php>
+                                      $product_total_price=0;
+                                      </php>
+                                       <volist name="result_product" id="vo">
+                                      <tr>
+                                      		<td>{$vo.title}</td>
+                                            <td>{$vo.masseur_name}</td>
+                                             <td>-</td>
+                                             <td><select name="room_id[]" lay-filter="roomlist">
+                                              <option value="0">无优惠</option>
+                                              <php>if($order_info['member_id']!=0 && $member_info['is_msg']==1 && $vo['is_discount']==1){</php>
+                                              <option value="1|{$member_info['id']}">会员打折卡</option>
+                                              <php>}</php>
+                                            </select></td>
+                                            <td>￥{$vo.unit_price}</td>
+                                            <td><span class="zhekou">-</span></td>
+                                              <td>{$vo.number}</td>
+                                               <td>
+                                               <input type="hidden" name="pro_order_id[]" value="{$vo.id}">
+                                               <input type="hidden" name="pro_id[]" value="{$vo.product_id}">
+                                            <input type="hidden" name="pro_type[]" value="2">
+                                            <input type="hidden" name="types[]" class="is_types" value="0">
+                                            <input type="hidden" name="card_id[]" class="card_id" value="0">
+                                               <span class="is_show" style="display:none;"><span class="yhh_money"></span><br /></span>
+                                            <span>￥<span class="yhq_money">{$vo.total_price}</span></span>
+                                               </td>
+                                            </tr>
+                                              <php>
+                                            $product_total_price+=$vo['total_price'];
+                                            </php>
+                                             </volist>   
+                                         
+                                      </tbody>
+                                    </table>
+                              </div>
+                            </div>
+                        
+                           
+                            
+                         <input type="hidden" name="total_price" value="{$product_total_price+$project_total_price}">
+                          
+                            
+                          </div>
+                          
+                          
+                          <div class="layui-card-body" style="display:table;width:95%;">
+              
+                <div class="layui-col-sm6" >
+                	<dl>
+                	<dt>
+                    <i></i>
+                    <span>订单原价：</span><span>￥<span id="yj_money">{$project_total_price+$product_total_price}</span></span>
+                    </dt>
+                       <dd id="hykdz" style="display:none;">
+                       <span>会员卡打折：</span>
+                       <span>-￥<span id="hykdz_money">0.00</span></span>
+                       </dd> 
+                       <dd id="ckdk" style="display:none;">
+                       <span>次卡抵扣：</span>
+                       <span>-￥ <span id="ckdk_money">0.00</span></span>
+                       </dd>
+                        <dd id="qxkdk" style="display:none;">
+                       <span>期限卡抵扣：</span>
+                       <span>-￥ <span id="qxkdk_money">0.00</span></span>
+                       </dd>
+                        <dd id="lckdk" style="display:none;">
+                       <span>疗程卡抵扣：</span>
+                       <span>-￥ <span id="lckdk_money">0.00</span></span>
+                       </dd>
+                       <dd><span style="float:left; line-height:40px;">整单优惠：</span><span style="width:200px; float:left;"><input id="pay_money_deal" name="pay_money_deal" type="number" class="layui-input" value="0" min="0" placeholder="请输入金额" lay-verify="required" autocomplete="off"></span></dd>
+                  </dl>
+                   <div style="clear:both;"></div>
+                  <dl>
+                	<dt>
+                    <i></i>
+                    <span>应收：</span><span>￥<span id="closed_money">{$project_total_price+$product_total_price}</span></span>
+                    </dt> 
+                    </dl>
+
+                </div>
+                
+                 <div class="layui-col-sm6">
+                 	<dl>
+                	<dt>
+                    <i></i>
+                    <span>选择支付方式：</span>
+                    </dt> 
+                    <volist name="pay_typest" id="vo">
+                          <php>
+                          if(!$member_info){
+                          	if($vo['id']!=2)
+                            {
+                          </php>
+                               <dd class="pay_type">
+                               <input type="radio" name="pay_types" value="{$vo.id}" title="{$vo.title}" lay-filter="pay_types">
+                               </dd>
+                          <php>}
+                          }else
+                          {
+                          </php>
+                           <dd class="pay_type">
+                               <input type="radio" name="pay_types" value="{$vo.id}" title="{$vo.title}" lay-filter="pay_types">
+                               </dd>
+                           <php>
+                         }
+                          </php>
+                     </volist>  
+                  </dl>
+                   <div style="clear:both;"></div>
+                 		
+                        
+                 <dl>
+                	<dt>
+                    <i></i>
+                    <span>应收明细：还有￥<span id="hc_money" style="color:#FF0000;">{$project_total_price+$product_total_price}</span> 没收</span>
+                    </dt>
+                    <div id="pay_detail">
+                    
+                    </div>
+                    </dl>
+                 
+                </div>
+              </div>
+              <div class="layui-card-body" style="display:table;width:95%;">
+              <textarea name="note" placeholder="请输入备注" class="layui-textarea">{$order_info.note}</textarea>
+              </div>
+              <div class="layui-form-item layui-hide">
+                  <input type="button" lay-submit lay-filter="LAY-pay-front-submit" id="LAY-pay-front-submit" value="确认">
+                </div>
+                  </form>       
+             </div>
+        </div>
+      </div>
+</div>
+</div>
+<script src="__JS__/jquery/jQuery-2.2.0.min.js"></script>
+<script src="__JS__/framework-ui.js"></script>
+<script src="__STATIC__/layuiadmin/layui/layui.js"></script> 
+ <script>
+ layui.config({
+    base: '__STATIC__/layuiadmin/' //静态资源所在路径
+  }).extend({
+    index: 'lib/index' //主入口模块
+  }).use(['index', 'form', 'table'], function(){
+    var $ = layui.$
+    ,form = layui.form
+	,element = layui.element
+	,table = layui.table
+	
+	
+	form.on('select(roomlist)', function(data){
+		var select_val=data.value;
+		var hykdz_num=0,ckdk_num=0,qxkdk_num=0,lckdk_num=0;
+		var array_val=select_val.split("|");
+		<php>if($member_info){</php>
+		var zhekou={$member_info['discount']};
+		<php>}</php>
+		/*
+		$("select[name='room_id[]']").each(function(){
+			alert($(this).val());
+	    });
+		*/
+		if(array_val[0]==0)
+		{
+			var is_types=$(this).parent().parent().parent().parent().find('.is_types').val();
+			if(is_types!=0)
+			{
+				$(this).parent().parent().parent().parent().find('.is_show').hide();
+				$(this).parent().parent().parent().parent().find('.yhq_money').css('text-decoration','none');
+				var ckdk_money=$(this).parent().parent().parent().parent().find('.yhq_money').html();
+				if(is_types==0)
+				{
+					
+				}else if(is_types==1)
+				{
+					$('#hykdz_money').html(parseFloat(parseFloat($('#hykdz_money').html())-(parseFloat(ckdk_money)-(parseFloat(ckdk_money)*parseFloat(zhekou)*0.1))).toFixed(2));
+					$(this).parent().parent().parent().parent().find('.zhekou').html('-');
+				}else if(is_types==2)
+				{
+					$('#ckdk_money').html(parseFloat($('#ckdk_money').html())-parseFloat(ckdk_money));
+				}else if(is_types==3)
+				{
+					$('#qxkdk_money').html(parseFloat($('#qxkdk_money').html())-parseFloat(ckdk_money));
+				}else if(is_types==4)
+				{
+					$('#lckdk_money').html(parseFloat($('#lckdk_money').html())-parseFloat(ckdk_money));
+				}
+				if(parseFloat($('#hykdz_money').html())==0)
+				{
+					$('#hykdz').hide();
+				}
+				if(parseFloat($('#ckdk_money').html())==0)
+				{
+					$('#ckdk').hide();
+				}
+				if(parseFloat($('#qxkdk_money').html())==0)
+				{
+					$('#qxkdk').hide();
+				}
+				if(parseFloat($('#lckdk_money').html())==0)
+				{
+					$('#lckdk').hide();
+				}
+				$('#closed_money').html(parseFloat(parseFloat($('#yj_money').html())-parseFloat($('#hykdz_money').html())-parseFloat($('#ckdk_money').html())-parseFloat($('#qxkdk_money').html())-parseFloat($('#lckdk_money').html())).toFixed(2));
+				$('#hc_money').html(parseFloat($('#closed_money').html()).toFixed(2));
+				$(this).parent().parent().parent().parent().find('.is_types').val(0);
+				$(this).parent().parent().parent().parent().find('.card_id').val(array_val[1]);
+				$(".pay_money_deal").each(function(){
+					$(this).val(0);
+				});
+			}
+		}else if(array_val[0]==1)
+		{
+			
+			var is_types=$(this).parent().parent().parent().parent().find('.is_types').val();
+			if(is_types!=1)
+			{
+				var ckdk_money=$(this).parent().parent().parent().parent().find('.yhq_money').html();
+				if(is_types==0)
+				{
+					
+				}else if(is_types==1)
+				{
+					$('#hykdz_money').html(parseFloat(parseFloat($('#hykdz_money').html())-(parseFloat(ckdk_money)-(parseFloat(ckdk_money)*parseFloat(zhekou)*0.1))).toFixed(2));
+					$(this).parent().parent().parent().parent().find('.zhekou').html('-');
+				}else if(is_types==2)
+				{
+					$('#ckdk_money').html(parseFloat($('#ckdk_money').html())-parseFloat(ckdk_money));
+				}else if(is_types==3)
+				{
+					$('#qxkdk_money').html(parseFloat($('#qxkdk_money').html())-parseFloat(ckdk_money));
+				}else if(is_types==4)
+				{
+					$('#lckdk_money').html(parseFloat($('#lckdk_money').html())-parseFloat(ckdk_money));
+				}
+				if(parseFloat($('#hykdz_money').html())==0)
+				{
+					$('#hykdz').hide();
+				}
+				if(parseFloat($('#ckdk_money').html())==0)
+				{
+					$('#ckdk').hide();
+				}
+				if(parseFloat($('#qxkdk_money').html())==0)
+				{
+					$('#qxkdk').hide();
+				}
+				if(parseFloat($('#lckdk_money').html())==0)
+				{
+					$('#lckdk').hide();
+				}
+					
+				
+				$(this).parent().parent().parent().parent().find('.is_show').show();
+				$(this).parent().parent().parent().parent().find('.is_show .yhh_money').html("￥"+parseFloat(parseFloat(ckdk_money)*parseFloat(zhekou)*0.1).toFixed(2));
+				$(this).parent().parent().parent().parent().find('.yhq_money').css('text-decoration','line-through');
+				$(this).parent().parent().parent().parent().find('.is_types').val(1);
+				$(this).parent().parent().parent().parent().find('.card_id').val(array_val[1]);
+				$(this).parent().parent().parent().parent().find('.zhekou').html(parseFloat(zhekou));
+				$('#hykdz').show();
+				$('#hykdz_money').html(parseFloat(parseFloat($('#hykdz_money').html())+(parseFloat(ckdk_money)-(parseFloat(ckdk_money)*parseFloat(zhekou)*0.1))).toFixed(2));
+				$('#closed_money').html(parseFloat(parseFloat($('#yj_money').html())-parseFloat($('#hykdz_money').html())-parseFloat($('#ckdk_money').html())-parseFloat($('#qxkdk_money').html())-parseFloat($('#lckdk_money').html())).toFixed(2));
+				$('#hc_money').html(parseFloat($('#closed_money').html()).toFixed(2));
+				$(".pay_money_deal").each(function(){
+					$(this).val(0);
+				});
+			}
+			
+		}else if(array_val[0]==2)
+		{
+			var is_types=$(this).parent().parent().parent().parent().find('.is_types').val();
+			if(is_types!=2)
+			{
+				var ckdk_money=$(this).parent().parent().parent().parent().find('.yhq_money').html();
+				if(is_types==0)
+				{
+					
+				}else if(is_types==1)
+				{
+					$('#hykdz_money').html(parseFloat(parseFloat($('#hykdz_money').html())-(parseFloat(ckdk_money)-(parseFloat(ckdk_money)*parseFloat(zhekou)*0.1))).toFixed(2));
+					$(this).parent().parent().parent().parent().find('.zhekou').html('-');
+				}else if(is_types==2)
+				{
+					$('#ckdk_money').html(parseFloat($('#ckdk_money').html())-parseFloat(ckdk_money));
+				}else if(is_types==3)
+				{
+					$('#qxkdk_money').html(parseFloat($('#qxkdk_money').html())-parseFloat(ckdk_money));
+				}else if(is_types==4)
+				{
+					$('#lckdk_money').html(parseFloat($('#lckdk_money').html())-parseFloat(ckdk_money));
+				}
+				if(parseFloat($('#hykdz_money').html())==0)
+				{
+					$('#hykdz').hide();
+				}
+				if(parseFloat($('#ckdk_money').html())==0)
+				{
+					$('#ckdk').hide();
+				}
+				if(parseFloat($('#qxkdk_money').html())==0)
+				{
+					$('#qxkdk').hide();
+				}
+				if(parseFloat($('#lckdk_money').html())==0)
+				{
+					$('#lckdk').hide();
+				}
+					
+				
+				$(this).parent().parent().parent().parent().find('.is_show').show();
+				$(this).parent().parent().parent().parent().find('.is_show .yhh_money').html("￥0.00");
+				$(this).parent().parent().parent().parent().find('.yhq_money').css('text-decoration','line-through');
+				$(this).parent().parent().parent().parent().find('.is_types').val(2);
+				$(this).parent().parent().parent().parent().find('.card_id').val(array_val[1]);	
+				$('#ckdk').show();
+				$('#ckdk_money').html(parseFloat(parseFloat($('#ckdk_money').html())+parseFloat(ckdk_money)).toFixed(2));
+				$('#closed_money').html(parseFloat(parseFloat($('#yj_money').html())-parseFloat($('#hykdz_money').html())-parseFloat($('#ckdk_money').html())-parseFloat($('#qxkdk_money').html())-parseFloat($('#lckdk_money').html())).toFixed(2));
+				$('#hc_money').html(parseFloat($('#closed_money').html()).toFixed(2));
+				$(".pay_money_deal").each(function(){
+					$(this).val(0);
+				});
+			}
+			
+		}else if(array_val[0]==3)
+		{
+			var is_types=$(this).parent().parent().parent().parent().find('.is_types').val();
+			if(is_types!=3)
+			{
+				var qxkdk_money=$(this).parent().parent().parent().parent().find('.yhq_money').html();	
+				
+				if(is_types==0)
+				{
+					
+				}else if(is_types==1)
+				{
+					$('#hykdz_money').html(parseFloat(parseFloat($('#hykdz_money').html())-(parseFloat(qxkdk_money)-(parseFloat(qxkdk_money)*parseFloat(zhekou)*0.1))).toFixed(2));
+					$(this).parent().parent().parent().parent().find('.zhekou').html('-');
+				}else if(is_types==2)
+				{
+					$('#ckdk_money').html(parseFloat($('#ckdk_money').html())-parseFloat(qxkdk_money));
+				}else if(is_types==3)
+				{
+					$('#qxkdk_money').html(parseFloat($('#qxkdk_money').html())-parseFloat(qxkdk_money));
+				}else if(is_types==4)
+				{
+					$('#lckdk_money').html(parseFloat($('#lckdk_money').html())-parseFloat(qxkdk_money));
+				}
+				if(parseFloat($('#hykdz_money').html())==0)
+				{
+					$('#hykdz').hide();
+				}
+				if(parseFloat($('#ckdk_money').html())==0)
+				{
+					$('#ckdk').hide();
+				}
+				if(parseFloat($('#qxkdk_money').html())==0)
+				{
+					$('#qxkdk').hide();
+				}
+				if(parseFloat($('#lckdk_money').html())==0)
+				{
+					$('#lckdk').hide();
+				}
+				
+				$(this).parent().parent().parent().parent().find('.is_show').show();
+				$(this).parent().parent().parent().parent().find('.is_show .yhh_money').html("￥0.00");
+				$(this).parent().parent().parent().parent().find('.yhq_money').css('text-decoration','line-through');
+				$(this).parent().parent().parent().parent().find('.is_types').val(3);
+				$(this).parent().parent().parent().parent().find('.card_id').val(array_val[1]);
+				$('#qxkdk').show();
+				$('#qxkdk_money').html(parseFloat(parseFloat($('#qxkdk_money').html())+parseFloat(qxkdk_money)).toFixed(2));
+				$('#closed_money').html(parseFloat(parseFloat($('#yj_money').html())-parseFloat($('#hykdz_money').html())-parseFloat($('#ckdk_money').html())-parseFloat($('#qxkdk_money').html())-parseFloat($('#lckdk_money').html())).toFixed(2));
+				$('#hc_money').html(parseFloat($('#closed_money').html()).toFixed(2));
+				$(".pay_money_deal").each(function(){
+					$(this).val(0);
+				});
+			}
+			
+		}else if(array_val[0]==4)
+		{
+			var is_types=$(this).parent().parent().parent().parent().find('.is_types').val();
+			if(is_types!=4)
+			{
+				var qxkdk_money=$(this).parent().parent().parent().parent().find('.yhq_money').html();	
+				
+				if(is_types==0)
+				{
+					
+				}else if(is_types==1)
+				{
+					$('#hykdz_money').html(parseFloat(parseFloat($('#hykdz_money').html())-(parseFloat(qxkdk_money)-(parseFloat(qxkdk_money)*parseFloat(zhekou)*0.1))).toFixed(2));
+					$(this).parent().parent().parent().parent().find('.zhekou').html('-');
+				}else if(is_types==2)
+				{
+					$('#ckdk_money').html(parseFloat($('#ckdk_money').html())-parseFloat(qxkdk_money));
+				}else if(is_types==3)
+				{
+					$('#qxkdk_money').html(parseFloat($('#qxkdk_money').html())-parseFloat(qxkdk_money));
+				}else if(is_types==4)
+				{
+					$('#lckdk_money').html(parseFloat($('#lckdk_money').html())-parseFloat(qxkdk_money));
+				}
+				if(parseFloat($('#hykdz_money').html())==0)
+				{
+					$('#hykdz').hide();
+				}
+				if(parseFloat($('#ckdk_money').html())==0)
+				{
+					$('#ckdk').hide();
+				}
+				if(parseFloat($('#qxkdk_money').html())==0)
+				{
+					$('#qxkdk').hide();
+				}
+				if(parseFloat($('#lckdk_money').html())==0)
+				{
+					$('#lckdk').hide();
+				}
+				
+				$(this).parent().parent().parent().parent().find('.is_show').show();
+				$(this).parent().parent().parent().parent().find('.is_show .yhh_money').html("￥0.00");
+				$(this).parent().parent().parent().parent().find('.yhq_money').css('text-decoration','line-through');
+				$(this).parent().parent().parent().parent().find('.is_types').val(4);
+				$(this).parent().parent().parent().parent().find('.card_id').val(array_val[1]);
+				$('#lckdk').show();
+				$('#lckdk_money').html(parseFloat(parseFloat($('#lckdk_money').html())+parseFloat(qxkdk_money)).toFixed(2));
+				$('#closed_money').html(parseFloat(parseFloat($('#yj_money').html())-parseFloat($('#hykdz_money').html())-parseFloat($('#ckdk_money').html())-parseFloat($('#qxkdk_money').html())-parseFloat($('#lckdk_money').html())).toFixed(2));
+				$('#hc_money').html(parseFloat($('#closed_money').html()).toFixed(2));
+				$(".pay_money_deal").each(function(){
+					$(this).val(0);
+				});
+			}
+			
+		}
+		return false;
+	});
+	
+	
+	//应收明细
+	form.on('radio(pay_types)', function(data){
+		if($(this).is(':checked'))
+		{
+			if(data.value==2)
+			{
+				
+				$('#pay_detail').html('<dd id="pay_detail'+data.value+'"><span>'+$(this).attr('title')+'：</span><span><input name="pay_money_type" type="number" mix="0" class="pay_money_deal layui-input" value="'+parseFloat($('#hc_money').html())+'"  placeholder="请输入金额" lay-verify="required" autocomplete="off"></span></dd><dd><span>验&nbsp;&nbsp;证&nbsp;码：</span><span><input type="number" class="pay_money_deal layui-input" name="pincode" id="pincode" style="margin-right: 10px;"></span><span id="msgs" class="msgs">获取短信验证码</span></dd>');
+			}else
+			{
+				$('#pay_detail').html('<dd id="pay_detail'+data.value+'"><span>'+$(this).attr('title')+'：</span><span><input name="pay_money_type" type="number" mix="0" class="pay_money_deal layui-input" value="'+parseFloat($('#hc_money').html())+'"  placeholder="请输入金额" lay-verify="required" autocomplete="off"></span></dd>');
+			}
+		}
+		
+	});
+	
+	//去付款
+	form.on('submit(LAY-pay-front-submit)', function(data){
+			$.submitForm({
+				url: "{:U('Order/post_pay_order')}",
+				param: $("#commentForm_order").serialize(),
+				success: function () {
+					$.currentWindow().Refresh();
+					top.Form.Refresh();	
+				}
+			}); 
+			return false;  
+	});	
+
+});
+</script>
+<script language="javascript">
+//选择会员
+function select_member(cid)
+{
+	var linkurl="{:U('Order/pay_select_member',array('orderid'=>'nidval'))}";
+	linkurl=linkurl.replace('nidval', cid),
+	$.modalOpen({
+		id: "Form4",
+		title: "选择会员",
+		url: linkurl,
+		width: "1100px",
+		height: "770px",
+		callBack: function (index, layero) {
+			 var iframeWindow = window['layui-layer'+ index]
+			,submitID = 'LAY-user-front-submit'
+			,submit = layero.find('iframe').contents().find('#'+ submitID);
+			submit.click();
+			//top.layer.close(index);
+		}
+	});
+}
+//取消会员
+function cancel_member(id)
+{
+	$.deleteForm({
+		prompt: "您确认要取消会员吗？",
+		url: "{:U('Order/cancel_member')}",
+		param: { id: id},
+		success: function () {
+		   Refresh();
+		   top.Form.Refresh();
+		}
+	});
+}
+//整单优惠
+$('#pay_money_deal').bind('input propertychange', function() {
+		if(parseFloat($(this).val()) < 0 || isNaN(parseFloat($(this).val())))
+		{
+			$(this).val(0);
+		}
+		$('#closed_money').html(parseFloat($('#yj_money').html())-parseFloat($(this).val())-parseFloat($('#hykdz_money').html())-parseFloat($('#ckdk_money').html())-parseFloat($('#qxkdk_money').html())-parseFloat($('#lckdk_money').html()));
+		if(parseFloat($('#closed_money').html()) < 0)
+		{
+			$(this).val(0);
+			$('#closed_money').html(parseFloat($('#yj_money').html())-parseFloat($(this).val())-parseFloat($('#hykdz_money').html())-parseFloat($('#ckdk_money').html())-parseFloat($('#qxkdk_money').html())-parseFloat($('#lckdk_money').html()));
+		}
+		$('#hc_money').html(parseFloat($('#closed_money').html()));
+		$(".pay_money_deal").each(function(){
+				$(this).val(0);
+		});
+});
+
+//应收明细
+$('body').on('input propertychange',".pay_money_deal",function(){
+	
+	if(parseFloat($(this).val()) < 0 || isNaN(parseFloat($(this).val())))
+	{
+		$(this).val(0);
+	}
+	var zs_money=0;
+	$(".pay_money_deal").each(function(){
+			zs_money+=parseFloat($(this).val());
+	});
+	$('#hc_money').html(parseFloat($('#closed_money').html())-parseFloat(zs_money));
+	if(parseFloat($('#hc_money').html()) < 0)
+	{
+		$(this).val(0);
+		var zs_money=0;
+		$(".pay_money_deal").each(function(){
+				zs_money+=parseFloat($(this).val());
+		});
+		$('#hc_money').html(parseFloat($('#closed_money').html())-parseFloat(zs_money));
+	}	
+});
+function Refresh()
+{
+	location.reload();
+}
+</script>
+</body>
+</html>

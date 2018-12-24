@@ -1,0 +1,165 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<title>{$userinfo.nickname}的名片</title>
+<link rel="stylesheet" type="text/css" href="__CSS__/public.css" />
+<script src="__JS__/jquery.min.js"></script>
+</head>
+<body>
+<div class="top01">
+    <div class="tx"><img src="{$userinfo.head_img}"></div>
+    <div class="nr">
+        <ul>
+            <dd class="z01 wjg"><span class="bt">{$userinfo.nickname}</span><span>
+            <php>if($userinfo['sex']==1){</php>
+            <img src="__IMG__/tb01.png">
+            <php>}else if($userinfo['sex']==2){</php>
+            <img src="__IMG__/tb02.png">
+            <php>}</php>
+            </span></dd>
+        </ul>
+    </div>
+</div>
+
+<div class="clear"></div>
+
+
+<div class="rowbox02">
+	<div class="wenda01">
+    
+        <div class="bt"><img src="__IMG__/huizhang.png">技能荣誉徽章</div>
+        <div class="line01"></div>
+        <div class="titjibie">专家级：达到一定级别的高深交流</div>
+        <div>
+        	
+             <php>if(!empty($badgelistzj)){</php>
+        	<volist name="badgelistzj" id="vo">
+            	
+                <span class="bk se05"><a href="{:U('Index/view',array('id'=>$vo['id'],'openid'=>$openid))}">{$vo.card_name} {$vo.score}分</a></span>
+               
+            </volist>
+             <php>}else{</php>
+                <span class="bk se08"><a href="JavaScript:;">90-100</a></span>
+                <php>}</php>
+            
+        </div>
+        <div class="line01"></div>
+        <div class="titjibie">教授级：画龙点睛的沟通</div>
+        <div>
+            
+            <php>if(!empty($badgelistjs)){</php>
+            <volist name="badgelistjs" id="vo">
+                 
+                 <span class="bk se04"><a href="{:U('Index/view',array('id'=>$vo['id'],'openid'=>$openid))}">{$vo.card_name} {$vo.score}分</a></span>
+
+            </volist>
+            <php>}else{</php>
+                <span class="bk se08"><a href="JavaScript:;">80-89</a></span>
+                <php>}</php>
+            
+        </div>
+        <div class="line01"></div>
+        <div class="titjibie">老师级：提纲挈领的知识</div>
+        <div>
+  
+            <php>if(!empty($badgelistjss)){</php>
+            <volist name="badgelistjss" id="vo">
+                 
+                 <span class="bk se03"><a href="{:U('Index/view',array('id'=>$vo['id'],'openid'=>$openid))}">{$vo.card_name} {$vo.score}分</a></span>
+
+            </volist>
+            <php>}else{</php>
+                <span class="bk se08"><a href="JavaScript:;">70-79</a></span>
+                <php>}</php>
+            
+        </div>
+        <div class="line01"></div>
+        <div class="titjibie">同学级：感同身受的交流会</div>
+        <div>
+
+            
+             <php>if(!empty($badgelisttx)){</php>
+            <volist name="badgelisttx" id="vo">
+                 
+                 <span class="bk se02"><a href="{:U('Index/view',array('id'=>$vo['id'],'openid'=>$openid))}">{$vo.card_name} {$vo.score}分</a></span>
+
+            </volist>
+            <php>}else{</php>
+                <span class="bk se08"><a href="JavaScript:;">60-69</a></span>
+                <php>}</php>
+            
+        </div>
+        <div class="line01"></div>
+        <div class="titjibie">进修级</div>
+
+		 <div>
+            <volist name="badgelist" id="vo">
+            	<php>if($vo['score'] < 60){</php>
+                <span class="bk"><a href="{:U('Index/view',array('id'=>$vo['id'],'openid'=>$openid))}">{$vo.card_name} {$vo.score}分</a></span>
+                <php>}</php>
+            </volist>
+        </div>
+        
+        
+                        <div class="wzfb001">快给他添加一个标签吧</div>
+        <div class="tanchuang01" id="btn1"><img src="__IMG__/qb04.png"></div>
+        
+        
+        <div id="popup">
+    <div class="title"><p><img src="__IMG__/icon_01.png"></p><span>关闭 x</span></div>
+    <div class="cont">
+    <form name="message" id="messaget" action="{:U('index/docards')}" method="post">
+    <input type="hidden" name="openid" value="{$openid}">
+    	<div class="biaodan">
+            <div><span><b>*</b>标签名称：</span><input name="card_name" type="text"></div>
+            <div class="but03"><a href="JavaScript:;" id="post_tj">确认提交</a></div>
+        </div>
+        </form>
+    </div>
+</div>
+<div id="mask_shadow"></div>
+
+<script src="__JS__/popup.js"></script>
+
+<script>$(function () {  
+$('#popup').popup({ifDrag: true, dragLimit: true});});
+</script>
+        
+       
+        
+        
+    </div>
+</div>
+
+
+<script language="javascript">
+$('#post_tj').click(function(){	
+	$.ajax({
+		url: "{:U('index/docards')}",    //请求的url地址
+		dataType: "json",   //返回格式为json
+		async: true, //请求是否异步，默认为异步，这也是ajax重要特性
+		data: $("#messaget").serialize(),    //参数值
+		type: "post",   //请求方式
+		success: function(data) {
+			if(data.status=='1')
+			{
+				alert(data.info);
+				window.location.href = data.url+'&'+ Math.random();
+			}else
+			{
+				alert(data.info);
+			}
+		},
+		error: function() {
+			alert('参数错误！');
+		}
+	});
+});
+</script>
+</body>
+</html>
+

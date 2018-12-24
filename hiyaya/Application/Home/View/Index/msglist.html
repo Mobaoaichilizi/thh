@@ -1,0 +1,131 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<title>评论</title>
+<link rel="stylesheet" type="text/css" href="__CSS__/public.css" />
+<script src="__JS__/jquery-1.9.1.min.js"></script>
+</head>
+<body style="max-width:380px; margin:0 auto;">
+
+<div class="rowbox01">
+
+
+      <ul class="box01_list">
+        <li class="li_list"  id="m_list">
+
+
+
+<volist name="myviewlist" id="vo">
+<div class="jinenglist01">
+    <div class="tx"><img src="{$vo.head_img}"></div>
+    <div class="nr">
+        <div class="sm">
+            <dd class="ming">{$vo.nickname}</dd>
+            <php>
+            unset($n_star);
+            $n_star=5-$vo['star'];
+            </php>
+            <dd class="feng">打分
+             <php>
+           		for($i=0;$i < $vo['star'];$i++)
+                {
+            </php><img src="__IMG__/qb13.png"><php>
+           		}
+            </php><php>
+           		for($i=0;$i < $n_star;$i++)
+                {
+</php><img src="__IMG__/qb14.png"><php>
+           		}
+            </php>
+           </dd>
+        </div>
+        <div class="pllbnr">{$vo.content}</div>
+     
+        <div class="pllbsj"><span>{$vo.createtime|date='Y-m-d H:i',###}</span></div>
+    </div>
+    <div class="line01 se"></div>
+</div>
+</volist>
+        </li>
+      
+      </ul>
+  <div class="more" id="show_more" page="2" style="display: none; width:100%; text-align:center; color:#FF0000; font-size:14px; line-height:35px; font-weight:bold;" href="javascript:void(0);">加载更多</div>
+   
+ <script type="text/javascript">
+$(function() {
+	/*---------------------加载更多--------------------*/
+	var total = {$count},
+		pagesize = 8,
+		pages = Math.ceil(total / pagesize);
+		var com_link = '{:U('Index/ajaxmsg',array('id'=>$id))}';
+		if (pages > 1) {
+		var _page = $('#show_more').attr('page');
+		$(window).bind("scroll",function() {
+			if ($(document).scrollTop() + $(window).height() >= $(document).height()) {
+				$('#show_more').show().html('加载中...');
+				if (_page > pages) {
+					$('#show_more').show().html('全部加载完毕...');
+					return;
+				}
+				if($('#canScroll').val()==0){//不要重复加载
+					return;
+				}
+				$('#canScroll').attr('value',0);
+				$.ajax({
+					type : "POST",
+					data : {'page' : _page, 'inajax' : 1, 'pagesize' : pagesize},
+					url :  com_link ,
+					dataType : "json",
+					success : function(RES) {
+						$('#canScroll').attr('value',1);
+						$('#show_more').hide().html('加载更多');
+						data = RES.products;
+						if(data.length){
+							$('#show_more').attr('page',parseInt(_page)+1);
+						}
+						_page = $('#show_more').attr('page');
+						var _tmp_html = '';
+						
+						$.each(data, function(x, y) {
+						var star_html="";
+						var star_html_no="";
+					    for(i=0;i<y.star;i++)
+						{
+							star_html+='<img src="__IMG__/qb13.png">';
+						}
+						var star_m=y.star;
+						var no_star=5-star_m;
+						for(j=0;j<no_star;j++)
+						{
+							star_html_no+='<img src="__IMG__/qb14.png">';
+						}
+						_tmp_html += '<div class="jinenglist01">' +
+							'<div class="tx"><img src="'+ y.head_img +'"></div>' +
+							'<div class="nr">' + 
+							'<div class="sm">'+ 
+							'<dd class="ming">'+ y.nickname +'</dd>'+ 
+							'<dd class="feng">打分 '+ star_html + star_html_no + '</dd>'+ 
+							'</div>'+ 
+							'<div class="pllbnr">'+ y.content +'</div>'+ 
+                            '<div class="pllbsj"><span>'+ y.createtime +'</span></div>' +
+							'</div>'+ 
+							'<div class="line01 se"></div>'+ 
+							'</div>';
+							
+						});
+						$('#m_list').append(_tmp_html);
+					}
+				});
+			}
+		});
+	}
+});
+</script>
+</div>
+</body>
+</html>
+

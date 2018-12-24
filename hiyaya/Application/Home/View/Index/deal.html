@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<title>观点</title>
+<link rel="stylesheet" type="text/css" href="__CSS__/public.css" />
+<script src="__JS__/jquery-1.9.1.min.js"></script>
+</head>
+<body>
+<div class="top01 xian">
+	<div class="guandiantopl01">
+    
+    <a href="{:U('Index/view',array('id'=>$info['id'],'openid'=>$openid))}">
+    <span <php>if($info['score'] < 60){</php> class="bkyanse01 se01" <php>}else if($info['score'] < 70 && $info['score'] >= 60){</php> class="bkyanse01 se02" <php>}else if($info['score'] < 80 && $info['score'] >= 70){</php> class="bkyanse01 se03" <php>}else if($info['score'] < 90 && $info['score'] >= 80){</php> class="bkyanse01 se04" <php>}else if($info['score'] <= 100 && $info['score'] >= 90){</php> class="bkyanse01 se05" <php>}</php>>{$info.card_name}</span>
+    </a>
+    
+    <span  <php>if($info['score'] < 60){</php> class="wzyanse01 wenziyanse01" <php>}else if($info['score'] < 70 && $info['score'] >= 60){</php> class="wzyanse01 wenziyanse02" <php>}else if($info['score'] < 80 && $info['score'] >= 70){</php> class="wzyanse01 wenziyanse03" <php>}else if($info['score'] < 90 && $info['score'] >= 80){</php> class="wzyanse01 wenziyanse04" <php>}else if($info['score'] <= 100 && $info['score'] >= 90){</php> class="wzyanse01 wenziyanse05" <php>}</php>>{$info.score}分</span></div>
+   <div class="guandiantopr01">您的技能被评为{$info.score}分哦~</div>
+</div>
+
+<div class="clear"></div>
+
+
+<div class="rowbox01">
+	<div class="appinfo">
+       
+        <div class="info">
+        <p>{$vo.content}</p>
+        
+         <php>if($vo['number']==1){</php>
+              <center><img src="{$vo.item_img}"></center>
+        <php>}else if($vo['number']==2){</php>
+
+             <php>$item_img=explode(',',$vo['item_img']);</php>
+        	 <center><img src="{$item_img[0]}"></center>
+              <center><img src="{$item_img[1]}"></center>
+        <php>}else if($vo['number']==3){</php>
+        	<php>$item_img=explode(',',$vo['item_img']);</php>
+        	 <center><img src="{$item_img[0]}"></center>
+              <center><img src="{$item_img[1]}"></center>
+             <center><img src="{$item_img[2]}"></center>
+        <php>}else if($vo['number']==4){</php>
+        	<php>$item_img=explode(',',$vo['item_img']);</php>
+        	 <center><img src="{$item_img[0]}"></center>
+              <center><img src="{$item_img[1]}"></center>
+             <center><img src="{$item_img[2]}"></center>
+            <center><img src="{$item_img[3]}"></center>
+        <php>}</php>
+      
+        
+        </div>
+         <div class="data">{$vo.createtime|date='Y-m-d H:i',###}</div>
+    </div>
+</div>
+
+
+
+</body>
+</html>
+

@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>会员详情</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <link rel="stylesheet" href="__STATIC__/layuiadmin/layui/css/layui.css" media="all">
+  <link rel="stylesheet" href="__STATIC__/layuiadmin/style/admin.css" media="all">
+</head>
+<body class="layui-layout-body">
+<div class="layui-fluid data-table-reload-btn" >
+  <div class="layui-row layui-col-space15">
+    <div class="layui-col-md12">
+      <div class="layui-card">
+      <div class="wrapper wrapper-content animated fadeInRight">
+
+        <div class="row">
+
+            <div class="col-sm-12">
+
+                <div class="ibox float-e-margins">
+
+
+                    <div class="ibox-content">
+
+                        <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper form-inline" role="grid">
+
+
+                        <table class="table table-bordered dataTable" style="border-bottom:1px solid #e6e6e6;width: 100%">
+
+                            <tbody>
+
+                                 <tr class="gradeC" style="height: 38px;line-height: 38px;">
+
+                                    <th style="text-align:right">姓名：</th>
+
+                                    <td>{$result.member_name}</td>
+
+                                   <th style="margin-left: 20px;text-align:right">性别：</th>
+
+                                    <td>{$result.sex}</td>
+
+                                    <th style="margin-left: 20px;text-align:right">联系方式：</th>
+
+                                    <td>{$result.member_tel}</td>
+
+
+                                </tr>
+
+                               
+
+                                <tr class="gradeC" style="height: 38px;line-height: 38px;">
+
+                                    <th style="text-align:right">编号：</th>
+
+                                    <td>{$result.member_no}</td>
+
+                                    <th style="margin-left: 20px;text-align:right">生日：</th>
+
+                                    <td>{$result.birthday}</td>
+
+                                    <th style="margin-left: 20px;text-align:right">成为会员时间：</th>
+
+                                    <td>{$result['createtime']|date='Y-m-d H:i:s',###}</td>
+
+                                 
+                                </tr>
+
+
+                            </tbody>
+
+                           
+
+                        </table>
+
+                        
+
+                    </div>
+
+                    </div>
+
+                    
+
+                </div>
+
+                
+
+            </div>
+
+            
+
+        </div>
+
+        
+
+    </div>
+  
+
+        <div class="layui-card-body">
+          <div style="padding-bottom: 10px;">
+            <button class="layui-btn layuiadmin-btn-useradmin" data-type="charge">充值</button>
+            <button class="layui-btn layuiadmin-btn-useradmin" data-type="transact_num">办理次卡</button>
+            <button class="layui-btn layuiadmin-btn-useradmin" data-type="transact_deadline">办理期限卡</button>
+            <button class="layui-btn layuiadmin-btn-useradmin" data-type="transact_course">办理疗程卡</button>
+          </div>
+            <table class="layui-hide" id="data-table-operate" lay-filter="data-table-operate"></table>
+            
+        </div>
+        <div class="layui-table-cell laytable-cell-1-member_tel">实体卡号： {$result.member_card}</div>
+        <input type="hidden" name="member_id" id="member_id" value="{$result.id}">
+      </div>
+      
+    </div>
+  </div>
+
+
+</div>
+  <script src="__JS__/jquery/jQuery-2.2.0.min.js"></script>
+  <script src="__JS__/framework-ui.js"></script>
+<script src="__STATIC__/layuiadmin/layui/layui.js"></script>
+<script>
+    layui.use(['table','form'], function(){
+        var table = layui.table;
+        var $ = layui.$;
+        var form = layui.form;
+     
+        table.render({
+            elem: '#data-table-operate'
+            ,url: "{:U('Member/info',array('id'=>$result['id']))}"
+            ,cellMinWidth: 80
+            ,cols: [[
+                {field:'balance', width:100, title: '余额'}
+                ,{field:'last_charge_time', MinWidth:100, title: '最后一次充值时间'}
+                ,{field:'total_charge_money', MinWidth:100, title: '累计储值金额'}
+            ]]
+        });
+
+
+        //查看详情
+        //监听表格复选框选择
+        table.on('checkbox(data-table-operate)', function(obj){
+            console.log(obj)
+        });
+       
+        
+        var element = layui.element;
+        var $ = layui.$,active = {
+            charge: function() {
+                var shopid=$('#member_id').val();
+                var linkurl="{:U('Member/charge',array('id'=>'idval'))}";
+                linkurl=linkurl.replace('idval', shopid),
+                $.modalOpen({
+                    id: "Form3",
+                    title: "充值",
+                    url: linkurl,
+                    width: "600px",
+                    height: "900px",
+                    callBack: function (index, layero) {
+                         var iframeWindow = window['layui-layer'+ index]
+                        ,submitID = 'LAY-user-front-submit'
+                        ,submit = layero.find('iframe').contents().find('#'+ submitID);
+                        submit.click();
+                    }
+                });
+            }
+            ,transact_num: function() {
+                var shopid=$('#member_id').val();
+                var linkurl="{:U('Member/transact_num',array('id'=>'idval'))}";
+                linkurl=linkurl.replace('idval', shopid),
+                $.modalOpen({
+                    id: "Form4",
+                    title: "办理次卡",
+                    url: linkurl,
+                    width: "600px",
+                    height: "900px",
+                    callBack: function (index, layero) {
+                         var iframeWindow = window['layui-layer'+ index]
+                        ,submitID = 'LAY-user-front-submit'
+                        ,submit = layero.find('iframe').contents().find('#'+ submitID);
+                        submit.click();
+                    }
+                });
+            }
+            ,transact_deadline: function() {
+                var shopid=$('#member_id').val();
+                var linkurl="{:U('Member/transact_deadline',array('id'=>'idval'))}";
+                linkurl=linkurl.replace('idval', shopid),
+                $.modalOpen({
+                    id: "Form4",
+                    title: "办理期限卡",
+                    url: linkurl,
+                    width: "600px",
+                    height: "900px",
+                    callBack: function (index, layero) {
+                         var iframeWindow = window['layui-layer'+ index]
+                        ,submitID = 'LAY-user-front-submit'
+                        ,submit = layero.find('iframe').contents().find('#'+ submitID);
+                        submit.click();
+                    }
+                });
+            }
+            ,transact_course: function() {
+                var shopid=$('#member_id').val();
+                var linkurl="{:U('Member/transact_course',array('id'=>'idval'))}";
+                linkurl=linkurl.replace('idval', shopid),
+                $.modalOpen({
+                    id: "Form4",
+                    title: "办理疗程卡",
+                    url: linkurl,
+                    width: "600px",
+                    height: "900px",
+                    callBack: function (index, layero) {
+                         var iframeWindow = window['layui-layer'+ index]
+                        ,submitID = 'LAY-user-front-submit'
+                        ,submit = layero.find('iframe').contents().find('#'+ submitID);
+                        submit.click();
+                    }
+                });
+            }
+            ,tabChange: function (id) {
+                    //切换到指定Tab项
+                    element.tabChange('demo', id); //切换到：用户管理
+
+           }
+          
+        };
+
+        $('.data-table-reload-btn .layui-btn').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+
+
+    });
+    function Refresh()
+    {
+        layui.table.reload('data-table-operate');
+    }
+</script>
+</body>
+</html>

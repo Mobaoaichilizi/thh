@@ -1,0 +1,78 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<title>问答名片</title>
+<link rel="stylesheet" type="text/css" href="__CSS__/public.css" />
+<script src="__JS__/jquery-1.9.1.min.js"></script>
+</head>
+<body>
+
+
+<div class="wendatxbg">
+    <div class="m-demo">
+        <dt>
+            <img src="{$userinfo.head_img}" class="hidden">
+            <img src="{$userinfo.head_img}">
+        </dt>
+    </div>
+</div>
+<div class="wendatxnr">
+    <dd class="tx"><img src="{$userinfo.head_img}"></dd>
+    <div class="name">{$userinfo.nickname} <php>if($userinfo['sex']==1){</php>
+            <img src="__IMG__/tb01.png">
+            <php>}else if($userinfo['sex']==2){</php>
+            <img src="__IMG__/tb02.png">
+            <php>}</php></div>
+</div>
+
+
+<div class="clear"></div>
+<div class="top01 xian">
+    
+    <div class="guandiantopl01"><span <php>if($info['score'] < 60){</php> class="bkyanse01 se01" <php>}else if($info['score'] < 70 && $info['score'] >= 60){</php> class="bkyanse01 se02" <php>}else if($info['score'] < 80 && $info['score'] >= 70){</php> class="bkyanse01 se03" <php>}else if($info['score'] < 90 && $info['score'] >= 80){</php> class="bkyanse01 se04" <php>}else if($info['score'] <= 100 && $info['score'] >= 90){</php> class="bkyanse01 se05" <php>}</php>>{$info.card_name}</span><span  <php>if($info['score'] < 60){</php> class="wzyanse01 wenziyanse01" <php>}else if($info['score'] < 70 && $info['score'] >= 60){</php> class="wzyanse01 wenziyanse02" <php>}else if($info['score'] < 80 && $info['score'] >= 70){</php> class="wzyanse01 wenziyanse03" <php>}else if($info['score'] < 90 && $info['score'] >= 80){</php> class="wzyanse01 wenziyanse04" <php>}else if($info['score'] <= 100 && $info['score'] >= 90){</php> class="wzyanse01 wenziyanse05" <php>}</php>>{$info.score}分</span></div>
+    
+    <div class="guandiantopr01">他的技能被评为{$info.score}分哦~</div>
+</div>
+
+<div class="clear"></div>
+<div class="wendabt01">{$qalabelinfo.title}</div>
+<form name="message" id="messaget" action="{:U('Index/doqanswer')}" method="post">
+<input type="hidden" name="card_id" value="{$card_id}">
+<input type="hidden" name="u_openid" value="{$openid}">
+<div class="rowbox02">
+	<div class="guandiannr01"><textarea placeholder="写下您的问题，等Ta回答。" name="content" cols="" rows=""></textarea></div>
+     <div class="but001"><a href="JavaScript:;" id="a_post">礼<span class="chabei01"><img src="__IMG__/chabei01.png"></span>问道</a></div>
+    <div class="shuoming">礼茶需支付3元</div>
+</div>
+</form>
+<script language="javascript">	
+$('#a_post').click(function(){	
+	$.ajax({
+		url: "{:U('index/doqanswer')}",    //请求的url地址
+		dataType: "json",   //返回格式为json
+		async: true, //请求是否异步，默认为异步，这也是ajax重要特性
+		data: $("#messaget").serialize(),    //参数值
+		type: "post",   //请求方式
+		success: function(data) {
+			if(data.status=='1')
+			{
+				alert(data.info);
+				window.location.href = data.url+'&'+ Math.random();;
+			}else
+			{
+				alert(data.info);
+			}
+		},
+		error: function() {
+			alert('参数错误！');
+		}
+	});
+});
+</script>  
+</body>
+</html>
+

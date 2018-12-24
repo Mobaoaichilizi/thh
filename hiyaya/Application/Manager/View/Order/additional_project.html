@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Index</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <link rel="stylesheet" href="__STATIC__/layuiadmin/layui/css/layui.css" media="all">
+  <link rel="stylesheet" href="__STATIC__/layuiadmin/style/admin.css" media="all">
+</head>
+<body>
+  <div class="layui-fluid" id="component-tabs">
+    <div class="layui-row layui-col-space15">
+      <div class="layui-col-md12">
+      
+      
+      		<div class="layui-col-sm6">
+            <div class="layui-card">
+              <div class="layui-card-header" style="text-align:center;">{$room_info.room_name}包间</div>
+              <div class="layui-card-body">
+              
+             		
+                      <div class="layui-card">
+                      <div class="layui-card-body">
+                        <div class="layui-tab layui-tab-brief" lay-filter="component-tabs-brief">
+                          <ul class="layui-tab-title">
+                            <li <php>if($_GET['typeid']==1){</php> class="layui-this" <php>}</php>>项目</li>
+                            <li <php>if($_GET['typeid']==2){</php> class="layui-this" <php>}</php>>产品</li>
+                            <li <php>if($_GET['typeid']==3){</php> class="layui-this" <php>}</php>>推荐提成</li>
+    
+                          </ul>
+                          <div class="layui-tab-content">
+                            <div <php>if($_GET['typeid']==1){</php> class="layui-tab-item layui-show" <php>}else{</php> class="layui-tab-item" <php>}</php> >
+                             	
+                             <div class="project-table-reload-btn" style="margin-bottom: 10px;">
+                              <div class="layui-inline">
+                                <input class="layui-input"  id="project-table-demoReload" placeholder="请输入项目名称"  autocomplete="off">
+                              </div>
+                              <button class="layui-btn" data-type="reload">搜索</button>
+                              </div>
+           					  <table class="layui-hide" id="project-table-reload" lay-filter="project"></table> 
+                               <script type="text/html" id="project-table-operate-barDemo">
+								 <a lay-event="edit" class="layui-btn layui-btn-normal layui-btn-xs"><i class="layui-icon layui-icon-edit"></i>添加</a>
+							   </script>
+                               
+                               
+                               
+                            </div>
+                            <div <php>if($_GET['typeid']==2){</php> class="layui-tab-item layui-show" <php>}else{</php> class="layui-tab-item" <php>}</php>>
+                            
+                            <div class="product-table-reload-btn" style="margin-bottom: 10px;">
+                              <div class="layui-inline">
+                                <input class="layui-input"  id="product-table-demoReload" placeholder="请输入产品名称"  autocomplete="off">
+                              </div>
+                              <button class="layui-btn" data-type="reload">搜索</button>
+                              </div>
+           					  <table class="layui-hide" id="product-table-reload" lay-filter="product"></table> 
+                               <script type="text/html" id="product-table-operate-barDemo">
+								 <a lay-event="edit" class="layui-btn layui-btn-normal layui-btn-xs"><i class="layui-icon layui-icon-edit"></i>添加</a>
+							   </script>
+                            
+                            </div>
+                            <div <php>if($_GET['typeid']==3){</php> class="layui-tab-item layui-show" <php>}else{</php> class="layui-tab-item" <php>}</php>>
+                            
+                           	 <div class="reward-table-reload-btn" style="margin-bottom: 10px;">
+                              <div class="layui-inline">
+                                <input class="layui-input"  id="reward-table-demoReload" placeholder="请输入名称"  autocomplete="off">
+                              </div>
+                              <button class="layui-btn" data-type="reload">搜索</button>
+                              </div>
+           					  <table class="layui-hide" id="reward-table-reload" lay-filter="reward"></table> 
+                               <script type="text/html" id="reward-table-operate-barDemo">
+								 <a lay-event="edit" class="layui-btn layui-btn-normal layui-btn-xs"><i class="layui-icon layui-icon-edit"></i>添加</a>
+							   </script>
+                            
+                            </div>
+          
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                
+              </div>
+            </div>
+          </div>
+          
+          <div class="layui-col-sm6">
+            <div class="layui-card">
+              <div class="layui-card-header" style="text-align:center;">已选项目</div>
+              <div class="layui-card-body">
+                	
+                <form class="layui-form" action="" lay-filter="component-form-group" id="commentForm_order">
+                    <input type="hidden" name="chain_id" id="chain_id" value="{$chain_id}" >
+                    <input type="hidden" name="shop_id" id="shop_id" value="{$shop_id}" >
+                    <input type="hidden" name="order_id" id="order_id" value="{$order_info.id}" >
+
+                <table class="layui-table">
+                  <thead>
+                    <tr>
+                      <th>项目/产品/推荐提成</th>
+                      <th>技师</th>
+                      <th>数量</th>
+                      <th>金额</th>
+                      <th>操作</th>
+                    </tr> 
+                  </thead>
+                  <tbody id="project_product_list">
+                  
+                   
+                  
+                  </tbody>
+                </table>
+    <div class="layui-card-header"><span>合计：<i id="total_number">0</i>项</span><span style="float:right;">订单总金额：￥<i id="total_price">0</i></span></div>               
+           
+            
+               
+          <div class="layui-form-item layui-hide">
+      <input type="button" lay-submit lay-filter="LAY-orders-front-submit" id="LAY-orders-front-submit" value="确认">
+    </div>
+</form>
+<script type="text/template" id="projectlist">
+<%for(var i=0;i<data.length;i++){%>	
+<tr>
+<input type="hidden" name="p_id[]" value="<%=data[i].p_id%>" >
+<input type="hidden" name="masseur_id[]" value="<%=data[i].masseur_id%>" >
+<input type="hidden" name="p_types[]" value="<%=data[i].p_types%>" >
+<input type="hidden" name="types[]" value="<%=data[i].types%>" >
+<input type="hidden" name="number[]" value="<%=data[i].number%>" >
+  <td><%=data[i].name%>
+  <%
+ if(data[i]['duration']!='')
+ {
+%>
+<br>
+  ￥<%=data[i].price%>/<%=data[i].duration%>分钟
+   <%
+	}
+	%>
+  </td>
+  <td><%=data[i].nick_name%>
+<%
+ if(data[i]['types']!='')
+ {
+%>
+  <br>
+  <%=data[i].types_name%>
+ <%
+	}
+	%>  
+  </td>
+  <td><%=data[i].number%></td>
+  <td><%=data[i].price%></td>
+  <td><a class="layui-btn layui-btn-xs" onClick="del_project(this,<%=data[i].price%>)">删除</a></td>
+</tr>
+<%}%>
+</script> 
+
+
+<script type="text/template" id="productlist">
+<%for(var i=0;i<data.length;i++){%>	
+<tr style="background-color:#fbfff6;">
+<input type="hidden" name="p_id[]" value="<%=data[i].p_id%>" >
+<input type="hidden" name="masseur_id[]" value="<%=data[i].masseur_id%>" >
+<input type="hidden" name="p_types[]" value="<%=data[i].p_types%>" >
+<input type="hidden" name="types[]" value="<%=data[i].types%>" >
+<input type="hidden" name="number[]" value="<%=data[i].number%>" >
+  <td><%=data[i].name%>
+ </td>
+  <td><%=data[i].nick_name%>
+  </td>
+  <td><%=data[i].number%></td>
+  <td><%=data[i].price%></td>
+  <td><a class="layui-btn layui-btn-xs" onClick="del_product(this,<%=data[i].price%>)">删除</a></td>
+</tr>
+<%}%>
+</script>
+
+<script type="text/template" id="rewardlist">
+<%for(var i=0;i<data.length;i++){%>	
+<tr style="background-color:#ffefe5;">
+<input type="hidden" name="p_id[]" value="<%=data[i].p_id%>" >
+<input type="hidden" name="masseur_id[]" value="<%=data[i].masseur_id%>" >
+<input type="hidden" name="p_types[]" value="<%=data[i].p_types%>" >
+<input type="hidden" name="types[]" value="<%=data[i].types%>" >
+<input type="hidden" name="number[]" value="<%=data[i].number%>" >
+  <td><%=data[i].name%>
+ </td>
+  <td><%=data[i].nick_name%>
+  </td>
+  <td><%=data[i].number%></td>
+  <td><%=data[i].price%></td>
+  <td><a class="layui-btn layui-btn-xs" onClick="del_reward(this,<%=data[i].price%>)">删除</a></td>
+</tr>
+<%}%>
+</script>      
+  
+                    
+              </div>
+            </div>
+          </div>
+          
+          
+        </div>
+      </div>
+</div>
+</div>
+<script src="__JS__/jquery/jQuery-2.2.0.min.js"></script>
+<script src="__JS__/framework-ui.js"></script>
+<script src="__STATIC__/layuiadmin/layui/layui.js"></script> 
+<script type="text/javascript" src="__JS__/template.js"></script>
+ <script>
+ layui.config({
+    base: '__STATIC__/layuiadmin/' //静态资源所在路径
+  }).extend({
+    index: 'lib/index' //主入口模块
+  }).use(['index', 'form', 'table'], function(){
+    var $ = layui.$
+    ,form = layui.form
+	,element = layui.element
+	,table = layui.table
+	
+	element.render();
+    
+    element.on('tab(component-tabs-brief)', function(obj){
+		if(obj.index==0)
+		{
+			layui.table.reload('project-table-reload');
+		}else if(obj.index==1)
+		{
+			layui.table.reload('product-table-reload');
+		}else if(obj.index==2)
+		{
+			layui.table.reload('reward-table-reload');
+		}
+    });
+	
+	 table.render({
+      elem: '#project-table-reload'
+      ,url: "{:U('Order/get_project')}"
+	  ,page: false
+      ,cols: [[
+         {field:'item_sn', title: '项目编号', width:80}
+        ,{field:'item_name', title: '项目'}
+        ,{field:'item_duration', title: '时长',width:80}
+        ,{field:'item_price', title: '价格', width:80}
+		,{width:80,title: '操作', align:'center',toolbar: '#project-table-operate-barDemo'}
+      ]]
+    });
+	
+	
+	table.on('tool(project)', function(obj){
+      var data = obj.data;
+
+      if(obj.event === 'edit'){
+	  		$("input[name^='p_types']").each(function(i, el) {
+				if($(this).val()==1)
+				{
+					$.modalMsg('只能添加一个项目', "error");
+					return false;
+				}
+			 });
+        	var linkurl="{:U('Order/order_addmasseur',array('project_id'=>'nidval'))}";
+			linkurl=linkurl.replace('nidval', data.id),
+			$.modalOpen({
+				id: "Form1",
+				title: "添加健康师",
+				url: linkurl,
+				width: "1100px",
+				height: "770px",
+				callBack: function (index, layero) {
+					 var iframeWindow = top.window['Form1']
+					,submitID = 'LAY-user-front-submit'
+					,submit = layero.find('iframe').contents().find('#'+ submitID);
+		
+					//监听提交
+					iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
+					  var field = data.field; //获取提交的字段
+					  $.submitForm({
+						url: "{:U('Order/post_shopproject')}",
+						param: field,
+						success: function (data) {
+							$('#total_number').html(parseInt($('#total_number').text())+parseInt(data.total_number));
+							$('#total_price').html(parseFloat($('#total_price').text())+parseFloat(data.total_price));
+							$("#project_product_list").append(bt('projectlist', data));
+							top.layer.close(index); //关闭弹层
+						}
+					  })
+					 
+					});
+					submit.trigger('click');
+            	}
+			});
+      }
+    });
+	
+	
+	var $ = layui.$, project = {
+      reload: function(){
+        var projectReload = $('#project-table-demoReload');
+        //执行重载
+        table.reload('project-table-reload', {
+          where: {
+              name: projectReload.val()
+          }
+        });
+      }
+    };
+    
+    $('.project-table-reload-btn .layui-btn').on('click', function(){
+      var type = $(this).data('type');
+      project[type] ? project[type].call(this) : '';
+    }); 
+	
+	
+	table.render({
+      elem: '#product-table-reload'
+      ,url: "{:U('Order/get_product')}"
+	  ,page: false
+      ,cols: [[
+         {field:'product_sn', title: '产品编号', width:80}
+        ,{field:'product_name', title: '产品'}
+        ,{field:'product_price', title: '价格',width:80}
+        ,{field:'rec_reward', title: '提成', width:80}
+		,{width:80,title: '操作', align:'center',toolbar: '#product-table-operate-barDemo'}
+      ]]
+    });
+	
+	
+	table.on('tool(product)', function(obj){
+      var data = obj.data;
+
+      if(obj.event === 'edit'){
+        	var linkurl="{:U('Order/order_addproductmasseur',array('product_id'=>'nidval'))}";
+			linkurl=linkurl.replace('nidval', data.id),
+			$.modalOpen({
+				id: "Form1",
+				title: "添加健康师",
+				url: linkurl,
+				width: "1100px",
+				height: "770px",
+				callBack: function (index, layero) {
+					 var iframeWindow = top.window['Form1']
+					,submitID = 'LAY-user-front-submit'
+					,submit = layero.find('iframe').contents().find('#'+ submitID);
+		
+					//监听提交
+					iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
+					  var field = data.field; //获取提交的字段
+					  $.submitForm({
+						url: "{:U('Order/post_shopproduct')}",
+						param: field,
+						success: function (data) {
+							$('#total_number').html(parseInt($('#total_number').text())+parseInt(data.total_number));
+							$('#total_price').html(parseFloat($('#total_price').text())+parseFloat(data.total_price));
+							$("#project_product_list").append(bt('productlist', data));
+							 top.layer.close(index); //关闭弹层
+						}
+					  })
+					 
+					});
+					submit.trigger('click');
+            	}
+			});
+      }
+    });
+	
+	
+	var $ = layui.$, product = {
+      reload: function(){
+        var productReload = $('#product-table-demoReload');
+        //执行重载
+        table.reload('product-table-reload', {
+          where: {
+              name: productReload.val()
+          }
+        });
+      }
+    };
+    
+    $('.product-table-reload-btn .layui-btn').on('click', function(){
+      var type = $(this).data('type');
+      product[type] ? product[type].call(this) : '';
+    }); 
+	
+	
+	
+	table.render({
+      elem: '#reward-table-reload'
+      ,url: "{:U('Order/get_reward')}"
+	  ,page: false
+      ,cols: [[
+         {field:'reward_name', title: '推荐名称',}
+        ,{field:'reward', title: '提成', width:80}
+		,{width:80,title: '操作', align:'center',toolbar: '#reward-table-operate-barDemo'}
+      ]]
+    });
+	
+	
+	table.on('tool(reward)', function(obj){
+      var data = obj.data;
+
+      if(obj.event === 'edit'){
+        	var linkurl="{:U('Order/order_addrewardmasseur',array('reward_id'=>'nidval'))}";
+			linkurl=linkurl.replace('nidval', data.id),
+			$.modalOpen({
+				id: "Form1",
+				title: "添加健康师",
+				url: linkurl,
+				width: "1100px",
+				height: "770px",
+				callBack: function (index, layero) {
+					 var iframeWindow = top.window['Form1']
+					,submitID = 'LAY-user-front-submit'
+					,submit = layero.find('iframe').contents().find('#'+ submitID);
+		
+					//监听提交
+					iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
+					  var field = data.field; //获取提交的字段
+					  $.submitForm({
+						url: "{:U('Order/post_shopreward')}",
+						param: field,
+						success: function (data) {
+							$('#total_number').html(parseInt($('#total_number').text())+parseInt(data.total_number));
+							$("#project_product_list").append(bt('rewardlist', data));
+							top.layer.close(index); //关闭弹层
+						}
+					  })
+					 
+					});
+					submit.trigger('click');
+            	}
+			});
+      }
+    });
+	
+	
+	var $ = layui.$, reward = {
+      reload: function(){
+        var rewardReload = $('#reward-table-demoReload');
+        //执行重载
+        table.reload('reward-table-reload', {
+          where: {
+              name: rewardReload.val()
+          }
+        });
+      }
+    };
+    
+    $('.reward-table-reload-btn .layui-btn').on('click', function(){
+      var type = $(this).data('type');
+      reward[type] ? reward[type].call(this) : '';
+    });
+	
+	form.on('select(roomlist)', function(data){
+		$.submitgetForm({
+		url: "{:U('Order/bed_list')}",
+		param: {'room_id':data.value},
+		success: function (res) {
+			var optionstring = "";
+			$.each(res.data, function(i,item){
+			 optionstring += "<option value=\"" + item.id + "\" >" + item.bed_no + "</option>";
+			});
+			$("#bed_id").html(optionstring);
+			form.render('select'); //这个很重要
+		}
+	});
+	return false;
+	});
+	
+	form.on('submit(LAY-orders-front-submit)', function(data){
+		var  frameindex= parent.layer.getFrameIndex(window.frameElement.id);
+	  	$.submitForm({
+		url: "{:U('Order/post_additional_orders')}",
+		param: $("#commentForm_order").serialize(),
+		success: function () {
+			top.layer.close(frameindex);
+			top.Form.Refresh();
+		}
+	}); 
+	return false;  
+	});	
+});
+</script>
+<script language="javascript">
+function del_project(that,price)
+{
+	$(that).parent().parent().remove(); 
+	$('#total_number').html(parseInt($('#total_number').text())-1);
+	$('#total_price').html(parseFloat($('#total_price').text())-parseFloat(price));
+}
+function del_product(that,price)
+{
+	$(that).parent().parent().remove(); 
+	$('#total_number').html(parseInt($('#total_number').text())-1);
+	$('#total_price').html(parseFloat($('#total_price').text())-parseFloat(price));
+}
+function del_reward(that,price)
+{
+	$(that).parent().parent().remove(); 
+	$('#total_number').html(parseInt($('#total_number').text())-1);
+}
+</script>
+</body>
+</html>

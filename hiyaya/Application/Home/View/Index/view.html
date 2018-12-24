@@ -1,0 +1,204 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<title>他的徽章</title>
+<link rel="stylesheet" type="text/css" href="__CSS__/public.css" />
+<link rel="stylesheet" type="text/css" href="__CSS__/jquery.range.css" />
+<script src="__JS__/jquery-1.9.1.min.js"></script>
+</head>
+<body>
+<div class="top01 xian">
+	<div class="guandiantopl01"><span <php>if($info['score'] < 60){</php> class="bkyanse01 se01" <php>}else if($info['score'] < 70 && $info['score'] >= 60){</php> class="bkyanse01 se02" <php>}else if($info['score'] < 80 && $info['score'] >= 70){</php> class="bkyanse01 se03" <php>}else if($info['score'] < 90 && $info['score'] >= 80){</php> class="bkyanse01 se04" <php>}else if($info['score'] <= 100 && $info['score'] >= 90){</php> class="bkyanse01 se05" <php>}</php>>{$info.card_name}</span><span  <php>if($info['score'] < 60){</php> class="wzyanse01 wenziyanse01" <php>}else if($info['score'] < 70 && $info['score'] >= 60){</php> class="wzyanse01 wenziyanse02" <php>}else if($info['score'] < 80 && $info['score'] >= 70){</php> class="wzyanse01 wenziyanse03" <php>}else if($info['score'] < 90 && $info['score'] >= 80){</php> class="wzyanse01 wenziyanse04" <php>}else if($info['score'] <= 100 && $info['score'] >= 90){</php> class="wzyanse01 wenziyanse05" <php>}</php>>{$info.score}分</span></div>
+    <div class="guandiantopr01"><a href="{:U('index/qanswer',array('id'=>$card_id,'openid'=>$openid))}" class="but002">向他取经</a></div>
+</div>
+<div class="m5"></div>
+<div class="clear"></div>
+<div class="rowbox03" id="m_list">
+
+<volist name="myviewlist" id="vo">
+
+    <div class="list01">
+    <a href="{:U('Index/deal',array('id'=>$vo['id'],'card_id'=>$card_id,'openid'=>$openid))}">
+        <dl class="nr">{$vo.content}</dl>
+        <php>if($vo['number']==1){</php>
+        	<dl class="tu01"><img src="{$vo.item_img}"></dl>
+        <php>}else if($vo['number']==2){</php>
+        	 <dl>
+             <php>$item_img=explode(',',$vo['item_img']);</php>
+            <dd class="fl"><img src="{$item_img[0]}"></dd>
+            <dd class="fr"><img src="{$item_img[1]}"></dd>
+        	</dl>
+        <php>}else if($vo['number']==3){</php>
+        	<php>$item_img=explode(',',$vo['item_img']);</php>
+        	 <dl class="sel01">
+            <dt><img src="{$item_img[0]}"></dt>
+            <dt><img src="{$item_img[1]}"></dt>
+            <dt class="sel"><img src="{$item_img[2]}"></dt>
+        	</dl>
+        <php>}else if($vo['number']==4){</php>
+        	<php>$item_img=explode(',',$vo['item_img']);</php>
+        	 <dl>
+            <dt><img src="{$item_img[0]}"></dt>
+            <dt><img src="{$item_img[1]}"></dt>
+            <dt><img src="{$item_img[2]}"></dt>
+            <dt class="sel"><img src="{$item_img[3]}"></dt>
+       		 </dl>
+        <php>}</php>
+          </a>
+        <dl class="data">{$vo.createtime|date='Y-m-d H:i',###}</dl>
+        <dl class="ping">
+        	<span><img src="__IMG__/qb11.png"><a href="{:U('Index/msglist',array('id'=>$vo['id'],'card_id'=>$card_id,'openid'=>$openid))}">{$vo.msg_count}条评论</a></span>
+            <span><img src="__IMG__/qb12.png"><a href="{:U('Index/message',array('id'=>$vo['id'],'card_id'=>$card_id,'openid'=>$openid))}">写评论</a></span>
+        </dl>
+    </div>
+ 
+</volist>   
+</div>
+ <div class="more" id="show_more" page="2" style="display: none; width:100%; text-align:center; color:#FF0000; font-size:14px; line-height:35px; font-weight:bold;" href="javascript:void(0);">加载更多</div>
+ 
+ 
+ <script type="text/javascript">
+$(function() {
+	/*---------------------加载更多--------------------*/
+	var total = {$count},
+		pagesize = 5,
+		pages = Math.ceil(total / pagesize);
+		var com_link = '{:U('Index/ajaxview',array('id'=>$card_id))}';
+		var b_url = '{:U('Index/deal')}';
+		var m_url = '{:U('Index/message')}';
+		var n_url = '{:U('Index/msglist')}';
+		if (pages > 1) {
+		var _page = $('#show_more').attr('page');
+		$(window).bind("scroll",function() {
+			if ($(document).scrollTop() + $(window).height() >= $(document).height()) {
+				$('#show_more').show().html('加载中...');
+				if (_page > pages) {
+					$('#show_more').show().html('全部加载完毕...');
+					return;
+				}
+				if($('#canScroll').val()==0){//不要重复加载
+					return;
+				}
+				$('#canScroll').attr('value',0);
+				$.ajax({
+					type : "POST",
+					data : {'page' : _page, 'inajax' : 1, 'pagesize' : pagesize},
+					url :  com_link ,
+					dataType : "json",
+					success : function(RES) {
+						$('#canScroll').attr('value',1);
+						$('#show_more').hide().html('加载更多');
+						data = RES.products;
+						if(data.length){
+							$('#show_more').attr('page',parseInt(_page)+1);
+						}
+						_page = $('#show_more').attr('page');
+						var _tmp_html = '';
+						$.each(data, function(x, y) {
+						var htmllj='';
+						if(y.number==1)
+						{
+							htmllj='<dl><img src="'+ y.item_img +'"></dl>';
+						}else if(y.number==2)
+						{
+							var arr=y.item_img.split(",");
+							htmllj='<dl><dd class="fl"><img src="'+ arr[0] +'"></dd><dd class="fr"><img src="'+ arr[1] +'"></dd></dl>';
+						}else if(y.number==3)
+						{
+							var arr1=y.item_img.split(",");
+							htmllj='<dl class="sel01"><dt><img src="'+ arr1[0] +'"></dt><dt><img src="'+ arr1[1] +'"></dt><dt class="sel"><img src="'+ arr1[2] +'"></dt></dl>';
+						}else if(y.number==4)
+						{
+							var arr2=y.item_img.split(",");
+							htmllj='<dl><dt><img src="'+ arr2[0] +'"></dt><dt><img src="'+ arr2[1] +'"></dt><dt><img src="'+ arr2[2] +'"></dt><dt class="sel"><img src="'+ arr2[3] +'"></dt></dl>';
+						}
+						_tmp_html += '<div class="list01">' +
+							'<a href="' + b_url + '&id=' + y.id + '&card_id={$card_id}&openid={$openid}">' +
+							'<dl class="nr">'+ y.content +'</dl>' + htmllj +
+							'</a>'+ 
+                            '<dl class="data">'+ y.createtime +'</dl>' +
+							'<dl class="ping">'+ 
+							'<span><img src="__IMG__/qb11.png"><a href="' + n_url + '&id=' + y.id + '&card_id={$card_id}&openid={$openid}">'+ y.msg_count+'条评论</a></span>'+ 
+							'<span><img src="__IMG__/qb12.png"><a href="' + m_url + '&id=' + y.id + '&card_id={$card_id}&openid={$openid}">写评论</a></span>'+ 
+							'</dl>'+ 
+							'</div>';
+							
+						});
+						$('#m_list').append(_tmp_html);
+					}
+				});
+			}
+		});
+	}
+});
+</script>
+ 
+<!-- 底部悬浮 -->
+<div class="m40"></div>
+<DIV class="pingfen">
+
+	<div class="pingfenbox01">
+            <!--评论滑动100%-->
+            <form name="message" id="messaget" action="{:U('Index/doview')}" method="post">
+            <input type="hidden" name="card_id" value="{$card_id}">
+            <input type="hidden" name="u_openid" value="{$openid}">
+            
+            <div style=" width:100%; float:left; background:#FFF; display:block;">
+            <div class="pf001"><input class="range-slider" name="score" type="hidden" value="{$info.score}"/></div>
+            <div class="pf002"><span id="val">100</span>分</div>
+       		 </div>
+</form>
+            <script src="__JS__/prism.js"></script>
+<script src="__JS__/jquery.range.js"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+		var w=$(".pf001").width();
+        $('.range-slider').jRange({
+			from: {$minscore},
+			to: {$maxscore},
+			step: 1,
+			scale: [{$minscore},{$maxscore}],
+			format: '%s',
+			width: w,
+			showLabels: true,
+			snap: true
+		});
+    });
+</script>
+    </div>
+
+    <div class="pingfenbut01"><a href="JavaScript:;" id="a_post">给他评分</a></div>
+    
+</DIV>
+ <script language="javascript">	
+$('#a_post').click(function(){	
+	$.ajax({
+		url: "{:U('index/doview')}",    //请求的url地址
+		dataType: "json",   //返回格式为json
+		async: true, //请求是否异步，默认为异步，这也是ajax重要特性
+		data: $("#messaget").serialize(),    //参数值
+		type: "post",   //请求方式
+		success: function(data) {
+			if(data.status=='1')
+			{
+				alert(data.info);
+				window.location.href = data.url+'&'+ Math.random();
+			}else
+			{
+				alert(data.info);
+			}
+		},
+		error: function() {
+			alert('参数错误！');
+		}
+	});
+});
+				</script>  
+<!-- /底部悬浮 -->
+</body>
+</html>
+

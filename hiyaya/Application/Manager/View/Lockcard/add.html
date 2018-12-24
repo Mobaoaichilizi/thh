@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>添加锁牌</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <link rel="stylesheet" href="__STATIC__/layuiadmin/layui/css/layui.css" media="all">
+</head>
+<body>
+<div>
+<div class="layui-card-body" >
+    <form class="layui-form" lay-filter="component-form-element" id="commentForm">
+    
+      <input type="hidden"  name="chain_id" value="{$chain_id}">
+      <input type="hidden"  name="shop_id" value="{$shop_id}">
+      <div class="layui-row layui-col-space10 layui-form-item">
+          <div class="layui-col-lg8">
+              <label class="layui-form-label">锁牌号：</label>
+              <div class="layui-input-block">
+                  <input type="text" name="card_number" id="card_number" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+              </div>
+          </div>
+          <div class="layui-col-lg8">
+              <label class="layui-form-label">排序：</label>
+              <div class="layui-input-block">
+                  <input type="text" name="sort" id="sort" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+              </div>
+          </div>
+
+
+
+           <div class="layui-col-md6">
+            <label class="layui-form-label">状态：</label>
+            <div class="layui-input-block">
+                <select id="is_lock" name="is_lock" class="layui-input">
+                  
+                         <option value="1">启用</option>
+                         <option value="0">锁定</option>
+              
+                    </select>
+            </div>
+          </div>
+
+
+          
+      </div>
+
+        <div class="layui-form-item layui-hide">
+            <input type="button" lay-submit lay-filter="LAY-user-front-submit" id="LAY-user-front-submit" value="确认">
+        </div>
+    </form>
+  </div>
+</div>
+
+ <script src="__JS__/jquery/jQuery-2.2.0.min.js"></script>
+ <script src="__JS__/framework-ui.js"></script>
+  <script src="__STATIC__/layuiadmin/layui/layui.js"></script> 
+<script>
+    layui.use( ['form','laydate'], function(){
+       form = layui.form;
+        var $ = layui.$;
+        var laydate = layui.laydate;
+        form.render(null, 'component-form-element');
+        laydate.render({
+            elem: '#birthday'
+        });
+
+
+        form.on('submit(LAY-user-front-submit)', function(data){
+          $.submitForm({
+        url: "{:U('Lockcard/add')}",
+        param: $("#commentForm").serialize(),
+        success: function () {
+          $.currentWindow().Refresh();
+        }
+      }) 
+
+            return false;
+        });
+    });
+</script>
+</body>
+</html>
+

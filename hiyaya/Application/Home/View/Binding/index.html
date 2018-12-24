@@ -1,0 +1,230 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>绑定账号</title>
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <link rel="stylesheet" type="text/css" href="__CSS__/aui.css" />
+    <link rel="stylesheet" type="text/css" href="__CSS__/aui-base.css" />
+    <link rel="stylesheet" type="text/css" href="__CSS__/style.css" />
+    <link rel="stylesheet" type="text/css" href="__CSS__/mui.picker.min.css" />
+</head>
+<body>
+  <header class="aui-bar aui-bar-nav header">
+    <div class="aui-title">加入会员</div>
+  </header>
+  <div class="aui-content">
+    <form class="cmsform" id="commentForm" name="message" action="{:U('Binding/binding')}" method="post">
+    <input type="hidden" name="i" id="i" value="{$i}">
+      <div class="pad075">
+          <ul class="aui-list aui-form-list">
+              <li class="aui-list-header">必填信息：</li>
+              <li class="aui-list-item">
+                  <div class="aui-list-item-inner">
+                      <div class="aui-list-item-label fs7">手机号：</div>
+                      <div class="aui-list-item-input">
+                          <input type="number" class="phone fs7" name="member_tel" id="member_tel" placeholder="请输入正确的手机号">
+                      </div>
+                  </div>
+              </li>
+              <li class="aui-list-item">
+                  <div class="aui-list-item-inner">
+                      <div class="aui-list-item-label fs7">验证码：</div>
+                      <div class="flex_between padr075 w10">
+                          <input type="number" name="pincode" id="pincode" class="fs7" placeholder="请输入验证码">
+                          <input type="button" name="getpincode" id="send_code" value="获取验证码" class="aui-btn aui-btn-primary" style="top:5px" />
+                      </div>
+                  </div>
+              </li>
+              <li class="aui-list-item">
+                  <div class="aui-list-item-inner">
+                      <div class="aui-list-item-label fs7">姓　名：</div>
+                      <div class="aui-list-item-input">
+                          <input type="text" class="fs7" name="member_name" placeholder="请输入姓名">
+                      </div>
+                  </div>
+              </li>
+              
+              <li class="aui-list-item">
+                  <div class="aui-list-item-inner">
+                      <div class="aui-list-item-label fs7">实体卡号：</div>
+                      <div class="flex_between padr075 w10">
+                          <input type="text" name="member_card" id="member_card" class="fs7" placeholder="请输入实体卡号">
+                          <div id="scan" class="scan" style="position:absolute; top:6px; right:-45px;"><img src="__IMG__/scan.png" height="20"></div>
+                      </div>
+                  </div>
+              </li>
+              
+              
+               <li class="aui-list-item">
+                  <div class="aui-list-item-inner">
+                      <div class="aui-list-item-label fs7">选择店铺：</div>
+                      <div class="aui-list-item-input">
+                           <select id="shop_id" name="shop_id" class="fs7" >
+                           	<volist name="shop_list" id="vo">
+                            <option value="{$vo.id}">{$vo.shop_name}</option>
+                            </volist>
+                          </select>
+                      </div>
+                  </div>
+              </li>
+              
+          </ul>
+
+          <ul class="aui-list aui-form-list mart075">
+            <li class="aui-list-header">选填信息：</li>
+            <li class="aui-list-item">
+                <div class="aui-list-item-inner">
+                    <div class="aui-list-item-label fs7">性　别：</div>
+                    <div class="aui-list-item-input">
+                      <label class="marr05 fs7"><input class="aui-radio" type="radio" name="sex" checked="" value="男"> 男</label>
+                      <label class="fs7"><input class="aui-radio" type="radio" name="sex" value="女"> 女</label>
+                    </div>
+                </div>
+            </li>
+            <li class="aui-list-item">
+                <div class="aui-list-item-inner">
+                    <div class="aui-list-item-label fs7">生　日：</div>
+                    <div class="aui-list-item-input">
+                        <input type="text" class="fs7" name="birthday" id="birthday" data-options='{"type":"date","beginYear":1949,"endYear":2010}' value="1970-10-01" onClick="dtpicker(this)" readonly>
+                    </div>
+                </div>
+            </li>
+          </ul>
+
+          <div class="aui-action mart075">
+            <input type="button" id="a_post" class="aui-btn aui-btn-warning aui-btn-block" name="submit" value="下一步" />
+          </div>
+      </div>
+    </form>
+  </div>
+
+  <script type="text/javascript" src="__JS__/jquery-2.2.3.min.js"></script>
+  <script type="text/javascript" src="__JS__/mui.min.js"></script>
+  <script type="text/javascript" src="__JS__/mui.picker.min.js"></script>
+    <script type="text/javascript" src="http://res2.wx.qq.com/open/js/jweixin-1.4.0.js"></script>
+  <script language="javascript">
+ wx.config({
+    debug: false,
+    appId: "{$signPackage.appId}",
+    timestamp: '{$signPackage.timestamp}',
+    nonceStr: '{$signPackage.nonceStr}',
+    signature: '{$signPackage.signature}',
+    jsApiList: [
+      // 所有要调用的 API 都要加到这个列表中
+	  'scanQRCode',
+    ]
+});
+wx.ready(function () {
+$("#scan").click(function() {  
+   wx.scanQRCode({
+		needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
+		scanType: ["qrCode","barCode"], // 可以指定扫二维码还是一维码，默认二者都有
+		success: function (res) {
+			//alert(JSON.stringify(res));  
+			$('#member_card').val(res.resultStr);
+		}
+	});
+});
+  });
+  wx.error(function(res){
+    // config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
+  });
+</script>
+  <script type="text/javascript">
+      function dtpicker(obj) {
+            mui.init();
+            var value;
+            var _self = $(obj);
+            if(_self.picker) {
+              _self.picker.show(function (rs) {
+                $(obj).val(rs.text);
+                _self.picker.dispose();
+                _self.picker = null;
+              });
+            } else {
+              var optionsJson = $(obj).attr('data-options') || '{}';
+              var options = JSON.parse(optionsJson);
+              var id = $(obj).attr('id');
+              _self.picker = new mui.DtPicker(options);
+              _self.picker.show(function (rs) {
+                $(obj).val(rs.text);
+                _self.picker.dispose();
+                _self.picker = null;
+              });
+            }
+      }
+  </script>
+  <script language="javascript">
+  var countdown=60;	
+$('#a_post').click(function(){
+	$.ajax({
+		url: "{:U('Binding/binding')}",    //请求的url地址
+		dataType: "json",   //返回格式为json
+		async: true, //请求是否异步，默认为异步，这也是ajax重要特性
+		data: $("#commentForm").serialize(),    //参数值
+		type: "post",   //请求方式
+		success: function(data) {
+			if(data.status=='1')
+			{
+				alert(data.info);
+				window.location.href = data.url+'&'+ Math.random();
+			}else
+			{
+				alert(data.info);
+			}
+		},
+		error: function() {
+			alert('参数错误！');
+		}
+	});
+});
+$('#send_code').click(function(){
+    $.ajax({
+		url: "{:U('Binding/send_code')}",    //请求的url地址
+		dataType: "json",   //返回格式为json
+		async: true, //请求是否异步，默认为异步，这也是ajax重要特性
+		data: {"phone":$('#member_tel').val()},    //参数值
+		type: "post",   //请求方式
+		success: function(data) {
+			if(data.status=='1')
+			{
+				alert(data.info);
+				var obj = $("#send_code");
+    			settime(obj);
+			}else
+			{
+				alert(data.info);
+			}
+		},
+		error: function() {
+			alert('参数错误！');
+		}
+	});
+});
+function settime(obj) { //发送验证码倒计时
+    if (countdown == 0) { 
+        obj.attr('disabled',false); 
+		obj.addClass('aui-btn-primary');
+		obj.removeClass('aui-btn-default');
+		
+        obj.val("获取验证码");
+        countdown = 60; 
+        return;
+    } else { 
+        obj.attr('disabled',true);
+		
+		obj.removeClass('aui-btn-primary');
+		obj.addClass('aui-btn-default');
+        obj.val("重新发送(" + countdown + ")");
+        countdown--; 
+    } 
+setTimeout(function() { 
+    settime(obj) }
+    ,1000) 
+}
+
+</script> 
+</body>
+</html>

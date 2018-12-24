@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>充值</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <link rel="stylesheet" href="__STATIC__/layuiadmin/layui/css/layui.css" media="all">
+  <style type="text/css">
+      .layui-form-label{
+        width: 126px;
+      }
+      .layui-input, .layui-textarea{
+        width: 82%;
+      }
+      .layui-form-select dl {
+        min-width: 82%;
+        margin-left: 45px;
+      }
+      .custom_charge div{
+        padding: 3px 0;
+      }
+  </style>
+</head>
+<body>
+<div>
+  <div class="layui-card-body">
+    <form class="layui-form" lay-filter="component-form-element" id="commentForm1">
+        <input type="hidden"  name="member_id" value="{$info.member_id}">
+      <input type="hidden"  name="chain_id" value="{$info.chain_id}">
+      <input type="hidden"  name="shop_id" value="{$info.shop_id}">
+        <input type="hidden"  name="deadlinecard_id" value="{$info.id}">
+      <div class="layui-row layui-col-space10 layui-form-item">
+        <div class="layui-col-lg8">
+          <label class="layui-form-label"><span style="color: #f00;">*</span>延长时间(天)：</label>
+          <div class="layui-input-block">
+              <input type="text" name="increase_num" id="increase_num" autocomplete="off" class="layui-input" lay-verify="number" placeholder="请输入延长时间">
+          </div>
+        </div>
+        <div class="layui-col-lg8">
+          <label class="layui-form-label">延期前截止日期：</label>
+          <div class="layui-input-block" style="padding: 7px 15px;">
+            {$info.end_time}
+      
+          </div>
+        </div>
+       
+      <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="LAY-user-front-submit" id="LAY-user-front-submit" value="确认">
+      </div>
+    </form>
+  </div>
+</div>
+
+ <script src="__JS__/jquery/jQuery-2.2.0.min.js"></script>
+ <script src="__JS__/framework-ui.js"></script>
+  <script src="__STATIC__/layuiadmin/layui/layui.js"></script> 
+<script>
+    layui.use( ['form','laydate'], function(){
+       form = layui.form;
+        var $ = layui.$;
+        var laydate = layui.laydate;
+        
+
+
+        form.render(null, 'component-form-element');
+        laydate.render({
+            elem: '#birthday'
+        });
+       
+        //监听提交
+        form.on('submit(LAY-user-front-submit)', function(data){
+          $.submitForm({
+              url: "{:U('Member/deadline_increase')}",
+              param: $("#commentForm1").serialize(),
+              success: function () {
+
+                // window.location.reload();
+                top.Form2.Refresh();
+
+              }
+            }) 
+
+            return false;
+        });
+        
+    });
+
+
+</script>
+</body>
+</html>
+
