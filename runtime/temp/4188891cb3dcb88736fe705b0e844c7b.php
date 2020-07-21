@@ -1,0 +1,410 @@
+<?php if (!defined('THINK_PATH')) exit(); /*a:1:{s:87:"/www/web/toupiao_com/public_html/public/../application/home/view/index/vote_result.html";i:1593401799;}*/ ?>
+﻿<!doctype html><html><head>
+
+<meta charset="utf-8"><meta name="keywords" content="" /><meta name="description" content="" />
+
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
+
+<title>首页</title>
+
+<link rel="stylesheet" href="/static/css/public.css">
+
+</head>
+
+<body>
+
+
+
+<DIV class="pet_mian">
+
+    
+
+    <div class="wtit1">投票排行榜</div>
+
+
+
+     <div class="find_nav"><div class="find_nav_left"><div class="find_nav_list" id="pagenavi1">
+
+        <ul>
+
+            <li><a href="#" class="active">法学专业排行</a></li>
+
+            <li><a href="#">法学以外专业排行</a></li>
+
+            <li class="sideline"></li>
+
+        </ul>
+
+    </div></div>
+
+    </div>
+
+
+
+   <div class="rowbox01">
+
+
+
+        <div id="slider1" class="swipe">
+
+          <ul class="box01_list">
+
+            <li class="li_list">
+
+
+
+                <?php if(is_array($law) || $law instanceof \think\Collection || $law instanceof \think\Paginator): $i = 0; $__LIST__ = $law;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vo): $mod = ($i % 2 );++$i;?>
+
+                    <div class="topbox">
+
+                        <dd class="nr1"><?php echo $key+1; ?></dd>
+
+                        <dd class="nr2"><img src="/static/images/loading1.gif" data-src="<?php echo $vo['img_thumb']; ?>" class="teacherpic"></dd>
+
+                        <dd class="nr3">
+
+                            <p><?php echo $vo['name']; ?></p>
+
+                            <p class="z2"><?php echo $vo['count']; ?>票</p>
+
+                            <p class="jindu" style="width:<?php echo $vo['count']/$total_count*100; ?>%;"></p>
+
+                        </dd>
+
+                    </div>
+
+                <?php endforeach; endif; else: echo "" ;endif; ?>
+
+
+
+
+
+            </li>
+
+            <li class="li_list">
+
+
+
+                <?php if(is_array($unlaw) || $unlaw instanceof \think\Collection || $unlaw instanceof \think\Paginator): $i = 0; $__LIST__ = $unlaw;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$co): $mod = ($i % 2 );++$i;?>
+
+                    <div class="topbox">
+
+                        <dd class="nr1"><?php echo $key+1; ?></dd>
+
+                        <dd class="nr2"><img src="/static/images/loading1.gif" data-src="<?php echo $co['img_thumb']; ?>" class="teacherpic"></dd>
+
+                        <dd class="nr3">
+
+                            <p><?php echo $co['name']; ?></p>
+
+                            <p class="z2"><?php echo $co['count']; ?>票</p>
+
+                            <p class="jindu" style="width:<?php echo $co['count']/$total_count*100; ?>%;"></p>
+
+                        </dd>
+
+                    </div>
+
+                    <?php endforeach; endif; else: echo "" ;endif; ?>
+
+
+
+            </li>
+
+          </ul>
+
+        </div>
+
+    </div>
+
+
+
+    <script src="/static/js/jquery.min.js"></script>
+
+    <script type="text/javascript" src="/static/js/touchslider.js"></script>
+
+    <script type="text/javascript">
+
+    // 初始化
+		var fl_w = $(".find_nav_list").width();
+		var flb_w = $(".find_nav_left").width();
+		$(".find_nav_list li").each(function () {
+			$(".find_nav_list li").eq(0).addClass("find_nav_cur").siblings().removeClass("find_nav_cur");
+		})
+		var nav_w = $(".find_nav_list li").first().width();
+		$(".sideline").width(nav_w);
+ 
+ 
+		$(".find_nav_list li").on("click", function () {
+ 
+			// 点击样式的替换
+			nav_w = $(this).width();
+			$(".sideline").stop(true);
+			$(".sideline").animate({ left: $(this).position().left }, 300);
+			$(".sideline").animate({ width: nav_w });
+			$(this).addClass("find_nav_cur").siblings().removeClass("find_nav_cur");
+ 
+			// 内容超出时导航栏自动滑动
+			var fn_w = ($(".find_nav").width() - nav_w) / 2;
+			var fnl_1;
+			var fnl_x = parseInt($(this).position().left);
+			if (fnl_x <= fn_w) {
+				fnl_l = 0;
+			} else if (fn_w - fnl_x <= flb_w - fl_w) {
+				fnl_l = flb_w - fl_w;
+			} else {
+				fnl_l = fn_w - fnl_x;
+			}
+			$(".find_nav_list").animate({
+				"left": fnl_l
+			}, 300);
+		});
+ 
+		// 设置导航栏可触屏滑动
+		var x1, y1, ty_left;
+		$(".find_nav_list").on('touchstart', function (e) {
+			var touch1 = e.originalEvent.targetTouches[0];
+			x1 = touch1.pageX;
+			y1 = touch1.pageY;
+			ty_left = parseInt($(this).css("left"));
+ 
+		});
+		$(".find_nav_list").on('touchmove', function (e) {
+            e.stopPropagation();
+			var touch2 = e.originalEvent.targetTouches[0];
+			var x2 = touch2.pageX;
+			var y2 = touch2.pageY;
+			if (ty_left + x2 - x1 >= 0) {
+				$(this).css("left", 0);
+			} else if (ty_left + x2 - x1 <= flb_w - fl_w) {
+				$(this).css("left", flb_w - fl_w);
+			} else {
+				$(this).css("left", ty_left + x2 - x1);
+			}
+			if (Math.abs(y2 - y1) > 0) {
+				e.preventDefault();
+			}
+		});
+ 
+		var page = 'pagenavi1';
+		var as = document.getElementById(page).getElementsByTagName('a');
+		var tt = new TouchSlider({
+			id: 'slider1', 'auto': '-1', fx: 'ease-out', direction: 'left', speed: 600, timeout: 5000, 'before': function (index) {
+ 
+				// 出发导航栏点击样式的替换
+				var as = document.getElementById(page).getElementsByTagName('a');
+				as[0].className = '';
+				fnl_x = parseInt($(".find_nav_list li").eq(index).position().left);
+				nav_w = $(".find_nav_list li").eq(index).width();
+				$(".sideline").stop(true);
+				$(".sideline").animate({ left: $(".find_nav_list li").eq(index).position().left }, 300);
+				$(".sideline").animate({ width: nav_w }, 100);
+				$(".find_nav_list li").eq(index).addClass("find_nav_cur").siblings().removeClass("find_nav_cur");
+ 
+				// 内容超出时导航栏自动滑动
+				var fn_w = ($(".find_nav").width() - nav_w) / 2;
+				var fnl_l;
+				if (fnl_x <= fn_w) {
+					fnl_l = 0;
+				} else if (fn_w - fnl_x <= flb_w - fl_w) {
+					fnl_l = flb_w - fl_w;
+				} else {
+					fnl_l = fn_w - fnl_x;
+				}
+				$(".find_nav_list").animate({
+					"left": fnl_l
+				}, 300);
+ 
+			}
+		});
+ 
+		// 传参
+ 
+		// 关联点击事件和滑动事件：点击（onclick）的时候出发滑动（slide）
+		for (var i = 0; i < as.length; i++) {
+			(function () {
+				var j = i;
+				as[j].tt = tt;
+				as[j].onclick = function () {
+					this.tt.slide(j);
+					return false;
+				}
+			})();
+		}
+		// onload是等所有的资源文件加载完毕以后再绑定事件
+window.onload = function(){
+	// 获取图片列表，即img标签列表
+	var imgs = document.querySelectorAll('.teacherpic');
+
+	// 获取到浏览器顶部的距离
+	function getTop(e){
+		return e.offsetTop;
+	}
+
+	// 懒加载实现
+	function lazyload(imgs){
+		// 可视区域高度
+		var h = window.innerHeight;
+		//滚动区域高度
+		var s = document.documentElement.scrollTop || document.body.scrollTop;
+		for(var i=0;i<imgs.length;i++){
+			//图片距离顶部的距离大于可视区域和滚动区域之和时懒加载
+			if ((h+s)>getTop(imgs[i])) {
+				// 真实情况是页面开始有2秒空白，所以使用setTimeout定时2s
+				(function(i){
+					setTimeout(function(){
+						// 不加立即执行函数i会等于9
+						// 隐形加载图片或其他资源，
+						//创建一个临时图片，这个图片在内存中不会到页面上去。实现隐形加载
+						var temp = new Image();
+						temp.src = imgs[i].getAttribute('data-src');//只会请求一次
+						// onload判断图片加载完毕，真是图片加载完毕，再赋值给dom节点
+						temp.onload = function(){
+							// 获取自定义属性data-src，用真图片替换假图片
+							imgs[i].src = imgs[i].getAttribute('data-src')
+						}
+					},2000)
+				})(i)
+			}
+		}
+	}
+	lazyload(imgs);
+
+	// 滚屏函数
+	window.onscroll =function(){
+		lazyload(imgs);
+	}
+}
+
+
+    </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--
+
+
+
+
+
+    <div class="topbox">
+
+    	<dd class="nr1">001</dd>
+
+    	<dd class="nr2"><img src="__IMG__/tx.jpg"></dd>
+
+    	<dd class="nr3">
+
+    		<p>徐亚波</p>
+
+    		<p class="z2">200票</p>
+
+    		<p class="jindu" style="width:100%;"></p>
+
+    	</dd>
+
+    </div>
+
+
+
+    <div class="topbox">
+
+    	<dd class="nr1">002</dd>
+
+    	<dd class="nr2"><img src="__IMG__/tx.jpg"></dd>
+
+    	<dd class="nr3">
+
+    		<p>徐亚波</p>
+
+    		<p class="z2">192票</p>
+
+    		<p class="jindu" style="width:92%;"></p>
+
+    	</dd>
+
+    </div>
+
+
+
+    <div class="topbox">
+
+    	<dd class="nr1">003</dd>
+
+    	<dd class="nr2"><img src="__IMG__/tx.jpg"></dd>
+
+    	<dd class="nr3">
+
+    		<p>徐亚波</p>
+
+    		<p class="z2">135票</p>
+
+    		<p class="jindu" style="width:35%;"></p>
+
+    	</dd>
+
+    </div>
+
+
+
+    <div class="topbox">
+
+    	<dd class="nr1">004</dd>
+
+    	<dd class="nr2"><img src="__IMG__/tx.jpg"></dd>
+
+    	<dd class="nr3">
+
+    		<p>徐亚波</p>
+
+    		<p class="z2">110票</p>
+
+    		<p class="jindu" style="width:10%;"></p>
+
+    	</dd>
+
+    </div>
+
+
+
+    <div class="topbox">
+
+    	<dd class="nr1">005</dd>
+
+    	<dd class="nr2"><img src="__IMG__/tx.jpg"></dd>
+
+    	<dd class="nr3">
+
+    		<p>徐亚波</p>
+
+    		<p class="z2">13票</p>
+
+    		<p class="jindu" style="width:3%;"></p>
+
+    	</dd>
+
+    </div>
+
+
+
+-->
+
+</DIV>
+
+
+
+</body>
+
+</html>

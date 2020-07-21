@@ -1,0 +1,40 @@
+<ul class="layui-nav layui-nav-tree" lay-shrink="all" id="LAY-system-side-menu" lay-filter="layadmin-system-side-menu">
+           {volist name="menu_list" id="item" key='k'}
+            <li data-name="component" class="layui-nav-item">
+              <a href="javascript:;" lay-tips="{$item['name']}" lay-direction="2">
+                <i class="layui-icon {$item.ico}"></i>
+                <cite>{$item['name']}</cite>
+              </a>
+                 {volist name="item['voo']" id="dd"}
+              <dl class="layui-nav-child">
+                <dd data-name="grid">
+                  <a data-id="{$dd.id}" {php}if($dd['ttt']){{/php} href="javascript:;" {php}}else{{/php} lay-href="{:Url($dd['app'].'/'.$dd['model'].'/'.$dd['action'])}" {php}}{/php}>
+				  <i class="layui-icon {$dd.ico}"></i>
+               	  <cite>{$dd['name']}</cite>
+				  </a>
+                  {php}if($dd['ttt']){{/php}
+                  <dl class="layui-nav-child">
+                  {volist name="dd['ttt']" id='tt'}        	
+                	<dd><a lay-href="{:Url($tt['app'].'/'.$tt['model'].'/'.$tt['action'])}">
+						<i class="layui-icon {$tt.ico}"></i>
+						<cite>{$tt['name']}</cite>
+					</a></dd>
+                  {/volist}
+                  </dl>
+                   {php}}{/php}
+                </dd>
+
+         
+              </dl>
+              
+                 {/volist}
+              
+            </li>
+              {/volist}
+            
+            
+          <li data-name="get" class="layui-nav-item"> <a href="javascript:;" lay-href="{:Url('Index/editPwd')}" lay-tips="修改密码" lay-direction="2"> <i class="layui-icon layui-icon-util"></i> <cite>修改密码</cite> </a> </li>
+          <li data-name="get" class="layui-nav-item"> <a href="javascript:;" onClick="logout()" lay-tips="注销登录" lay-direction="2"> <i class="layui-icon layui-icon-auz"></i> <cite>注销登录</cite> </a> </li>  
+            
+            
+          </ul>
